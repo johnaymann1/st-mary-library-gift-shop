@@ -101,7 +101,7 @@ export default function CreateProductForm({ categories, onSuccess }: { categorie
                         {imagePreview ? (
                             <div className="space-y-3">
                                 <div className="relative w-full h-48 rounded-xl overflow-hidden border-2 border-green-500 bg-green-50">
-                                    <Image src={imagePreview} alt="Preview" fill className="object-contain" />
+                                    <img src={imagePreview} alt="Preview" className="w-full h-full object-contain" />
                                 </div>
                                 <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-4 py-3">
                                     <div className="flex items-center gap-2">
