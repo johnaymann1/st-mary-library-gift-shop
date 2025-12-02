@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import CheckoutClient from './checkout-client'
+import { getStoreSettings } from '@/utils/settings'
 
 export default async function CheckoutPage() {
     const supabase = await createClient()
@@ -9,6 +10,9 @@ export default async function CheckoutPage() {
     if (!user) {
         redirect('/login?next=/checkout')
     }
+
+    // Fetch store settings for delivery fee
+    const settings = await getStoreSettings()
 
     // Fetch user profile with phone
     const { data: userProfile } = await supabase
@@ -32,6 +36,8 @@ export default async function CheckoutPage() {
                 <CheckoutClient 
                     userPhone={userProfile?.phone || ''} 
                     savedAddresses={addresses || []} 
+                    deliveryFee={settings.delivery_fee}
+                    currencyCode={settings.currency_code}
                 />
             </main>
         </div>

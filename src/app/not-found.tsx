@@ -1,13 +1,16 @@
 import Link from 'next/link'
 import { Home, Search } from 'lucide-react'
 import Navbar from '@/components/Navbar'
+import { getStoreSettings } from '@/utils/settings'
 
 export const dynamic = 'force-dynamic'
 
-export default function NotFound() {
+export default async function NotFound() {
+    const settings = await getStoreSettings()
+
     return (
         <>
-            <Navbar />
+            <Navbar storeName={settings.store_name} />
             <div className="min-h-[calc(100vh-64px)] bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center px-4">
                 <div className="max-w-2xl w-full text-center">
                     {/* 404 Illustration */}

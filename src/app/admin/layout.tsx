@@ -33,6 +33,7 @@ export default async function AdminLayout({
         { name: 'Orders', href: '/admin/orders', icon: 'ShoppingBag' },
         { name: 'Products', href: '/admin/products', icon: 'Package' },
         { name: 'Categories', href: '/admin/categories', icon: 'FolderOpen' },
+        { name: 'Settings', href: '/admin/settings', icon: 'Settings' },
     ]
 
     return <AdminLayoutClient navigation={navigation}>{children}</AdminLayoutClient>

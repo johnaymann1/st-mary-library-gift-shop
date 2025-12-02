@@ -3,8 +3,13 @@
 import Link from 'next/link'
 import { Gift, Mail, Phone, MapPin, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react'
 import { siteConfig } from '@/config/site'
+import type { StoreSettings } from '@/utils/settings'
 
-export default function Footer() {
+interface FooterProps {
+    settings: StoreSettings
+}
+
+export default function Footer({ settings }: FooterProps) {
     const currentYear = new Date().getFullYear()
 
     return (
@@ -17,10 +22,10 @@ export default function Footer() {
                             <div className="bg-gradient-to-br from-rose-500 to-pink-600 p-2 rounded-xl group-hover:rotate-12 transition-transform">
                                 <Gift className="h-5 w-5 text-white" />
                             </div>
-                            <span className="text-lg font-bold">{siteConfig.displayName}</span>
+                            <span className="text-lg font-bold">{settings.store_name}</span>
                         </Link>
                         <p className="text-neutral-400 text-sm">
-                            Quality religious books and gifts
+                            {settings.description}
                         </p>
                     </div>
 
@@ -28,9 +33,9 @@ export default function Footer() {
                     <div>
                         <h3 className="text-white font-bold mb-4">Follow Us</h3>
                         <div className="flex gap-3">
-                            {siteConfig.links.facebook && (
+                            {settings.facebook_url && (
                                 <a 
-                                    href={siteConfig.links.facebook} 
+                                    href={settings.facebook_url} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
@@ -39,9 +44,9 @@ export default function Footer() {
                                     <Facebook className="h-5 w-5" />
                                 </a>
                             )}
-                            {siteConfig.links.instagram && (
+                            {settings.instagram_url && (
                                 <a 
-                                    href={siteConfig.links.instagram} 
+                                    href={settings.instagram_url} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
@@ -50,9 +55,9 @@ export default function Footer() {
                                     <Instagram className="h-5 w-5" />
                                 </a>
                             )}
-                            {siteConfig.links.twitter && (
+                            {settings.twitter_url && (
                                 <a 
-                                    href={siteConfig.links.twitter} 
+                                    href={settings.twitter_url} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
@@ -61,9 +66,9 @@ export default function Footer() {
                                     <Twitter className="h-5 w-5" />
                                 </a>
                             )}
-                            {siteConfig.links.linkedin && (
+                            {settings.linkedin_url && (
                                 <a 
-                                    href={siteConfig.links.linkedin} 
+                                    href={settings.linkedin_url} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
@@ -80,21 +85,21 @@ export default function Footer() {
                         <h3 className="text-white font-bold mb-4">Contact</h3>
                         <ul className="space-y-2">
                             <li>
-                                <a href={`tel:${siteConfig.contact.phone}`} className="text-neutral-400 hover:text-rose-400 transition-colors text-sm flex items-center gap-2">
+                                <a href={`tel:${settings.phone}`} className="text-neutral-400 hover:text-rose-400 transition-colors text-sm flex items-center gap-2">
                                     <Phone className="h-4 w-4 text-rose-500" />
-                                    <span>{siteConfig.contact.phone}</span>
+                                    <span>{settings.phone}</span>
                                 </a>
                             </li>
                             <li>
-                                <a href={`mailto:${siteConfig.contact.email}`} className="text-neutral-400 hover:text-rose-400 transition-colors text-sm flex items-center gap-2">
+                                <a href={`mailto:${settings.support_email}`} className="text-neutral-400 hover:text-rose-400 transition-colors text-sm flex items-center gap-2">
                                     <Mail className="h-4 w-4 text-rose-500" />
-                                    <span>{siteConfig.contact.email}</span>
+                                    <span>{settings.support_email}</span>
                                 </a>
                             </li>
                             <li>
                                 <div className="text-neutral-400 text-sm flex items-start gap-2">
                                     <MapPin className="h-4 w-4 text-rose-500 mt-0.5" />
-                                    <span>{siteConfig.contact.address}</span>
+                                    <span>{settings.address}</span>
                                 </div>
                             </li>
                         </ul>

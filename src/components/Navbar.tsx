@@ -12,7 +12,11 @@ import { createClient } from '@/utils/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import { siteConfig } from '@/config/site'
 
-export default function Navbar() {
+interface NavbarProps {
+    storeName?: string
+}
+
+export default function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
     const [user, setUser] = useState<User | null>(null)
     const [isAdmin, setIsAdmin] = useState(false)
 
@@ -77,7 +81,7 @@ export default function Navbar() {
                             <Gift className="h-6 w-6" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-xl font-bold text-neutral-900 leading-none">{siteConfig.displayName}</span>
+                            <span className="text-xl font-bold text-neutral-900 leading-none">{storeName}</span>
                             <span className="text-xs text-rose-600 font-medium tracking-widest uppercase">{siteConfig.tagline}</span>
                         </div>
                     </Link>

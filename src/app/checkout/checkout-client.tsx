@@ -22,10 +22,14 @@ import {
 
 export default function CheckoutClient({
     userPhone,
-    savedAddresses
+    savedAddresses,
+    deliveryFee,
+    currencyCode
 }: {
     userPhone: string
     savedAddresses: SavedAddress[]
+    deliveryFee: number
+    currencyCode: string
 }) {
     const { cart, isLoading: cartLoading } = useCart()
     const [submitting, setSubmitting] = useState(false)
@@ -83,7 +87,7 @@ export default function CheckoutClient({
     }
 
     const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0)
-    const shippingCost = deliveryType === 'delivery' ? siteConfig.delivery.fee : 0
+    const shippingCost = deliveryType === 'delivery' ? deliveryFee : 0
     const total = subtotal + shippingCost
 
     async function handleSubmit(formData: FormData) {
@@ -269,7 +273,7 @@ export default function CheckoutClient({
                                 />
                                 <span className="font-semibold text-neutral-900">Home Delivery</span>
                                 <span className="text-xs sm:text-sm text-neutral-500">Delivery to your doorstep</span>
-                                <span className="mt-2 font-bold text-rose-600">{siteConfig.delivery.fee.toFixed(2)} {siteConfig.currency.code}</span>
+                                <span className="mt-2 font-bold text-rose-600">{deliveryFee.toFixed(2)} {currencyCode}</span>
                             </label>
                             <label className={`relative flex flex-col p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all ${deliveryType === 'pickup' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
                                 <input

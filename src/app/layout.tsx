@@ -6,6 +6,7 @@ import { CartProvider } from "@/context/CartContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { siteConfig } from "@/config/site";
+import { getStoreSettings } from "@/utils/settings";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,54 +18,60 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    template: `%s | ${siteConfig.name}`,
-    default: `${siteConfig.name} - Books, Stationery & Premium Gifts`
-  },
-  description: siteConfig.description,
-  keywords: siteConfig.seo.keywords,
-  authors: [{ name: siteConfig.name }],
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
-    title: `${siteConfig.name} - Books, Stationery & Premium Gifts`,
-    description: siteConfig.description,
-    siteName: siteConfig.name,
-    images: [
-      {
-        url: siteConfig.seo.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.name
-      }
-    ]
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: `${siteConfig.name} - Books, Stationery & Premium Gifts`,
-    description: siteConfig.description,
-    images: [siteConfig.seo.ogImage]
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getStoreSettings()
+  
+  return {
+    title: {
+      template: `%s | ${settings.store_name}`,
+      default: `${settings.store_name} - Books, Stationery & Premium Gifts`
+    },
+    description: settings.description,
+    keywords: siteConfig.seo.keywords,
+    authors: [{ name: settings.store_name }],
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      url: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
+      title: `${settings.store_name} - Books, Stationery & Premium Gifts`,
+      description: settings.description,
+      siteName: settings.store_name,
+      images: [
+        {
+          url: siteConfig.seo.ogImage,
+          width: 1200,
+          height: 630,
+          alt: settings.store_name
+        }
+      ]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${settings.store_name} - Books, Stationery & Premium Gifts`,
+      description: settings.description,
+      images: [siteConfig.seo.ogImage]
+    },
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1
+      }
     }
   }
-};
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getStoreSettings();
+
   return (
     <html lang="en">
       <head>
@@ -76,11 +83,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <CartProvider>
-          <Navbar />
+          <Navbar storeName={settings.store_name} />
           <div className="pt-20">
             {children}
           </div>
-          <Footer />
+          <Footer settings={settings} />
           <Toaster />
         </CartProvider>
       </body>

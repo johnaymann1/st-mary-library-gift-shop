@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Store, X, Menu, LayoutDashboard, Package, FolderOpen, ShoppingBag, Home, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Store, X, Menu, LayoutDashboard, Package, FolderOpen, ShoppingBag, Home, ChevronLeft, ChevronRight, Settings } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { NavigationItem } from '@/types/navigation'
@@ -16,6 +16,7 @@ const iconMap = {
     ShoppingBag,
     Package,
     FolderOpen,
+    Settings,
 }
 
 export function AdminSidebar({ navigation }: AdminSidebarProps) {

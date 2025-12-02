@@ -381,3 +381,59 @@ export async function cancelOrderByAdmin(orderId: number, reason?: string) {
     revalidatePath('/admin/orders')
     return { success: true }
 }
+
+/**
+ * Updates store settings in the database
+ * @param formData - Form data containing the settings to update
+ * @returns Success or error object
+ */
+export async function updateStoreSettings(formData: FormData) {
+    const supabase = await createClient()
+
+    const storeName = formData.get('store_name') as string
+    const description = formData.get('description') as string
+    const phone = formData.get('phone') as string
+    const supportEmail = formData.get('support_email') as string
+    const address = formData.get('address') as string
+    const deliveryFee = parseFloat(formData.get('delivery_fee') as string)
+    const freeDeliveryThreshold = formData.get('free_delivery_threshold') as string
+    const facebookUrl = formData.get('facebook_url') as string
+    const instagramUrl = formData.get('instagram_url') as string
+    const twitterUrl = formData.get('twitter_url') as string
+    const linkedinUrl = formData.get('linkedin_url') as string
+
+    // Validation
+    if (!storeName || !phone || !supportEmail || !address || isNaN(deliveryFee)) {
+        return { error: 'Please fill in all required fields' }
+    }
+
+    const { error } = await supabase
+        .from('store_settings')
+        .update({
+            store_name: storeName,
+            description: description,
+            phone: phone,
+            support_email: supportEmail,
+            address: address,
+            delivery_fee: deliveryFee,
+            free_delivery_threshold: freeDeliveryThreshold ? parseFloat(freeDeliveryThreshold) : null,
+            facebook_url: facebookUrl || null,
+            instagram_url: instagramUrl || null,
+            twitter_url: twitterUrl || null,
+            linkedin_url: linkedinUrl || null,
+            updated_at: new Date().toISOString(),
+        })
+        .eq('id', 1)
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    // Revalidate all pages that use settings
+    revalidatePath('/', 'layout')
+    revalidatePath('/admin/settings')
+    revalidatePath('/checkout')
+    revalidatePath('/not-found')
+    
+    return { success: true }
+}
