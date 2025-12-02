@@ -1,65 +1,114 @@
-import Image from "next/image";
 
-export default function Home() {
+import { createClient } from '@/utils/supabase/server'
+import Link from 'next/link'
+
+import Image from 'next/image'
+import { Button } from '@/components/ui/button'
+import { ArrowRight, Sparkles } from 'lucide-react'
+
+export default async function Home() {
+  const supabase = await createClient()
+
+  // Fetch Categories
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('*')
+    .eq('is_active', true)
+    .order('name_en')
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-white">
+
+
+      <main>
+        {/* Hero Section - Premium Split Layout */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-rose-50 via-white to-pink-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left: Content */}
+              <div className="text-left space-y-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-rose-100 text-rose-700 rounded-full text-sm font-medium">
+                  <Sparkles className="h-4 w-4" />
+                  Premium Gift Collection
+                </div>
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900 leading-tight">
+                  Make Someone&apos;s
+                  <span className="block text-rose-600">Day Special</span>
+                </h1>
+                <p className="text-xl text-neutral-600 max-w-xl leading-relaxed">
+                  Discover our curated collection of premium gifts, handpicked to bring joy and create lasting memories.
+                </p>
+                <div>
+                  <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl" asChild>
+                    <Link href="#categories">
+                      Shop Now
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+
+              {/* Right: Image */}
+              <div className="relative lg:h-[500px] h-[400px]">
+                <div className="absolute inset-0 bg-gradient-to-br from-rose-400 to-pink-600 rounded-3xl transform rotate-3 opacity-20"></div>
+                <div className="relative h-full rounded-3xl overflow-hidden shadow-2xl">
+                  <Image
+                    src="/hero-image.jpg"
+                    alt="Premium Gifts"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Categories Section */}
+        <div id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-neutral-900 mb-4">Shop by Category</h2>
+            <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+              Explore our carefully organized collections to find the perfect gift
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {categories?.map((category) => (
+              <Link key={category.id} href={`/category/${category.id}`} className="group">
+                <div className="relative rounded-3xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-1000 ease-in-out aspect-[4/5] transform hover:-translate-y-2">
+                  {category.image_url ? (
+                    <Image
+                      src={category.image_url}
+                      alt={category.name_en}
+                      fill
+                      className="object-cover group-hover:scale-105"
+                      style={{
+                        transition: 'transform 2000ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-rose-100 to-pink-100 text-neutral-400">
+                      <span className="text-sm font-medium">No Image</span>
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                  <div className="absolute inset-x-0 bottom-0 p-8">
+                    <h3 className="text-white font-bold text-2xl drop-shadow-lg mb-2">{category.name_en}</h3>
+                    <p className="text-white/90 text-lg drop-shadow-md font-medium" dir="rtl">{category.name_ar}</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+          {(!categories || categories.length === 0) && (
+            <div className="text-center py-12">
+              <p className="text-neutral-500 text-lg">No categories available yet.</p>
+            </div>
+          )}
         </div>
       </main>
     </div>
-  );
+  )
 }
+

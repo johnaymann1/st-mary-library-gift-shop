@@ -1,0 +1,223 @@
+import { createClient } from '@/utils/supabase/server'
+import { Package, ShoppingBag, TrendingUp, AlertCircle } from 'lucide-react'
+import Link from 'next/link'
+import { Badge } from '@/components/ui/badge'
+import { siteConfig } from '@/config/site'
+
+export default async function AdminDashboard() {
+    const supabase = await createClient()
+
+    // Fetch statistics
+    const { count: totalProducts } = await supabase
+        .from('products')
+        .select('*', { count: 'exact', head: true })
+
+    const { count: activeProducts } = await supabase
+        .from('products')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+
+    const { count: outOfStock } = await supabase
+        .from('products')
+        .select('*', { count: 'exact', head: true })
+        .eq('in_stock', false)
+
+    const { count: totalCategories } = await supabase
+        .from('categories')
+        .select('*', { count: 'exact', head: true })
+
+    // Fetch recent products for quick access
+    const { data: recentProducts } = await supabase
+        .from('products')
+        .select(`
+            *,
+            categories (
+                name_en
+            )
+        `)
+        .order('created_at', { ascending: false })
+        .limit(5)
+
+    const stats = [
+        {
+            name: 'Total Products',
+            value: totalProducts || 0,
+            icon: Package,
+            color: 'bg-blue-500',
+            textColor: 'text-blue-600',
+            bgLight: 'bg-blue-50',
+        },
+        {
+            name: 'Active Products',
+            value: activeProducts || 0,
+            icon: TrendingUp,
+            color: 'bg-green-500',
+            textColor: 'text-green-600',
+            bgLight: 'bg-green-50',
+        },
+        {
+            name: 'Out of Stock',
+            value: outOfStock || 0,
+            icon: AlertCircle,
+            color: 'bg-red-500',
+            textColor: 'text-red-600',
+            bgLight: 'bg-red-50',
+        },
+        {
+            name: 'Categories',
+            value: totalCategories || 0,
+            icon: ShoppingBag,
+            color: 'bg-purple-500',
+            textColor: 'text-purple-600',
+            bgLight: 'bg-purple-50',
+        },
+    ]
+
+    return (
+        <div className="space-y-8">
+            {/* Header */}
+            <div>
+                <h1 className="text-4xl font-bold text-neutral-900 mb-2">Dashboard</h1>
+                <p className="text-neutral-700 text-lg font-medium">Welcome back! Here's what's happening with your store.</p>
+            </div>
+
+            {/* Quick Search */}
+            <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+                <h2 className="text-2xl font-bold text-neutral-900 mb-4">Quick Search</h2>
+                <div className="grid md:grid-cols-2 gap-4">
+                    <Link href="/admin/products" className="group">
+                        <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-neutral-200 hover:border-rose-300 hover:bg-rose-50 transition-all">
+                            <div className="p-2 bg-rose-100 rounded-lg group-hover:bg-rose-200 transition-colors">
+                                <Package className="h-5 w-5 text-rose-600" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="font-semibold text-neutral-900">Search Products</p>
+                                <p className="text-sm text-neutral-700">Find and manage products</p>
+                            </div>
+                        </div>
+                    </Link>
+                    <Link href="/admin/categories" className="group">
+                        <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-neutral-200 hover:border-rose-300 hover:bg-rose-50 transition-all">
+                            <div className="p-2 bg-rose-100 rounded-lg group-hover:bg-rose-200 transition-colors">
+                                <ShoppingBag className="h-5 w-5 text-rose-600" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="font-semibold text-neutral-900">Search Categories</p>
+                                <p className="text-sm text-neutral-700">Organize your catalog</p>
+                            </div>
+                        </div>
+                    </Link>
+                </div>
+            </div>
+
+            {/* Statistics Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {stats.map((stat) => {
+                    const Icon = stat.icon
+                    return (
+                        <div key={stat.name} className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6 hover:shadow-md transition-shadow">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className={`p-3 rounded-xl ${stat.bgLight}`}>
+                                    <Icon className={`h-6 w-6 ${stat.textColor}`} />
+                                </div>
+                            </div>
+                            <h3 className="text-neutral-700 text-sm font-bold uppercase tracking-wide mb-1">{stat.name}</h3>
+                            <p className="text-4xl font-bold text-neutral-900">{stat.value}</p>
+                        </div>
+                    )
+                })}
+            </div>
+
+            {/* Recent Products */}
+            <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+                <div className="p-6 border-b border-neutral-200">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h2 className="text-2xl font-bold text-neutral-900">Recent Products</h2>
+                            <p className="text-neutral-700 mt-1 font-medium">Latest additions to your inventory</p>
+                        </div>
+                        <Link
+                            href="/admin/products"
+                            className="text-rose-600 hover:text-rose-700 font-semibold text-sm"
+                        >
+                            View All →
+                        </Link>
+                    </div>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-neutral-200">
+                        <thead className="bg-neutral-50">
+                            <tr>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 uppercase tracking-wider">Product</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 uppercase tracking-wider">Category</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 uppercase tracking-wider">Price</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 uppercase tracking-wider">Status</th>
+                                <th className="px-6 py-4 text-right text-xs font-bold text-neutral-900 uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-neutral-200">
+                            {recentProducts?.map((product) => (
+                                <tr key={product.id} className="hover:bg-neutral-50 transition-colors">
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="flex items-center gap-3">
+                                            {product.image_url ? (
+                                                <img
+                                                    src={product.image_url}
+                                                    alt={product.name_en}
+                                                    className="h-12 w-12 rounded-lg object-cover shadow-sm"
+                                                />
+                                            ) : (
+                                                <div className="h-12 w-12 rounded-lg bg-neutral-100 flex items-center justify-center">
+                                                    <Package className="h-6 w-6 text-neutral-400" />
+                                                </div>
+                                            )}
+                                            <div>
+                                                <p className="text-sm font-semibold text-neutral-900">{product.name_en}</p>
+                                                <p className="text-xs text-neutral-600">{product.name_ar}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <span className="text-sm text-neutral-700">
+                                            {/* @ts-ignore */}
+                                            {product.categories?.name_en || 'Uncategorized'}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <span className="text-sm font-bold text-neutral-900">{product.price} {siteConfig.currency.code}</span>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <Badge variant={product.in_stock ? 'success' : 'destructive'}>
+                                            {product.in_stock ? 'In Stock' : 'Out of Stock'}
+                                        </Badge>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                                        <Link
+                                            href={`/admin/products/${product.id}`}
+                                            className="text-rose-600 hover:text-rose-700 font-semibold text-sm"
+                                        >
+                                            Edit
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
+                            {(!recentProducts || recentProducts.length === 0) && (
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-12 text-center">
+                                        <div className="flex flex-col items-center gap-2">
+                                            <Package className="h-12 w-12 text-neutral-300" />
+                                            <p className="text-neutral-700 font-medium">No products yet</p>
+                                            <Link href="/admin/products" className="text-rose-600 hover:text-rose-700 text-sm font-semibold">
+                                                Create your first product →
+                                            </Link>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    )
+}
