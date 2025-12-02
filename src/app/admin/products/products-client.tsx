@@ -6,7 +6,7 @@ import DeleteProductButton from './delete-button'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { siteConfig } from '@/config/site'
 
 import { Product, Category } from '@/types'
@@ -19,40 +19,40 @@ export default function ProductsClientPage() {
     const [statusFilter, setStatusFilter] = useState('all')
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        async function fetchData() {
-            const supabase = createClient()
+    const fetchData = useCallback(async () => {
+        const supabase = createClient()
 
-            // Fetch products
-            const { data: productsData } = await supabase
-                .from('products')
-                .select(`
-                    *,
-                    categories (
-                        name_en
-                    )
-                `)
-                .order('created_at', { ascending: false })
+        // Fetch products
+        const { data: productsData } = await supabase
+            .from('products')
+            .select(`
+                *,
+                categories (
+                    name_en
+                )
+            `)
+            .order('created_at', { ascending: false })
 
-            if (productsData) {
-                setAllProducts(productsData)
-            }
-
-            // Fetch categories
-            const { data: categoriesData } = await supabase
-                .from('categories')
-                .select('id, name_en')
-                .order('name_en')
-
-            if (categoriesData) {
-                setCategories(categoriesData)
-            }
-
-            setLoading(false)
+        if (productsData) {
+            setAllProducts(productsData)
         }
 
-        fetchData()
+        // Fetch categories
+        const { data: categoriesData } = await supabase
+            .from('categories')
+            .select('id, name_en')
+            .order('name_en')
+
+        if (categoriesData) {
+            setCategories(categoriesData)
+        }
+
+        setLoading(false)
     }, [])
+
+    useEffect(() => {
+        fetchData()
+    }, [fetchData])
 
     // Apply filters whenever search or status changes
     useEffect(() => {
@@ -92,7 +92,7 @@ export default function ProductsClientPage() {
                 <p className="text-neutral-700 font-medium text-lg">Manage your gift shop inventory</p>
             </div>
 
-            <CreateProductForm categories={categories} />
+            <CreateProductForm categories={categories} onSuccess={fetchData} />
 
             {/* Search and Filter Bar */}
             <div className="bg-white p-4 rounded-xl shadow-sm border border-neutral-200 space-y-4">
@@ -199,7 +199,7 @@ export default function ProductsClientPage() {
                                                 </svg>
                                                 Edit
                                             </a>
-                                            <DeleteProductButton id={product.id} />
+                                            <DeleteProductButton id={product.id} onDelete={fetchData} />
                                         </div>
                                     </td>
                                 </tr>
@@ -267,7 +267,7 @@ export default function ProductsClientPage() {
                                     </svg>
                                     Edit
                                 </a>
-                                <DeleteProductButton id={product.id} />
+                                <DeleteProductButton id={product.id} onDelete={fetchData} />
                             </div>
                         </div>
                     </div>

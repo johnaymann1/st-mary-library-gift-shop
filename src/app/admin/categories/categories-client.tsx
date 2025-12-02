@@ -6,7 +6,7 @@ import DeleteCategoryButton from './delete-button'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 import { Category } from '@/types'
 
@@ -16,24 +16,24 @@ export default function CategoriesClientPage() {
     const [searchQuery, setSearchQuery] = useState('')
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        async function fetchData() {
-            const supabase = createClient()
+    const fetchData = useCallback(async () => {
+        const supabase = createClient()
 
-            const { data: categoriesData } = await supabase
-                .from('categories')
-                .select('*')
-                .order('created_at', { ascending: false })
+        const { data: categoriesData } = await supabase
+            .from('categories')
+            .select('*')
+            .order('created_at', { ascending: false })
 
-            if (categoriesData) {
-                setAllCategories(categoriesData)
-            }
-
-            setLoading(false)
+        if (categoriesData) {
+            setAllCategories(categoriesData)
         }
 
-        fetchData()
+        setLoading(false)
     }, [])
+
+    useEffect(() => {
+        fetchData()
+    }, [fetchData])
 
     // Apply search filter
     useEffect(() => {
@@ -65,7 +65,7 @@ export default function CategoriesClientPage() {
                 <p className="text-neutral-700 font-medium text-lg">Organize your products into categories</p>
             </div>
 
-            <CreateCategoryForm />
+            <CreateCategoryForm onSuccess={fetchData} />
 
             {/* Search Bar */}
             <div className="bg-white p-4 rounded-xl shadow-sm border border-neutral-200 space-y-4">
@@ -127,7 +127,7 @@ export default function CategoriesClientPage() {
                                             </svg>
                                             Edit
                                         </a>
-                                        <DeleteCategoryButton id={category.id} />
+                                        <DeleteCategoryButton id={category.id} onDelete={fetchData} />
                                     </div>
                                 </td>
                             </tr>
@@ -179,7 +179,7 @@ export default function CategoriesClientPage() {
                                     </svg>
                                     Edit
                                 </a>
-                                <DeleteCategoryButton id={category.id} />
+                                <DeleteCategoryButton id={category.id} onDelete={fetchData} />
                             </div>
                         </div>
                     </div>

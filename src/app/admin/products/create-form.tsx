@@ -13,7 +13,7 @@ import { compressImage } from '@/utils/imageCompression'
 
 import { Category } from '@/types'
 
-export default function CreateProductForm({ categories }: { categories: Pick<Category, 'id' | 'name_en'>[] }) {
+export default function CreateProductForm({ categories, onSuccess }: { categories: Pick<Category, 'id' | 'name_en'>[]; onSuccess?: () => void }) {
     const [loading, setLoading] = useState(false)
     const [imagePreview, setImagePreview] = useState<string | null>(null)
     const [imageName, setImageName] = useState<string>('')
@@ -43,6 +43,7 @@ export default function CreateProductForm({ categories }: { categories: Pick<Cat
                 form?.reset()
                 setImagePreview(null)
                 setImageName('')
+                onSuccess?.()
             }
         } catch (error) {
             toast.error(error instanceof Error ? error.message : 'Failed to create product')

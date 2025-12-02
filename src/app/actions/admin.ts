@@ -58,6 +58,8 @@ export async function createCategory(formData: FormData) {
     }
 
     revalidatePath('/admin/categories')
+    revalidatePath('/')
+    revalidatePath('/category/[id]', 'page')
     return { success: true }
 }
 
@@ -84,6 +86,8 @@ export async function deleteCategory(id: number) {
     }
 
     revalidatePath('/admin/categories')
+    revalidatePath('/')
+    revalidatePath('/category/[id]', 'page')
     return { success: true }
 }
 
@@ -129,6 +133,9 @@ export async function createProduct(formData: FormData) {
     }
 
     revalidatePath('/admin/products')
+    revalidatePath('/')
+    revalidatePath('/product/[id]', 'page')
+    revalidatePath('/category/[id]', 'page')
     return { success: true }
 }
 
@@ -164,6 +171,8 @@ export async function updateCategory(formData: FormData) {
     }
 
     revalidatePath('/admin/categories')
+    revalidatePath('/')
+    revalidatePath('/category/[id]', 'page')
     return { success: true }
 }
 
@@ -209,6 +218,9 @@ export async function updateProduct(formData: FormData) {
     }
 
     revalidatePath('/admin/products')
+    revalidatePath('/')
+    revalidatePath('/product/[id]', 'page')
+    revalidatePath('/category/[id]', 'page')
     return { success: true }
 }
 
@@ -225,6 +237,9 @@ export async function deleteProduct(id: number) {
     }
 
     revalidatePath('/admin/products')
+    revalidatePath('/')
+    revalidatePath('/product/[id]', 'page')
+    revalidatePath('/category/[id]', 'page')
     return { success: true }
 }
 

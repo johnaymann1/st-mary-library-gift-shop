@@ -9,7 +9,7 @@ import { toast } from 'sonner'
 import Image from 'next/image'
 import { compressImage } from '@/utils/imageCompression'
 
-export default function CreateCategoryForm() {
+export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => void }) {
     const [loading, setLoading] = useState(false)
     const [imagePreview, setImagePreview] = useState<string | null>(null)
     const [imageName, setImageName] = useState<string>('')
@@ -39,6 +39,7 @@ export default function CreateCategoryForm() {
                 form?.reset()
                 setImagePreview(null)
                 setImageName('')
+                onSuccess?.()
             }
         } catch (error) {
             toast.error(error instanceof Error ? error.message : 'Failed to create category')
