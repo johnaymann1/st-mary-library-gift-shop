@@ -8,18 +8,18 @@ export default function Footer() {
     const currentYear = new Date().getFullYear()
 
     return (
-        <footer className="bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 text-white mt-16">
+        <footer className="bg-neutral-900 text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                     {/* Brand Section */}
                     <div className="space-y-4">
                         <Link href="/" className="flex items-center gap-2 group">
-                            <div className="bg-gradient-to-br from-rose-500 to-pink-600 text-white p-2 rounded-xl group-hover:rotate-12 transition-transform duration-500 shadow-lg">
-                                <Gift className="h-5 w-5" />
+                            <div className="bg-gradient-to-br from-rose-500 to-pink-600 p-2 rounded-xl group-hover:rotate-12 transition-transform">
+                                <Gift className="h-5 w-5 text-white" />
                             </div>
-                            <span className="text-lg font-bold text-white">{siteConfig.displayName}</span>
+                            <span className="text-lg font-bold">{siteConfig.displayName}</span>
                         </Link>
-                        <p className="text-neutral-400 text-sm leading-relaxed">
+                        <p className="text-neutral-400 text-sm">
                             Quality religious books and gifts
                         </p>
                     </div>
@@ -33,7 +33,7 @@ export default function Footer() {
                                     href={siteConfig.links.facebook} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-all"
+                                    className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
                                     aria-label="Facebook"
                                 >
                                     <Facebook className="h-5 w-5" />
@@ -44,7 +44,7 @@ export default function Footer() {
                                     href={siteConfig.links.instagram} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-all"
+                                    className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
                                     aria-label="Instagram"
                                 >
                                     <Instagram className="h-5 w-5" />
@@ -55,7 +55,7 @@ export default function Footer() {
                                     href={siteConfig.links.twitter} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-all"
+                                    className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
                                     aria-label="Twitter"
                                 >
                                     <Twitter className="h-5 w-5" />
@@ -66,7 +66,7 @@ export default function Footer() {
                                     href={siteConfig.links.linkedin} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-all"
+                                    className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
                                     aria-label="LinkedIn"
                                 >
                                     <Linkedin className="h-5 w-5" />
@@ -102,7 +102,7 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="pt-6 border-t border-neutral-700 text-center">
+                <div className="pt-6 border-t border-neutral-800 text-center">
                     <p className="text-neutral-500 text-sm">
                         © {currentYear} {siteConfig.name}. All rights reserved.
                     </p>
