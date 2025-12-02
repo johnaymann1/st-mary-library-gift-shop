@@ -64,7 +64,7 @@ export default function DeleteCategoryButton({ id, onDelete }: { id: number; onD
                             variant="outline"
                             onClick={() => setShowDialog(false)}
                             disabled={loading}
-                            className="w-full sm:w-auto border-2 border-neutral-300 hover:bg-neutral-100 font-semibold"
+                            className="w-full sm:w-auto border-2 border-neutral-400 text-neutral-800 hover:bg-neutral-100 hover:border-neutral-500 font-semibold"
                         >
                             Cancel
                         </Button>

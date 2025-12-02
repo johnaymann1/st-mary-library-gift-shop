@@ -495,7 +495,7 @@ export default function CheckoutClient({
                                                         setEditingPhone(true)
                                                     }
                                                 }}
-                                                className="bg-white text-neutral-900 border-neutral-300 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 font-semibold"
+                                                className="border-2 border-neutral-400 text-neutral-800 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-400 font-semibold"
                                             >
                                                 {editingPhone ? 'Save' : 'Edit'}
                                             </Button>
@@ -687,7 +687,7 @@ export default function CheckoutClient({
                                 setDeleteDialogOpen(false)
                                 setAddressToDelete(null)
                             }}
-                            className="w-full sm:w-auto border-2 border-neutral-300 hover:bg-neutral-100 font-semibold"
+                            className="w-full sm:w-auto border-2 border-neutral-400 text-neutral-800 hover:bg-neutral-100 hover:border-neutral-500 font-semibold"
                         >
                             Cancel
                         </Button>

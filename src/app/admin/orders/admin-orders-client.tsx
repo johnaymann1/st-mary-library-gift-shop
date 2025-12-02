@@ -282,7 +282,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                                 variant="outline"
                                                 size="sm"
                                                 asChild
-                                                className="border-neutral-300 hover:bg-neutral-100 hover:border-neutral-400 text-neutral-700 h-8 px-2"
+                                                className="border-2 border-neutral-400 hover:bg-neutral-100 hover:border-neutral-500 text-neutral-800 h-8 px-2 font-semibold"
                                             >
                                                 <Link href={`/orders/${order.id}`}>
                                                     <Eye className="h-4 w-4" />
@@ -330,7 +330,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                                 <Button
                                                     size="sm"
                                                     variant="outline"
-                                                    className="border-red-300 hover:bg-red-50 hover:border-red-400 text-red-600 font-medium h-8 px-2"
+                                                    className="border-2 border-red-300 hover:bg-red-50 hover:border-red-400 text-red-700 font-semibold h-8 px-2"
                                                     onClick={() => openCancelModal(order)}
                                                     disabled={updating}
                                                 >
@@ -395,7 +395,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                             variant="outline"
                             onClick={() => handleVerifyPayment(false)}
                             disabled={updating || !selectedOrder?.payment_proof_url}
-                            className="flex-1 border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800"
+                            className="flex-1 border-2 border-red-300 text-red-700 hover:bg-red-50 hover:text-red-800 hover:border-red-400 font-semibold"
                         >
                             <XCircle className="mr-2 h-4 w-4" />
                             Reject
@@ -448,7 +448,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                 setCancelReason('')
                             }}
                             disabled={updating}
-                            className="flex-1"
+                            className="flex-1 border-2 border-neutral-400 text-neutral-800 hover:bg-neutral-100 hover:border-neutral-500 font-semibold"
                         >
                             Keep Order
                         </Button>

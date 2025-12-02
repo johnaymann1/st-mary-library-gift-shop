@@ -44,6 +44,7 @@ export default function CancelOrderButton({ orderId, status }: CancelOrderButton
                     variant="outline"
                     onClick={() => setShowConfirm(false)}
                     disabled={loading}
+                    className="border-2 border-neutral-400 text-neutral-800 hover:bg-neutral-100 hover:border-neutral-500 font-semibold"
                 >
                     No, keep order
                 </Button>
@@ -62,7 +63,7 @@ export default function CancelOrderButton({ orderId, status }: CancelOrderButton
         <Button 
             variant="outline" 
             onClick={() => setShowConfirm(true)}
-            className="border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+            className="border-2 border-red-300 text-red-700 hover:bg-red-50 hover:border-red-400 font-semibold"
         >
             <X className="h-4 w-4 mr-2" />
             Cancel Order

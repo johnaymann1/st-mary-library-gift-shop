@@ -422,15 +422,18 @@ supabase/                    # Database schema & migrations
 ### Design System Principles
 
 1. **UI Components** (`components/ui/`): Dumb, reusable atoms
+
    - No business logic
    - Accept props for customization
    - Use CVA for variants (Button, Badge, etc.)
 
 2. **Feature Components** (`components/`): Smart, feature-specific
+
    - Can use hooks, state, and actions
    - Grouped by feature when needed (navbar/, emails/)
 
 3. **Centralized Logic**:
+
    - **Types**: `types/index.ts` (no inline interfaces in pages)
    - **Formatters**: `utils/formatters.ts` (currency, phone)
    - **Constants**: `config/site.ts` (site metadata, currency)
@@ -445,17 +448,19 @@ supabase/                    # Database schema & migrations
 ### Example: Adding a New Product Feature
 
 1. **Define Types** (`types/index.ts`):
+
    ```typescript
    export interface ProductReview {
-       id: number
-       product_id: number
-       user_id: string
-       rating: number
-       comment: string
+     id: number;
+     product_id: number;
+     user_id: string;
+     rating: number;
+     comment: string;
    }
    ```
 
 2. **Create Server Action** (`app/actions/products.ts`):
+
    ```typescript
    /**
     * Creates a product review
@@ -464,22 +469,27 @@ supabase/                    # Database schema & migrations
     * @param comment - Review text
     * @returns Success or error
     */
-   export async function createReview(productId: number, rating: number, comment: string) {
-       // Implementation
+   export async function createReview(
+     productId: number,
+     rating: number,
+     comment: string
+   ) {
+     // Implementation
    }
    ```
 
 3. **Build UI Component** (`components/ProductReview.tsx`):
+
    ```typescript
-   'use client'
-   import { Button } from '@/components/ui/button'
-   import { createReview } from '@/app/actions/products'
+   "use client";
+   import { Button } from "@/components/ui/button";
+   import { createReview } from "@/app/actions/products";
    // Component implementation
    ```
 
 4. **Integrate in Page** (`app/product/[id]/page.tsx`):
    ```typescript
-   import ProductReview from '@/components/ProductReview'
+   import ProductReview from "@/components/ProductReview";
    // Add to page layout
    ```
 
