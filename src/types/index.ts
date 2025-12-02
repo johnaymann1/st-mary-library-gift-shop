@@ -68,6 +68,7 @@ export interface Order {
     payment_method: 'cash' | 'instapay'
     payment_proof_url: string | null
     created_at: string
+    updated_at: string
     items?: OrderItem[]
     user?: {
         full_name: string | null

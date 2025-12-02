@@ -2,11 +2,12 @@
 
 import { useCart } from '@/context/CartContext'
 import { Button } from '@/components/ui/button'
-import { Trash2, Plus, Minus, ArrowRight } from 'lucide-react'
+import { Trash2, Plus, Minus, ArrowRight, ShoppingBag } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { siteConfig } from '@/config/site'
+import CartSkeleton from '@/components/CartSkeleton'
 
 import { User } from '@supabase/supabase-js'
 
@@ -25,11 +26,7 @@ export default function CartClient({ user }: { user: User | null }) {
     }
 
     if (isLoading) {
-        return (
-            <div className="flex items-center justify-center h-96">
-                <div className="text-neutral-600">Loading cart...</div>
-            </div>
-        )
+        return <CartSkeleton />
     }
 
     if (cart.length === 0) {
@@ -37,11 +34,11 @@ export default function CartClient({ user }: { user: User | null }) {
             <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-neutral-200">
                 <div className="mb-4">
                     <div className="mx-auto h-16 w-16 bg-neutral-100 rounded-full flex items-center justify-center">
-                        <ShoppingBagIcon className="h-8 w-8 text-neutral-400" />
+                        <ShoppingBag className="h-8 w-8 text-neutral-400" />
                     </div>
                 </div>
                 <h2 className="text-xl font-semibold text-neutral-900 mb-2">Your cart is empty</h2>
-                <p className="text-neutral-500 mb-8">Looks like you haven't added anything yet.</p>
+                <p className="text-neutral-500 mb-8">Looks like you haven&apos;t added anything yet.</p>
                 <Button asChild>
                     <Link href="/">Start Shopping</Link>
                 </Button>

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ChevronLeft, MapPin, Phone, CreditCard, Package, Truck } from 'lucide-react'
 import CancelOrderButton from '@/components/CancelOrderButton'
+import OrderStatusTimeline from '@/components/OrderStatusTimeline'
 import { siteConfig } from '@/config/site'
 
 export default async function OrderDetailsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -139,6 +140,13 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
 
                     {/* Right Column: Details */}
                     <div className="lg:col-span-2 space-y-6">
+                        {/* Order Status Timeline */}
+                        <OrderStatusTimeline 
+                            status={order.status} 
+                            createdAt={order.created_at}
+                            updatedAt={order.updated_at}
+                        />
+
                         {/* Delivery Info */}
                         <div className="bg-white rounded-3xl shadow-sm p-8">
                             <div className="flex items-center gap-3 mb-6">
