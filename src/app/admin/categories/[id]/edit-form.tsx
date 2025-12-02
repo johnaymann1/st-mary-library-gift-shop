@@ -50,7 +50,6 @@ export default function EditCategoryForm({ category }: { category: Category }) {
                 toast.error(result.error)
             } else {
                 toast.success('Category updated successfully!')
-                router.refresh()
                 router.push('/admin/categories')
             }
         } catch (error) {

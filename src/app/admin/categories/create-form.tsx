@@ -11,6 +11,7 @@ export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => vo
     const [loading, setLoading] = useState(false)
     const [imagePreview, setImagePreview] = useState<string | null>(null)
     const [imageName, setImageName] = useState<string>('')
+    const [imageError, setImageError] = useState<string>('')
 
     async function handleSubmit(formData: FormData) {
         setLoading(true)
@@ -38,6 +39,18 @@ export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => vo
     function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0]
         if (file) {
+            // Check file size (5MB limit)
+            const maxSize = 5 * 1024 * 1024 // 5MB in bytes
+            if (file.size > maxSize) {
+                setImageError('Image size must be less than 5MB')
+                setImagePreview(null)
+                setImageName('')
+                e.target.value = '' // Clear the input
+                toast.error('Image size must be less than 5MB')
+                return
+            }
+
+            setImageError('')
             setImageName(file.name)
             const reader = new FileReader()
             reader.onloadend = () => {

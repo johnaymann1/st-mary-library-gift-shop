@@ -52,7 +52,6 @@ export default function EditProductForm({ product, categories }: { product: Prod
                 toast.error(result.error)
             } else {
                 toast.success('Product updated successfully!')
-                router.refresh()
                 router.push('/admin/products')
             }
         } catch (error) {
