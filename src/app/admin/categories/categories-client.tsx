@@ -87,7 +87,8 @@ export default function CategoriesClientPage() {
                 )}
             </div>
 
-            <div className="bg-white shadow-sm rounded-xl overflow-hidden border border-neutral-200">
+            {/* Desktop Table View */}
+            <div className="hidden md:block bg-white shadow-sm rounded-xl overflow-hidden border border-neutral-200">
                 <table className="min-w-full divide-y divide-neutral-200">
                     <thead className="bg-neutral-50">
                         <tr>
@@ -142,6 +143,56 @@ export default function CategoriesClientPage() {
                         )}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4">
+                {filteredCategories.map((category) => (
+                    <div key={category.id} className="bg-white shadow-sm rounded-xl border border-neutral-200 overflow-hidden">
+                        <div className="p-4 space-y-4">
+                            {/* Image and Title */}
+                            <div className="flex gap-4">
+                                {category.image_url ? (
+                                    <img src={category.image_url} alt={category.name_en} className="h-20 w-20 rounded-full object-cover shadow-sm flex-shrink-0" />
+                                ) : (
+                                    <div className="h-20 w-20 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 text-xs font-medium flex-shrink-0">No Image</div>
+                                )}
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="font-semibold text-neutral-900">{category.name_en}</h3>
+                                    <p className="text-sm text-neutral-600 truncate">{category.name_ar}</p>
+                                    <div className="mt-2">
+                                        <Badge variant={category.is_active ? 'success' : 'destructive'}>
+                                            {category.is_active ? 'Active' : 'Inactive'}
+                                        </Badge>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex gap-2 pt-3 border-t border-neutral-100">
+                                <a
+                                    href={`/admin/categories/${category.id}`}
+                                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-rose-600 hover:bg-rose-700 rounded-lg transition-colors"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    Edit
+                                </a>
+                                <DeleteCategoryButton id={category.id} />
+                            </div>
+                        </div>
+                    </div>
+                ))}
+                {filteredCategories.length === 0 && (
+                    <div className="bg-white shadow-sm rounded-xl border border-neutral-200 p-8 text-center">
+                        <p className="text-sm text-neutral-700 font-medium">
+                            {searchQuery
+                                ? 'No categories match your search.'
+                                : 'No categories found. Create your first category above.'}
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     )
