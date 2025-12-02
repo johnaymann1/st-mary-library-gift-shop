@@ -5,12 +5,7 @@ import { useState, useEffect } from 'react'
 import { Store, X, Menu, LayoutDashboard, Package, FolderOpen, ShoppingBag, Home, ChevronLeft, ChevronRight } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-
-interface NavigationItem {
-    name: string
-    href: string
-    icon: string
-}
+import { NavigationItem } from '@/types/navigation'
 
 interface AdminSidebarProps {
     navigation: NavigationItem[]

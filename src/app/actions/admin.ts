@@ -4,7 +4,13 @@ import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import sharp from 'sharp'
 
-// --- Helper: Upload Image with automatic compression ---
+/**
+ * Uploads and compresses an image to Supabase storage
+ * @param file - The image file to upload
+ * @param bucket - The storage bucket ('categories' or 'products')
+ * @returns The public URL of the uploaded image
+ * @throws Error if upload fails
+ */
 async function uploadImage(file: File, bucket: 'categories' | 'products') {
     const supabase = await createClient()
 
@@ -44,6 +50,11 @@ async function uploadImage(file: File, bucket: 'categories' | 'products') {
 
 // --- Categories ---
 
+/**
+ * Creates a new category with optional image
+ * @param formData - Form data containing name_en, name_ar, and optional image file
+ * @returns Success status or error message
+ */
 export async function createCategory(formData: FormData) {
     const supabase = await createClient()
 
@@ -79,6 +90,11 @@ export async function createCategory(formData: FormData) {
     return { success: true }
 }
 
+/**
+ * Deletes a category by ID (only if no products are associated)
+ * @param id - The category ID to delete
+ * @returns Success status or error message if products exist
+ */
 export async function deleteCategory(id: number) {
     const supabase = await createClient()
 

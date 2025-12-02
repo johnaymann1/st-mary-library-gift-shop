@@ -4,6 +4,10 @@ import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { CartItem } from '@/types'
 
+/**
+ * Retrieves the current user's shopping cart
+ * @returns Array of cart items with product details, or empty array if not logged in
+ */
 export async function getCart() {
     const supabase = await createClient()
 
@@ -38,6 +42,12 @@ export async function getCart() {
     return data as unknown as CartItem[]
 }
 
+/**
+ * Adds a product to the shopping cart or updates quantity if it already exists
+ * @param productId - The ID of the product to add
+ * @param quantity - The quantity to add (default: 1)
+ * @returns Success status or error message
+ */
 export async function addToCart(productId: number, quantity: number) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()

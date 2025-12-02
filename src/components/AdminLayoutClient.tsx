@@ -1,13 +1,8 @@
 'use client'
 
-import { AdminSidebar } from '@/components/AdminSidebar'
-import { useState, useEffect } from 'react'
-
-interface NavigationItem {
-    name: string
-    href: string
-    icon: string
-}
+import { AdminSidebar } from './AdminSidebar'
+import { useEffect, useState } from 'react'
+import { NavigationItem } from '@/types/navigation'
 
 interface AdminLayoutClientProps {
     navigation: NavigationItem[]

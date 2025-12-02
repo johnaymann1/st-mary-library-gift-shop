@@ -11,6 +11,14 @@ import { toast } from 'sonner'
 import { Loader2, Upload, CreditCard, Banknote, Truck, MapPin, ArrowLeft, Trash2, Plus, Edit2, Check } from 'lucide-react'
 import { SavedAddress } from '@/types'
 import { siteConfig } from '@/config/site'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog'
 
 export default function CheckoutClient({
     userPhone,
@@ -44,6 +52,10 @@ export default function CheckoutClient({
     const [uploadedImage, setUploadedImage] = useState<string | null>(null)
     const [uploadedFileName, setUploadedFileName] = useState<string>('')
     const [uploadedFile, setUploadedFile] = useState<File | null>(null)
+
+    // Delete Address Dialog State
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [addressToDelete, setAddressToDelete] = useState<number | null>(null)
 
     useEffect(() => {
         if (selectedAddress) {
@@ -187,8 +199,6 @@ export default function CheckoutClient({
     }
 
     async function handleDeleteAddress(addressId: number) {
-        if (!confirm('Are you sure you want to delete this address?')) return
-
         const result = await deleteAddress(addressId)
         if (result?.error) {
             toast.error(result.error)
@@ -204,6 +214,8 @@ export default function CheckoutClient({
                 setCustomAddress(newSelected?.address || '')
             }
         }
+        setDeleteDialogOpen(false)
+        setAddressToDelete(null)
     }
 
     if (cartLoading) {
@@ -339,7 +351,8 @@ export default function CheckoutClient({
                                                                 size="sm"
                                                                 onClick={(e) => {
                                                                     e.stopPropagation()
-                                                                    handleDeleteAddress(addr.id)
+                                                                    setAddressToDelete(addr.id)
+                                                                    setDeleteDialogOpen(true)
                                                                 }}
                                                                 className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
                                                             >
@@ -653,6 +666,42 @@ export default function CheckoutClient({
                     </div>
                 </div>
             </div>
+
+            {/* Delete Address Dialog */}
+            <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <DialogContent className="sm:max-w-md bg-gradient-to-br from-white to-rose-50 border-2 border-rose-200">
+                    <DialogHeader>
+                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 mb-4">
+                            <Trash2 className="h-6 w-6 text-red-600" />
+                        </div>
+                        <DialogTitle className="text-xl font-bold text-neutral-900 text-center">Delete Address</DialogTitle>
+                        <DialogDescription className="text-neutral-600 text-center pt-2">
+                            Are you sure you want to delete this address? This action cannot be undone.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="gap-2 sm:gap-2 flex-col sm:flex-row">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => {
+                                setDeleteDialogOpen(false)
+                                setAddressToDelete(null)
+                            }}
+                            className="w-full sm:w-auto border-2 border-neutral-300 hover:bg-neutral-100 font-semibold"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={() => addressToDelete && handleDeleteAddress(addressToDelete)}
+                            className="w-full sm:w-auto gap-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold shadow-lg"
+                        >
+                            <Trash2 className="h-4 w-4" />
+                            Delete Address
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }

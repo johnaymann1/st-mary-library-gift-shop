@@ -326,7 +326,164 @@ orders.user_id → users.id
 order_items.order_id → orders.id
 ```
 
-## 🐛 Troubleshooting
+## 📁 Project Structure
+
+This project follows a feature-based architecture for scalability and maintainability.
+
+### Directory Overview
+
+```
+src/
+├── app/                      # Next.js App Router pages
+│   ├── (auth)/              # Authentication pages (login, register)
+│   ├── admin/               # Admin dashboard routes
+│   │   ├── categories/      # Category management
+│   │   ├── orders/          # Order management
+│   │   └── products/        # Product management
+│   ├── actions/             # Server Actions (API logic)
+│   │   ├── address.ts       # Address management
+│   │   ├── admin.ts         # Admin operations (CRUD)
+│   │   ├── auth.ts          # Authentication
+│   │   ├── cart.ts          # Shopping cart
+│   │   ├── checkout.ts      # Order placement
+│   │   └── orders.ts        # Order operations
+│   ├── cart/                # Shopping cart page
+│   ├── category/[id]/       # Category detail page
+│   ├── checkout/            # Checkout flow
+│   ├── orders/              # Order history & details
+│   ├── product/[id]/        # Product detail page
+│   └── search/              # Search results page
+│
+├── components/              # Reusable React components
+│   ├── ui/                  # Base UI components (Design System)
+│   │   ├── button.tsx       # Button with variants (CVA)
+│   │   ├── card.tsx         # Card container component
+│   │   ├── dialog.tsx       # Modal dialogs
+│   │   ├── input.tsx        # Text input field
+│   │   ├── select.tsx       # Dropdown select
+│   │   ├── badge.tsx        # Status badges
+│   │   ├── skeleton.tsx     # Loading skeletons
+│   │   └── toaster.tsx      # Toast notifications (Sonner)
+│   │
+│   ├── navbar/              # Navigation components
+│   │   ├── NavbarCart.tsx   # Cart icon with count
+│   │   ├── NavbarSearch.tsx # Search bar
+│   │   └── NavbarUser.tsx   # User menu
+│   │
+│   ├── emails/              # Email templates (React Email)
+│   │   ├── OrderReceipt.tsx
+│   │   └── WelcomeEmail.tsx
+│   │
+│   ├── AddToCartButton.tsx  # Product add-to-cart action
+│   ├── AdminSidebar.tsx     # Admin navigation sidebar
+│   ├── CancelOrderButton.tsx # Order cancellation
+│   ├── Footer.tsx           # Site footer
+│   ├── Navbar.tsx           # Main navigation
+│   ├── ProductCard.tsx      # Product grid item
+│   └── OrderStatusTimeline.tsx # Order progress tracker
+│
+├── config/                  # App configuration
+│   └── site.ts              # Site metadata, currency, delivery
+│
+├── context/                 # React Context providers
+│   └── CartContext.tsx      # Global cart state
+│
+├── lib/                     # Third-party integrations
+│   ├── resend.ts            # Email service client
+│   └── utils.ts             # Utility helpers (cn, etc.)
+│
+├── types/                   # TypeScript type definitions
+│   ├── index.ts             # Main types (Product, Order, etc.)
+│   ├── navigation.ts        # Navigation interfaces
+│   └── supabase.ts          # Supabase-generated types
+│
+├── utils/                   # Utility functions
+│   ├── formatters.ts        # Price/phone formatting
+│   └── supabase/            # Supabase client factories
+│       ├── client.ts        # Client-side client
+│       └── server.ts        # Server-side client
+│
+└── middleware.ts            # Route protection & auth
+
+supabase/                    # Database schema & migrations
+├── schema.sql               # Complete database schema
+├── triggers.sql             # Database triggers
+└── storage_policy.sql       # Storage bucket policies
+```
+
+### Naming Conventions
+
+- **Files**: `kebab-case.tsx` (e.g., `product-card.tsx`)
+- **Components**: `PascalCase` (e.g., `ProductCard`)
+- **Functions**: `camelCase` (e.g., `handleAddToCart`)
+- **Constants**: `UPPER_SNAKE_CASE` (e.g., `MAX_CART_ITEMS`)
+- **Types/Interfaces**: `PascalCase` (e.g., `Product`, `CartItem`)
+
+### Design System Principles
+
+1. **UI Components** (`components/ui/`): Dumb, reusable atoms
+   - No business logic
+   - Accept props for customization
+   - Use CVA for variants (Button, Badge, etc.)
+
+2. **Feature Components** (`components/`): Smart, feature-specific
+   - Can use hooks, state, and actions
+   - Grouped by feature when needed (navbar/, emails/)
+
+3. **Centralized Logic**:
+   - **Types**: `types/index.ts` (no inline interfaces in pages)
+   - **Formatters**: `utils/formatters.ts` (currency, phone)
+   - **Constants**: `config/site.ts` (site metadata, currency)
+
+4. **Server Actions** (`app/actions/`):
+   - Prefixed with action verb (`create`, `update`, `delete`, `get`)
+   - JSDoc comments for parameters and return types
+   - Always revalidate affected paths
+
+## 🎨 Adding New Features
+
+### Example: Adding a New Product Feature
+
+1. **Define Types** (`types/index.ts`):
+   ```typescript
+   export interface ProductReview {
+       id: number
+       product_id: number
+       user_id: string
+       rating: number
+       comment: string
+   }
+   ```
+
+2. **Create Server Action** (`app/actions/products.ts`):
+   ```typescript
+   /**
+    * Creates a product review
+    * @param productId - The product ID
+    * @param rating - Rating (1-5)
+    * @param comment - Review text
+    * @returns Success or error
+    */
+   export async function createReview(productId: number, rating: number, comment: string) {
+       // Implementation
+   }
+   ```
+
+3. **Build UI Component** (`components/ProductReview.tsx`):
+   ```typescript
+   'use client'
+   import { Button } from '@/components/ui/button'
+   import { createReview } from '@/app/actions/products'
+   // Component implementation
+   ```
+
+4. **Integrate in Page** (`app/product/[id]/page.tsx`):
+   ```typescript
+   import ProductReview from '@/components/ProductReview'
+   // Add to page layout
+   ```
+
+## 🔧 Troubleshooting
 
 ### Build Errors
 
