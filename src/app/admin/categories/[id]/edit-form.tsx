@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Upload, Save, ArrowLeft } from 'lucide-react'
+import { Upload, Save, ArrowLeft, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Category } from '@/types'
@@ -130,16 +130,26 @@ export default function EditCategoryForm({ category }: { category: Category }) {
                         type="button"
                         onClick={() => router.back()}
                         variant="outline"
+                        className="border-2 border-neutral-400 text-neutral-700 hover:bg-neutral-100 hover:border-neutral-500 font-semibold"
                     >
                         Cancel
                     </Button>
                     <Button
                         type="submit"
                         disabled={loading}
-                        className="gap-2"
+                        className="gap-2 min-w-[140px]"
                     >
-                        <Save className="h-4 w-4" />
-                        {loading ? 'Saving...' : 'Save Changes'}
+                        {loading ? (
+                            <>
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                Saving...
+                            </>
+                        ) : (
+                            <>
+                                <Save className="h-4 w-4" />
+                                Save Changes
+                            </>
+                        )}
                     </Button>
                 </div>
             </form>

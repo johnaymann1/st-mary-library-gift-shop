@@ -48,28 +48,31 @@ export default function DeleteProductButton({ id, onDelete }: { id: number; onDe
             </button>
 
             <Dialog open={showDialog} onOpenChange={setShowDialog}>
-                <DialogContent className="sm:max-w-md">
+                <DialogContent className="sm:max-w-md bg-gradient-to-br from-white to-rose-50 border-2 border-rose-200">
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-bold text-neutral-900">Delete Product</DialogTitle>
-                        <DialogDescription className="text-neutral-600">
-                            Are you sure you want to delete this product? This action cannot be undone.
+                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 mb-4">
+                            <Trash2 className="h-6 w-6 text-red-600" />
+                        </div>
+                        <DialogTitle className="text-xl font-bold text-neutral-900 text-center">Delete Product</DialogTitle>
+                        <DialogDescription className="text-neutral-600 text-center pt-2">
+                            Are you sure you want to delete this product? This action cannot be undone and will permanently remove all associated data.
                         </DialogDescription>
                     </DialogHeader>
-                    <DialogFooter className="gap-2 sm:gap-0">
+                    <DialogFooter className="gap-2 sm:gap-2 flex-col sm:flex-row">
                         <Button
                             type="button"
                             variant="outline"
                             onClick={() => setShowDialog(false)}
                             disabled={loading}
+                            className="w-full sm:w-auto border-2 border-neutral-300 hover:bg-neutral-100 font-semibold"
                         >
                             Cancel
                         </Button>
                         <Button
                             type="button"
-                            variant="destructive"
                             onClick={handleDelete}
                             disabled={loading}
-                            className="gap-2"
+                            className="w-full sm:w-auto gap-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold shadow-lg"
                         >
                             {loading ? (
                                 <>
@@ -79,7 +82,7 @@ export default function DeleteProductButton({ id, onDelete }: { id: number; onDe
                             ) : (
                                 <>
                                     <Trash2 className="h-4 w-4" />
-                                    Delete
+                                    Delete Permanently
                                 </>
                             )}
                         </Button>

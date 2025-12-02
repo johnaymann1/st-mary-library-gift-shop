@@ -104,7 +104,7 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
                                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${
                                     isActive 
                                         ? 'bg-rose-600 text-white' 
-                                        : 'text-neutral-700 hover:bg-neutral-100'
+                                        : 'text-neutral-800 hover:bg-neutral-100 hover:text-neutral-900'
                                 } ${isCollapsed ? 'justify-center' : ''}`}
                                 title={isCollapsed ? item.name : undefined}
                             >
@@ -118,7 +118,7 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
                 {/* Bottom Action */}
                 <div className="p-4 border-t border-neutral-200">
                     <Link href="/">
-                        <Button variant="outline" className={`w-full gap-2 ${isCollapsed ? 'px-2' : ''}`} title={isCollapsed ? 'Back to Store' : undefined}>
+                        <Button variant="outline" className={`w-full gap-2 border-2 border-neutral-400 text-neutral-700 hover:bg-neutral-100 hover:border-neutral-500 font-semibold ${isCollapsed ? 'px-2' : ''}`} title={isCollapsed ? 'Back to Store' : undefined}>
                             <Home className="h-4 w-4 flex-shrink-0" />
                             {!isCollapsed && 'Back to Store'}
                         </Button>
@@ -194,7 +194,7 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
                                         className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${
                                             isActive 
                                                 ? 'bg-rose-600 text-white' 
-                                                : 'text-neutral-700 hover:bg-neutral-100'
+                                                : 'text-neutral-800 hover:bg-neutral-100 hover:text-neutral-900'
                                         }`}
                                     >
                                         <Icon className="h-5 w-5" />
@@ -207,7 +207,7 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
                         {/* Drawer Footer */}
                         <div className="p-4 border-t border-neutral-200">
                             <Link href="/">
-                                <Button variant="outline" className="w-full gap-2">
+                                <Button variant="outline" className="w-full gap-2 border-2 border-neutral-400 text-neutral-700 hover:bg-neutral-100 hover:border-neutral-500 font-semibold">
                                     <Home className="h-4 w-4" />
                                     Back to Store
                                 </Button>
