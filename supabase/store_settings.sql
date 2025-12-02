@@ -1,53 +1,125 @@
--- Create store_settings table
-CREATE TABLE IF NOT EXISTS public.store_settings (
-    id INTEGER PRIMARY KEY DEFAULT 1,
-    store_name TEXT NOT NULL DEFAULT 'St. Mary Gift Shop',
-    description TEXT NOT NULL DEFAULT 'Discover a curated collection of books, stationery, and unique gifts',
-    phone TEXT NOT NULL DEFAULT '+20 123 456 7890',
-    support_email TEXT NOT NULL DEFAULT 'support@stmarylibrary.com',
-    address TEXT NOT NULL DEFAULT 'St Mary Church Faggalah, Cairo, Egypt',
-    delivery_fee DECIMAL(10, 2) NOT NULL DEFAULT 50.00,
-    free_delivery_threshold DECIMAL(10, 2),
-    currency_code TEXT NOT NULL DEFAULT 'EGP',
-    currency_symbol TEXT NOT NULL DEFAULT 'EGP',
-    facebook_url TEXT,
-    instagram_url TEXT,
-    twitter_url TEXT,
-    linkedin_url TEXT,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    CONSTRAINT single_settings_row CHECK (id = 1)
-);
+-- Migrate existing store_settings table to add new columns
+-- Run this if you already have a store_settings table
 
--- Insert default settings if not exists
-INSERT INTO public.store_settings (
-    id,
-    store_name,
-    description,
-    phone,
-    support_email,
-    address,
-    delivery_fee,
-    free_delivery_threshold,
-    currency_code,
-    currency_symbol
-)
-VALUES (
-    1,
-    'St. Mary Gift Shop',
-    'Discover a curated collection of books, stationery, and unique gifts at St Mary Library. Find the perfect gift for every occasion, from educational materials to premium gift items.',
-    '+20 123 456 7890',
-    'support@stmarylibrary.com',
-    'St Mary Church Faggalah, Cairo, Egypt',
-    50.00,
-    1000.00,
-    'EGP',
-    'EGP'
-)
-ON CONFLICT (id) DO NOTHING;
+-- Add missing columns if they don't exist
+DO $$ 
+BEGIN
+    -- Add support_email column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_schema = 'public' 
+        AND table_name = 'store_settings' 
+        AND column_name = 'support_email'
+    ) THEN
+        ALTER TABLE public.store_settings 
+        ADD COLUMN support_email TEXT NOT NULL DEFAULT 'support@stmarylibrary.com';
+    END IF;
 
--- Enable RLS
+    -- Add description column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_schema = 'public' 
+        AND table_name = 'store_settings' 
+        AND column_name = 'description'
+    ) THEN
+        ALTER TABLE public.store_settings 
+        ADD COLUMN description TEXT NOT NULL DEFAULT 'Discover a curated collection of books, stationery, and unique gifts';
+    END IF;
+
+    -- Add free_delivery_threshold column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_schema = 'public' 
+        AND table_name = 'store_settings' 
+        AND column_name = 'free_delivery_threshold'
+    ) THEN
+        ALTER TABLE public.store_settings 
+        ADD COLUMN free_delivery_threshold DECIMAL(10, 2);
+    END IF;
+
+    -- Add currency_code column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_schema = 'public' 
+        AND table_name = 'store_settings' 
+        AND column_name = 'currency_code'
+    ) THEN
+        ALTER TABLE public.store_settings 
+        ADD COLUMN currency_code TEXT NOT NULL DEFAULT 'EGP';
+    END IF;
+
+    -- Add currency_symbol column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_schema = 'public' 
+        AND table_name = 'store_settings' 
+        AND column_name = 'currency_symbol'
+    ) THEN
+        ALTER TABLE public.store_settings 
+        ADD COLUMN currency_symbol TEXT NOT NULL DEFAULT 'EGP';
+    END IF;
+
+    -- Add facebook_url column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_schema = 'public' 
+        AND table_name = 'store_settings' 
+        AND column_name = 'facebook_url'
+    ) THEN
+        ALTER TABLE public.store_settings 
+        ADD COLUMN facebook_url TEXT;
+    END IF;
+
+    -- Add instagram_url column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_schema = 'public' 
+        AND table_name = 'store_settings' 
+        AND column_name = 'instagram_url'
+    ) THEN
+        ALTER TABLE public.store_settings 
+        ADD COLUMN instagram_url TEXT;
+    END IF;
+
+    -- Add twitter_url column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_schema = 'public' 
+        AND table_name = 'store_settings' 
+        AND column_name = 'twitter_url'
+    ) THEN
+        ALTER TABLE public.store_settings 
+        ADD COLUMN twitter_url TEXT;
+    END IF;
+
+    -- Add linkedin_url column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_schema = 'public' 
+        AND table_name = 'store_settings' 
+        AND column_name = 'linkedin_url'
+    ) THEN
+        ALTER TABLE public.store_settings 
+        ADD COLUMN linkedin_url TEXT;
+    END IF;
+END $$;
+
+-- Update existing row with better defaults if values are null or default
+UPDATE public.store_settings
+SET 
+    description = COALESCE(description, 'Discover a curated collection of books, stationery, and unique gifts at St Mary Library. Find the perfect gift for every occasion, from educational materials to premium gift items.'),
+    support_email = COALESCE(support_email, 'support@stmarylibrary.com'),
+    free_delivery_threshold = COALESCE(free_delivery_threshold, 1000.00),
+    currency_code = COALESCE(currency_code, 'EGP'),
+    currency_symbol = COALESCE(currency_symbol, 'EGP')
+WHERE id = 1;
+
+-- Enable RLS if not already enabled
 ALTER TABLE public.store_settings ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Allow public read access to store settings" ON public.store_settings;
+DROP POLICY IF EXISTS "Allow admins to update store settings" ON public.store_settings;
 
 -- Allow everyone to read settings
 CREATE POLICY "Allow public read access to store settings"
