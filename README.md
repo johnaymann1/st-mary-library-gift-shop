@@ -10,6 +10,7 @@ A modern, full-featured e-commerce platform built with Next.js 15, Supabase, and
 ## ✨ Features
 
 ### 🛍️ Customer Features
+
 - **Product Browsing**: Browse products by category with advanced search and filters
 - **Shopping Cart**: Real-time cart management with quantity updates
 - **Bilingual Support**: Full English and Arabic language support
@@ -20,10 +21,11 @@ A modern, full-featured e-commerce platform built with Next.js 15, Supabase, and
 - **Responsive Design**: Optimized for all devices (mobile, tablet, desktop)
 
 ### 👨‍💼 Admin Features
+
 - **Dashboard**: Overview of orders, products, and revenue
 - **Product Management**: Create, edit, delete products with image upload
 - **Category Management**: Organize products into categories
-- **Order Management**: 
+- **Order Management**:
   - View all orders with filters by status
   - Update order status (pending → processing → delivery → completed)
   - Approve/reject InstaPay payment proofs
@@ -32,6 +34,7 @@ A modern, full-featured e-commerce platform built with Next.js 15, Supabase, and
 - **Role-Based Access**: Secure admin-only routes
 
 ### 🔒 Security & Performance
+
 - **Row Level Security (RLS)**: Supabase RLS policies protect user data
 - **Server Actions**: Secure server-side data mutations
 - **Image Optimization**: Next.js Image component for optimized images
@@ -42,6 +45,7 @@ A modern, full-featured e-commerce platform built with Next.js 15, Supabase, and
 ## 🚀 Tech Stack
 
 ### Frontend
+
 - **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript 5.6
 - **Styling**: Tailwind CSS 3.4
@@ -51,6 +55,7 @@ A modern, full-featured e-commerce platform built with Next.js 15, Supabase, and
 - **State Management**: React Context + Supabase real-time subscriptions
 
 ### Backend
+
 - **Database**: Supabase (PostgreSQL)
 - **Authentication**: Supabase Auth (Email + Google OAuth)
 - **Storage**: Supabase Storage (images)
@@ -58,6 +63,7 @@ A modern, full-featured e-commerce platform built with Next.js 15, Supabase, and
 - **ORM**: Supabase Client SDK
 
 ### DevOps
+
 - **Deployment**: Vercel (recommended)
 - **Version Control**: Git
 - **Code Quality**: ESLint + TypeScript strict mode
@@ -127,6 +133,7 @@ See detailed instructions in [`supabase/README.md`](./supabase/README.md)
 ### 5. Create Storage Buckets
 
 In Supabase Dashboard → Storage, create these **public** buckets:
+
 - `categories`
 - `products`
 - `payment-proofs`
@@ -177,40 +184,44 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## 🎨 Key Features Implementation
 
 ### Authentication Flow
+
 ```typescript
 // Login with email/password
-await loginWithEmail(email, password)
+await loginWithEmail(email, password);
 
 // Login with Google OAuth
-await loginWithGoogle()
+await loginWithGoogle();
 
 // Protected routes (middleware.ts)
-if (!user && isProtectedRoute) redirect('/login')
+if (!user && isProtectedRoute) redirect("/login");
 ```
 
 ### Shopping Cart
+
 ```typescript
 // Add to cart (creates cart_items row)
-await addToCart(productId, quantity)
+await addToCart(productId, quantity);
 
 // Cart persists in Supabase, syncs across devices
-const { cart } = useCart()
+const { cart } = useCart();
 ```
 
 ### Checkout Process
+
 ```typescript
 // 1. Select delivery method (delivery / pickup)
 // 2. Enter address & phone (if delivery)
 // 3. Choose payment (cash / instapay)
 // 4. Upload proof (if instapay)
 // 5. Place order (RPC function handles atomically)
-await placeOrder(formData)
+await placeOrder(formData);
 ```
 
 ### Order Status Timeline
+
 ```typescript
 // Visual tracking: Pending → Processing → Delivery → Completed
-<OrderStatusTimeline 
+<OrderStatusTimeline
   status={order.status}
   createdAt={order.created_at}
   updatedAt={order.updated_at}
@@ -225,8 +236,8 @@ await placeOrder(formData)
 2. In Supabase Dashboard, run:
 
 ```sql
-UPDATE users 
-SET role = 'admin' 
+UPDATE users
+SET role = 'admin'
 WHERE email = 'your-email@example.com';
 ```
 
@@ -235,6 +246,7 @@ WHERE email = 'your-email@example.com';
 ### Admin Permissions
 
 Admin users can:
+
 - ✅ View dashboard with stats
 - ✅ Manage products (CRUD)
 - ✅ Manage categories (CRUD)
@@ -252,6 +264,7 @@ The app sends transactional emails via [Resend](https://resend.com):
 ### Email Templates
 
 Located in `src/components/emails/`:
+
 - `OrderReceipt.tsx` - Customer order confirmation
 - `WelcomeEmail.tsx` - Welcome email on signup
 
@@ -262,6 +275,7 @@ Located in `src/components/emails/`:
 1. Push code to GitHub
 2. Import project in [Vercel Dashboard](https://vercel.com/new)
 3. Add environment variables:
+
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `RESEND_API_KEY`
@@ -317,17 +331,21 @@ order_items.order_id → orders.id
 ### Build Errors
 
 **Error**: `Module not found: Can't resolve '@/components/...'`
+
 - **Fix**: Check `tsconfig.json` has correct `paths` mapping
 
 **Error**: `Hydration mismatch`
+
 - **Fix**: Ensure server/client components are properly marked with `'use client'`
 
 ### Database Issues
 
 **Error**: `permission denied for table ...`
+
 - **Fix**: Check RLS policies in Supabase Dashboard → Authentication → Policies
 
 **Error**: `function place_order does not exist`
+
 - **Fix**: Run `supabase/setup_checkout_complete.sql`
 
 ### Image Upload Fails
@@ -346,6 +364,7 @@ Contributions are welcome! Please open an issue or submit a pull request.
 ## 📧 Support
 
 For questions or support:
+
 - Open an issue on GitHub
 - Email: support@stmarylibrary.com
 
@@ -359,4 +378,3 @@ For questions or support:
 ---
 
 **Made with ❤️ by John Ayman**
-

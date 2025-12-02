@@ -40,9 +40,9 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
     return (
         <>
             {/* Desktop Sidebar */}
-            <aside className={`hidden md:flex md:flex-col fixed left-0 top-20 h-[calc(100vh-5rem)] bg-white border-r border-neutral-200 shadow-sm transition-all duration-300 z-30 ${isCollapsed ? 'md:w-20' : 'md:w-72'}`}>
+            <aside className={`hidden md:flex md:flex-col fixed left-0 top-0 h-screen bg-white border-r border-neutral-200 shadow-sm transition-all duration-300 z-10 ${isCollapsed ? 'md:w-20' : 'md:w-72'}`}>
                 {/* Logo and Collapse Button */}
-                <div className="h-16 flex items-center justify-between px-4 border-b border-neutral-200">
+                <div className="h-16 flex items-center justify-between px-4 border-b border-neutral-200 mt-20">
                     {!isCollapsed ? (
                         <>
                             <Link href="/admin" className="flex items-center gap-3">

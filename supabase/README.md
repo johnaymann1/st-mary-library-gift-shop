@@ -1,9 +1,11 @@
 # Supabase Database Setup
 
 ## Overview
+
 This directory contains all SQL migration files needed to set up the St. Mary Library Gift Shop database.
 
 ## Prerequisites
+
 - A Supabase project (create at https://supabase.com)
 - Access to the SQL Editor in your Supabase dashboard
 
@@ -12,6 +14,7 @@ This directory contains all SQL migration files needed to set up the St. Mary Li
 **IMPORTANT:** Run these SQL files in the exact order listed below:
 
 ### 1. Core Schema Setup
+
 ```sql
 -- File: schema.sql
 -- Purpose: Creates all tables (users, products, categories, orders, etc.)
@@ -19,6 +22,7 @@ This directory contains all SQL migration files needed to set up the St. Mary Li
 ```
 
 ### 2. Storage Policies
+
 ```sql
 -- File: storage_policy.sql
 -- Purpose: Sets up storage buckets and RLS policies for images
@@ -26,6 +30,7 @@ This directory contains all SQL migration files needed to set up the St. Mary Li
 ```
 
 ### 3. Database Triggers
+
 ```sql
 -- File: triggers.sql
 -- Purpose: Automatic user profile creation on signup
@@ -33,12 +38,14 @@ This directory contains all SQL migration files needed to set up the St. Mary Li
 ```
 
 ### 4. User Addresses
+
 ```sql
 -- File: user_addresses.sql
 -- Purpose: Creates saved addresses table for delivery
 ```
 
 ### 5. Checkout Function
+
 ```sql
 -- File: setup_checkout_complete.sql
 -- Purpose: Creates the place_order() RPC function
@@ -46,12 +53,14 @@ This directory contains all SQL migration files needed to set up the St. Mary Li
 ```
 
 ### 6. Product Refinements (Optional)
+
 ```sql
 -- File: refine_products.sql
 -- Purpose: Adds additional product fields if needed
 ```
 
 ### 7. Data Fixes (Run if needed)
+
 ```sql
 -- File: fix_database.sql
 -- Purpose: Repairs any data inconsistencies
@@ -80,6 +89,7 @@ This directory contains all SQL migration files needed to set up the St. Mary Li
 ## Quick Setup Guide
 
 ### Step 1: Create Storage Buckets
+
 1. Go to Storage in Supabase Dashboard
 2. Create three public buckets:
    - `categories`
@@ -87,21 +97,25 @@ This directory contains all SQL migration files needed to set up the St. Mary Li
    - `payment-proofs`
 
 ### Step 2: Run Migrations
+
 1. Open SQL Editor in Supabase Dashboard
 2. Copy and paste contents of `schema.sql`
 3. Run the query
 4. Repeat for each file in order listed above
 
 ### Step 3: Verify Setup
+
 Run this query to check all tables exist:
+
 ```sql
-SELECT table_name 
-FROM information_schema.tables 
+SELECT table_name
+FROM information_schema.tables
 WHERE table_schema = 'public'
 ORDER BY table_name;
 ```
 
 You should see:
+
 - users
 - categories
 - products
@@ -111,6 +125,7 @@ You should see:
 - cart_items
 
 ### Step 4: Test RLS Policies
+
 ```sql
 -- Test user can read their own data
 SELECT * FROM users WHERE id = auth.uid();
@@ -125,36 +140,43 @@ SELECT * FROM orders WHERE user_id = auth.uid();
 ## Row Level Security (RLS) Policies
 
 ### Users Table
+
 - **SELECT**: Users can view their own profile
 - **UPDATE**: Users can update their own profile
 - **Admins**: Can view/edit all users
 
 ### Products Table
+
 - **SELECT**: Everyone can view active products
 - **INSERT/UPDATE/DELETE**: Admin only
 
 ### Categories Table
+
 - **SELECT**: Everyone can view active categories
 - **INSERT/UPDATE/DELETE**: Admin only
 
 ### Orders Table
+
 - **SELECT**: Users can view their own orders, admins view all
 - **INSERT**: Handled through RPC function
 - **UPDATE**: Admin only (status changes)
 
 ### Cart Items Table
+
 - **ALL**: Users can manage their own cart
 - **Automatic cleanup**: Cleared on order placement
 
 ## Important Functions
 
 ### place_order(p_user_id, p_delivery_type, p_address, p_phone, p_delivery_date, p_payment_method, p_payment_proof_url)
+
 - Creates order atomically
 - Moves cart items to order_items
 - Clears cart
 - Returns order ID
 
 ### Example Usage:
+
 ```sql
 SELECT place_order(
   'user-uuid-here',
@@ -170,19 +192,23 @@ SELECT place_order(
 ## Troubleshooting
 
 ### Error: "relation does not exist"
+
 - Make sure you ran `schema.sql` first
 - Check table names are lowercase
 
 ### Error: "permission denied for table"
+
 - RLS policies may not be set correctly
 - Check user is authenticated
 - Verify admin role in users table
 
 ### Error: "function place_order does not exist"
+
 - Run `setup_checkout_complete.sql`
 - Make sure function name matches exactly
 
 ### Orders not appearing
+
 - Check RLS policies on orders table
 - Verify user_id matches auth.uid()
 - Check order status filter
@@ -192,6 +218,7 @@ SELECT place_order(
 To add sample data for testing:
 
 ### Add Categories
+
 ```sql
 INSERT INTO categories (name_en, name_ar, image_url, is_active) VALUES
 ('Books', 'كتب', 'https://...', true),
@@ -200,6 +227,7 @@ INSERT INTO categories (name_en, name_ar, image_url, is_active) VALUES
 ```
 
 ### Add Products
+
 ```sql
 INSERT INTO products (name_en, name_ar, desc_en, desc_ar, price, category_id, image_url, in_stock, is_active) VALUES
 ('Notebook', 'دفتر', 'Premium notebook', 'دفتر فاخر', 50.00, 1, 'https://...', true, true),
@@ -207,6 +235,7 @@ INSERT INTO products (name_en, name_ar, desc_en, desc_ar, price, category_id, im
 ```
 
 ### Create Admin User
+
 ```sql
 -- After signup via app, update role:
 UPDATE users SET role = 'admin' WHERE email = 'admin@yourdomain.com';
@@ -215,6 +244,7 @@ UPDATE users SET role = 'admin' WHERE email = 'admin@yourdomain.com';
 ## Backup & Restore
 
 ### Backup
+
 ```bash
 # Export schema
 supabase db dump --file backup.sql
@@ -224,6 +254,7 @@ supabase db dump --data-only --file data.sql
 ```
 
 ### Restore
+
 ```bash
 supabase db reset
 psql -h db.your-project.supabase.co -U postgres -d postgres -f backup.sql
@@ -241,6 +272,7 @@ psql -h db.your-project.supabase.co -U postgres -d postgres -f backup.sql
 ## Support
 
 For issues with Supabase setup:
+
 - Check Supabase logs in Dashboard
 - Review RLS policies in Table Editor
 - Test queries in SQL Editor
@@ -248,10 +280,10 @@ For issues with Supabase setup:
 
 ## Migration History
 
-| Date | File | Description |
-|------|------|-------------|
-| Initial | schema.sql | Core database structure |
-| Initial | storage_policy.sql | Storage buckets setup |
-| Initial | triggers.sql | Automatic user creation |
-| Initial | user_addresses.sql | Saved addresses feature |
-| Initial | setup_checkout_complete.sql | Checkout RPC function |
+| Date    | File                        | Description             |
+| ------- | --------------------------- | ----------------------- |
+| Initial | schema.sql                  | Core database structure |
+| Initial | storage_policy.sql          | Storage buckets setup   |
+| Initial | triggers.sql                | Automatic user creation |
+| Initial | user_addresses.sql          | Saved addresses feature |
+| Initial | setup_checkout_complete.sql | Checkout RPC function   |

@@ -4,11 +4,14 @@ import { createCategory } from '@/app/actions/admin'
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Plus, Upload } from 'lucide-react'
+import { Plus, Upload, Check } from 'lucide-react'
 import { toast } from 'sonner'
+import Image from 'next/image'
 
 export default function CreateCategoryForm() {
     const [loading, setLoading] = useState(false)
+    const [imagePreview, setImagePreview] = useState<string | null>(null)
+    const [imageName, setImageName] = useState<string>('')
 
     async function handleSubmit(formData: FormData) {
         setLoading(true)
@@ -21,8 +24,22 @@ export default function CreateCategoryForm() {
             toast.success('Category created successfully!')
             const form = document.getElementById('create-category-form') as HTMLFormElement
             form?.reset()
+            setImagePreview(null)
+            setImageName('')
         }
         setLoading(false)
+    }
+
+    function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0]
+        if (file) {
+            setImageName(file.name)
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                setImagePreview(reader.result as string)
+            }
+            reader.readAsDataURL(file)
+        }
     }
 
     return (
@@ -43,13 +60,29 @@ export default function CreateCategoryForm() {
 
                 <div>
                     <label className="block text-sm font-semibold text-neutral-700 mb-2">Category Image</label>
-                    <div className="relative">
+                    {imagePreview ? (
+                        <div className="space-y-3">
+                            <div className="relative w-full h-48 rounded-xl overflow-hidden border-2 border-green-500 bg-green-50">
+                                <Image src={imagePreview} alt="Preview" fill className="object-contain" />
+                            </div>
+                            <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+                                <div className="flex items-center gap-2">
+                                    <Check className="h-5 w-5 text-green-600" />
+                                    <span className="text-sm font-medium text-green-700">{imageName}</span>
+                                </div>
+                                <label className="text-sm text-rose-600 hover:text-rose-700 font-medium cursor-pointer">
+                                    Change
+                                    <input type="file" name="image" accept="image/*" onChange={handleImageChange} className="sr-only" />
+                                </label>
+                            </div>
+                        </div>
+                    ) : (
                         <label className="flex items-center justify-center gap-2 w-full h-24 px-4 py-6 border-2 border-dashed border-neutral-300 rounded-xl cursor-pointer hover:border-rose-400 hover:bg-rose-50/50 transition-all group">
                             <Upload className="h-5 w-5 text-neutral-400 group-hover:text-rose-600 transition-colors" />
                             <span className="text-sm text-neutral-600 group-hover:text-rose-600 font-medium transition-colors">Click to upload image</span>
-                            <input type="file" name="image" accept="image/*" className="sr-only" />
+                            <input type="file" name="image" accept="image/*" onChange={handleImageChange} className="sr-only" />
                         </label>
-                    </div>
+                    )}
                 </div>
 
                 <Button
