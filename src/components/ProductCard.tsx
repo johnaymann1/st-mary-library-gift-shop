@@ -21,7 +21,10 @@ export default function ProductCard({ product }: { product: Product }) {
 
     return (
         <div className="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-700 ease-out transform hover:-translate-y-2 flex flex-col">
-            <Link href={`/product/${product.id}`} className="relative">
+            <Link 
+                href={`/product/${product.id}`} 
+                className={`relative ${!product.in_stock ? 'pointer-events-none' : ''}`}
+            >
                 {/* Image Container with Aspect Ratio */}
                 <div className="relative aspect-square bg-neutral-100 overflow-hidden">
                     {product.image_url ? (

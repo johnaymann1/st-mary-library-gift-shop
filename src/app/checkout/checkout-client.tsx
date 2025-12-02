@@ -141,7 +141,7 @@ export default function CheckoutClient({
 
             // Redirect after showing message
             setTimeout(() => {
-                window.location.href = '/'
+                window.location.href = '/orders'
             }, 2000)
         }
     }

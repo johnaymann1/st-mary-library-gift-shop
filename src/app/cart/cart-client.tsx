@@ -92,17 +92,17 @@ export default function CartClient({ user }: { user: User | null }) {
                                         <div className="flex items-center gap-2 sm:gap-3 bg-neutral-50 rounded-lg p-1 border border-neutral-200">
                                             <button
                                                 onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
-                                                className="p-1 hover:bg-white rounded-md transition-colors text-neutral-600 disabled:opacity-50 h-8 w-8 flex items-center justify-center"
+                                                className="p-1 hover:bg-white rounded-md transition-colors text-neutral-600 disabled:opacity-50 h-11 w-11 flex items-center justify-center"
                                                 disabled={item.quantity <= 1}
                                             >
-                                                <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
+                                                <Minus className="h-4 w-4" />
                                             </button>
-                                            <span className="text-sm font-medium w-6 text-center text-neutral-900">{item.quantity}</span>
+                                            <span className="text-sm font-medium w-8 text-center text-neutral-900">{item.quantity}</span>
                                             <button
                                                 onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
-                                                className="p-1 hover:bg-white rounded-md transition-colors text-neutral-600 h-8 w-8 flex items-center justify-center"
+                                                className="p-1 hover:bg-white rounded-md transition-colors text-neutral-600 h-11 w-11 flex items-center justify-center"
                                             >
-                                                <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
+                                                <Plus className="h-4 w-4" />
                                             </button>
                                         </div>
 

@@ -139,7 +139,7 @@ export default async function SearchPage({
                                 onChange={(e) => {
                                     window.location.href = `/search?q=${query}${categoryId ? `&category=${categoryId}` : ''}&sort=${e.target.value}&page=1`
                                 }}
-                                className="w-full px-4 py-2 rounded-lg border border-neutral-200 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                                className="w-full px-4 py-2 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-base focus:outline-none focus:ring-2 focus:ring-rose-500\"
                             >
                                 <option value="newest">Newest First</option>
                                 <option value="price-asc">Price: Low to High</option>
@@ -223,11 +223,30 @@ export default async function SearchPage({
                         <h3 className="text-xl font-semibold text-neutral-900 mb-2">
                             No products found
                         </h3>
-                        <p className="text-neutral-600 mb-6">
+                        <p className="text-neutral-600 mb-4">
                             {query 
                                 ? `We couldn't find any products matching "${query}"`
                                 : 'Try searching for something'}
                         </p>
+                        
+                        {/* Category Suggestions */}
+                        {categories && categories.length > 0 && (
+                            <div className="mb-6">
+                                <p className="text-sm text-neutral-600 mb-3">Try browsing these categories:</p>
+                                <div className="flex flex-wrap gap-2 justify-center">
+                                    {categories.slice(0, 4).map((cat) => (
+                                        <a
+                                            key={cat.id}
+                                            href={`/category/${cat.id}`}
+                                            className="px-4 py-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition-colors text-sm font-medium"
+                                        >
+                                            {cat.name_en}
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                        
                         <a href="/" className="inline-flex items-center justify-center px-6 py-3 bg-rose-600 text-white rounded-xl hover:bg-rose-700 transition-colors">
                             Browse All Products
                         </a>

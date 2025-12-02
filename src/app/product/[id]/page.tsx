@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/client'
 import Image from 'next/image'
+import Link from 'next/link'
 import { notFound, useRouter } from 'next/navigation'
 import AddToCartButton from '@/components/AddToCartButton'
 import { siteConfig } from '@/config/site'
@@ -37,28 +38,53 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
     }, [params])
 
     if (loading || !product) {
-        return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-            <div className="animate-pulse text-gray-400">Loading...</div>
+        return <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="animate-pulse space-y-8">
+                    <div className="h-10 w-24 bg-neutral-200 rounded-lg"></div>
+                    <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
+                            <div className="h-96 bg-gradient-to-br from-rose-100 to-pink-100 rounded-3xl"></div>
+                            <div className="space-y-4">
+                                <div className="h-6 w-32 bg-rose-100 rounded-full"></div>
+                                <div className="h-10 w-3/4 bg-neutral-200 rounded-lg"></div>
+                                <div className="h-8 w-32 bg-neutral-200 rounded-lg"></div>
+                                <div className="space-y-2">
+                                    <div className="h-4 w-full bg-neutral-100 rounded"></div>
+                                    <div className="h-4 w-full bg-neutral-100 rounded"></div>
+                                    <div className="h-4 w-2/3 bg-neutral-100 rounded"></div>
+                                </div>
+                                <div className="h-12 w-full bg-rose-100 rounded-xl mt-8"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                {/* Back Button */}
-                <Button
-                    variant="ghost"
-                    onClick={() => router.back()}
-                    className="mb-6 text-neutral-600 hover:text-rose-600 hover:bg-rose-50"
-                >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back
-                </Button>
+                {/* Breadcrumb Navigation */}
+                <nav className="flex items-center gap-2 text-sm text-neutral-600 mb-6">
+                    <Link href="/" className="hover:text-rose-600 transition-colors">Home</Link>
+                    <span>/</span>
+                    {product.categories && (
+                        <>
+                            <Link href={`/category/${product.category_id}`} className="hover:text-rose-600 transition-colors">
+                                {product.categories.name_en}
+                            </Link>
+                            <span>/</span>
+                        </>
+                    )}
+                    <span className="text-neutral-900 font-medium">{product.name_en}</span>
+                </nav>
 
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-white">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
                         {/* Image Section */}
-                        <div className="relative aspect-w-1 aspect-h-1 h-96 bg-gray-200 rounded-lg overflow-hidden">
+                        <div className="relative aspect-w-1 aspect-h-1 h-96 bg-gradient-to-br from-rose-50 to-pink-50 rounded-3xl overflow-hidden shadow-xl">
                             {product.image_url ? (
                                 <Image
                                     src={product.image_url}
@@ -76,7 +102,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                         {/* Details Section */}
                         <div className="flex flex-col">
                             <div className="mb-4">
-                                <span className="text-indigo-600 font-medium text-sm">
+                                <span className="inline-flex items-center text-rose-600 font-medium text-sm px-3 py-1 bg-rose-50 rounded-full">
                                     {product.categories?.name_en || 'Uncategorized'}
                                 </span>
                                 <h1 className="text-3xl font-bold text-gray-900 mt-1">{product.name_en}</h1>
