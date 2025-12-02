@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import { AdminSidebar } from '@/components/AdminSidebar'
+import { AdminLayoutClient } from '@/components/AdminLayoutClient'
 
 export default async function AdminLayout({
     children,
@@ -35,16 +35,5 @@ export default async function AdminLayout({
         { name: 'Categories', href: '/admin/categories', icon: 'FolderOpen' },
     ]
 
-    return (
-        <div className="min-h-screen bg-neutral-50">
-            <AdminSidebar navigation={navigation} />
-            
-            {/* Main Content - offset by sidebar on desktop, mobile padding for header */}
-            <main className="md:ml-64 pt-20 md:pt-24 min-h-screen">
-                <div className="px-4 sm:px-6 lg:px-8 py-6">
-                    {children}
-                </div>
-            </main>
-        </div>
-    )
+    return <AdminLayoutClient navigation={navigation}>{children}</AdminLayoutClient>
 }

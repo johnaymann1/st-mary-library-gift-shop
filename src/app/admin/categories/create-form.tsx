@@ -6,8 +6,6 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Plus, Upload, Check } from 'lucide-react'
 import { toast } from 'sonner'
-import Image from 'next/image'
-import { compressImage } from '@/utils/imageCompression'
 
 export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => void }) {
     const [loading, setLoading] = useState(false)
@@ -18,17 +16,6 @@ export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => vo
         setLoading(true)
 
         try {
-            // Compress image if present
-            const imageFile = formData.get('image') as File
-            if (imageFile && imageFile.size > 0) {
-                // Compress image if it's larger than 1MB
-                if (imageFile.size > 1024 * 1024) {
-                    toast.info('Compressing image...')
-                    const compressedImage = await compressImage(imageFile)
-                    formData.set('image', compressedImage)
-                }
-            }
-
             const result = await createCategory(formData)
 
             if (result?.error) {

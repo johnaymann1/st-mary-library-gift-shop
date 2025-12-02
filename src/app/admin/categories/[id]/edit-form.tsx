@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Upload, Save, ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
-import { compressImage } from '@/utils/imageCompression'
 
 import { Category } from '@/types'
 

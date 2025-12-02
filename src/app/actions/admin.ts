@@ -2,18 +2,34 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import sharp from 'sharp'
 
-// --- Helper: Upload Image ---
+// --- Helper: Upload Image with automatic compression ---
 async function uploadImage(file: File, bucket: 'categories' | 'products') {
     const supabase = await createClient()
 
+    // Convert File to Buffer
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    // Compress image using sharp (max 1200x1200, 80% quality)
+    const compressedBuffer = await sharp(buffer)
+        .resize(1200, 1200, {
+            fit: 'inside',
+            withoutEnlargement: true
+        })
+        .jpeg({ quality: 80 })
+        .toBuffer()
+
     // Sanitize filename: remove non-ascii, replace spaces with dashes, add timestamp
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9]/g, '-')}.${fileExt}`
+    const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '-')}.jpg`
 
     const { error } = await supabase.storage
         .from(bucket)
-        .upload(fileName, file)
+        .upload(fileName, compressedBuffer, {
+            contentType: 'image/jpeg',
+            upsert: false
+        })
 
     if (error) {
         throw new Error(`Image upload failed: ${error.message}`)

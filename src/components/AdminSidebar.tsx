@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Store, X, Menu, LayoutDashboard, Package, FolderOpen, ShoppingBag, Home } from 'lucide-react'
+import { Store, X, Menu, LayoutDashboard, Package, FolderOpen, ShoppingBag, Home, ChevronLeft, ChevronRight } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 
@@ -25,7 +25,23 @@ const iconMap = {
 
 export function AdminSidebar({ navigation }: AdminSidebarProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [isCollapsed, setIsCollapsed] = useState(false)
     const pathname = usePathname()
+
+    // Load collapse state from localStorage
+    useEffect(() => {
+        const collapsed = localStorage.getItem('sidebarCollapsed') === 'true'
+        setIsCollapsed(collapsed)
+    }, [])
+
+    // Save collapse state and trigger update
+    const toggleCollapse = () => {
+        const newState = !isCollapsed
+        setIsCollapsed(newState)
+        localStorage.setItem('sidebarCollapsed', String(newState))
+        // Dispatch custom event for same-tab updates
+        window.dispatchEvent(new Event('sidebarToggle'))
+    }
 
     // Close mobile menu on route change
     useEffect(() => {
@@ -46,18 +62,33 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
 
     return (
         <>
-            {/* Desktop Sidebar - Fixed */}
-            <aside className="hidden md:flex md:flex-col fixed left-0 top-20 bottom-0 w-64 bg-white border-r border-neutral-200 shadow-lg z-40">
+            {/* Desktop Sidebar - Fixed and Collapsible */}
+            <aside className={`hidden md:flex md:flex-col fixed left-0 top-20 bottom-0 bg-white border-r border-neutral-200 shadow-lg z-40 transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'}`}>
+                {/* Collapse Toggle Button */}
+                <button
+                    onClick={toggleCollapse}
+                    className="absolute -right-3 top-8 bg-white border border-neutral-200 rounded-full p-1 shadow-md hover:bg-neutral-50 transition-colors z-50"
+                    aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                >
+                    {isCollapsed ? (
+                        <ChevronRight className="h-4 w-4 text-neutral-600" />
+                    ) : (
+                        <ChevronLeft className="h-4 w-4 text-neutral-600" />
+                    )}
+                </button>
+
                 {/* Logo Section */}
-                <div className="h-20 flex items-center justify-center px-6 border-b border-neutral-200">
+                <div className={`h-20 flex items-center px-6 border-b border-neutral-200 ${isCollapsed ? 'justify-center' : ''}`}>
                     <Link href="/admin" className="flex items-center gap-3">
-                        <div className="bg-gradient-to-br from-rose-500 to-pink-600 p-2.5 rounded-xl">
+                        <div className="bg-gradient-to-br from-rose-500 to-pink-600 p-2.5 rounded-xl flex-shrink-0">
                             <Store className="h-6 w-6 text-white" />
                         </div>
-                        <div>
-                            <h1 className="text-base font-bold text-neutral-900">Admin Panel</h1>
-                            <p className="text-xs text-neutral-500">St Mary Library</p>
-                        </div>
+                        {!isCollapsed && (
+                            <div>
+                                <h1 className="text-base font-bold text-neutral-900">Admin Panel</h1>
+                                <p className="text-xs text-neutral-500">St Mary Library</p>
+                            </div>
+                        )}
                     </Link>
                 </div>
 
@@ -74,10 +105,11 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
                                     isActive 
                                         ? 'bg-rose-600 text-white' 
                                         : 'text-neutral-700 hover:bg-neutral-100'
-                                }`}
+                                } ${isCollapsed ? 'justify-center' : ''}`}
+                                title={isCollapsed ? item.name : undefined}
                             >
-                                <Icon className="h-5 w-5" />
-                                <span>{item.name}</span>
+                                <Icon className="h-5 w-5 flex-shrink-0" />
+                                {!isCollapsed && <span>{item.name}</span>}
                             </Link>
                         )
                     })}
@@ -86,9 +118,9 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
                 {/* Bottom Action */}
                 <div className="p-4 border-t border-neutral-200">
                     <Link href="/">
-                        <Button variant="outline" className="w-full gap-2">
-                            <Home className="h-4 w-4" />
-                            Back to Store
+                        <Button variant="outline" className={`w-full gap-2 ${isCollapsed ? 'px-2' : ''}`} title={isCollapsed ? 'Back to Store' : undefined}>
+                            <Home className="h-4 w-4 flex-shrink-0" />
+                            {!isCollapsed && 'Back to Store'}
                         </Button>
                     </Link>
                 </div>
