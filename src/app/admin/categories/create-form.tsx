@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Plus, Upload, Check } from 'lucide-react'
 import { toast } from 'sonner'
 import Image from 'next/image'
+import { compressImage } from '@/utils/imageCompression'
 
 export default function CreateCategoryForm() {
     const [loading, setLoading] = useState(false)
@@ -16,18 +17,34 @@ export default function CreateCategoryForm() {
     async function handleSubmit(formData: FormData) {
         setLoading(true)
 
-        const result = await createCategory(formData)
+        try {
+            // Compress image if present
+            const imageFile = formData.get('image') as File
+            if (imageFile && imageFile.size > 0) {
+                // Compress image if it's larger than 1MB
+                if (imageFile.size > 1024 * 1024) {
+                    toast.info('Compressing image...')
+                    const compressedImage = await compressImage(imageFile)
+                    formData.set('image', compressedImage)
+                }
+            }
 
-        if (result?.error) {
-            toast.error(result.error)
-        } else {
-            toast.success('Category created successfully!')
-            const form = document.getElementById('create-category-form') as HTMLFormElement
-            form?.reset()
-            setImagePreview(null)
-            setImageName('')
+            const result = await createCategory(formData)
+
+            if (result?.error) {
+                toast.error(result.error)
+            } else {
+                toast.success('Category created successfully!')
+                const form = document.getElementById('create-category-form') as HTMLFormElement
+                form?.reset()
+                setImagePreview(null)
+                setImageName('')
+            }
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : 'Failed to create category')
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
     }
 
     function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {

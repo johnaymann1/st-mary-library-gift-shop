@@ -18,7 +18,7 @@ export default async function EditCategoryPage({ params }: { params: Promise<{ i
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-6">Edit Category</h1>
+            <h1 className="text-2xl font-bold mb-6 text-neutral-900">Edit Category</h1>
             <EditCategoryForm category={category} />
         </div>
     )
