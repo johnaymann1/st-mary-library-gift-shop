@@ -39,9 +39,9 @@ export default async function AdminLayout({
         <div className="min-h-screen bg-neutral-50">
             <AdminSidebar navigation={navigation} />
             
-            {/* Main Content - offset by sidebar width using CSS variable on desktop only */}
-            <main className="transition-all duration-300 md:ml-[var(--admin-sidebar-width,18rem)] pt-24 md:pt-20">
-                <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-6 mb-20 md:mb-0">
+            {/* Main Content - offset by sidebar on desktop, mobile padding for header */}
+            <main className="md:ml-64 pt-20 min-h-screen">
+                <div className="px-4 sm:px-6 lg:px-8 py-6">
                     {children}
                 </div>
             </main>
