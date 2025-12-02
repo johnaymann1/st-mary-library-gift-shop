@@ -4,10 +4,14 @@ import Link from 'next/link'
 
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight, Sparkles, Phone, Truck } from 'lucide-react'
+import { getStoreSettings } from '@/utils/settings'
 
 export default async function Home() {
   const supabase = await createClient()
+
+  // Fetch store settings for phone number
+  const settings = await getStoreSettings()
 
   // Fetch Categories
   const { data: categories } = await supabase
@@ -38,6 +42,33 @@ export default async function Home() {
                 <p className="text-xl text-neutral-600 max-w-xl leading-relaxed">
                   Discover our curated collection of premium gifts, handpicked to bring joy and create lasting memories.
                 </p>
+
+                {/* Delivery Info & Phone */}
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <div className="flex items-center gap-3 px-5 py-3 bg-white rounded-xl shadow-md border border-neutral-200">
+                    <div className="p-2 bg-rose-100 rounded-lg">
+                      <Truck className="h-5 w-5 text-rose-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-neutral-900">Fast Delivery</p>
+                      <p className="text-xs text-neutral-600">Island-wide shipping</p>
+                    </div>
+                  </div>
+                  
+                  <a 
+                    href={`tel:${settings.phone}`}
+                    className="flex items-center gap-3 px-5 py-3 bg-gradient-to-br from-rose-600 to-pink-600 text-white rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-105"
+                  >
+                    <div className="p-2 bg-white/20 rounded-lg">
+                      <Phone className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">Call to Order</p>
+                      <p className="text-xs font-medium">{settings.phone}</p>
+                    </div>
+                  </a>
+                </div>
+
                 <div>
                   <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl" asChild>
                     <Link href="#categories">
