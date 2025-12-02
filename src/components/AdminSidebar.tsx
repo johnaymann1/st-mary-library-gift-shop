@@ -64,7 +64,7 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
                             </Button>
                         </>
                     ) : (
-                        <div className="flex flex-col items-center gap-2 mx-auto">
+                        <div className="flex flex-col items-center gap-2 mx-auto pt-2">
                             <div className="bg-gradient-to-br from-rose-500 to-pink-600 p-2 rounded-xl shadow-md">
                                 <Store className="h-5 w-5 text-white" />
                             </div>
