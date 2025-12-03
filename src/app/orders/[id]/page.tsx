@@ -27,12 +27,12 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case 'pending_payment': return 'bg-blue-100 text-blue-800 border-blue-200'
-            case 'processing': return 'bg-indigo-100 text-indigo-800 border-indigo-200'
-            case 'out_for_delivery': return 'bg-orange-100 text-orange-800 border-orange-200'
+            case 'pending_payment': return 'bg-amber-100 text-amber-800 border-amber-200'
+            case 'processing': return 'bg-blue-100 text-blue-800 border-blue-200'
+            case 'out_for_delivery': return 'bg-indigo-100 text-indigo-800 border-indigo-200'
             case 'ready_for_pickup': return 'bg-purple-100 text-purple-800 border-purple-200'
             case 'completed': return 'bg-green-100 text-green-800 border-green-200'
-            case 'cancelled': return 'bg-red-100 text-red-800 border-red-200'
+            case 'cancelled': return 'bg-gray-100 text-gray-800 border-gray-200'
             default: return 'bg-gray-100 text-gray-800 border-gray-200'
         }
     }
@@ -80,11 +80,6 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
                             </div>
                             <div className="flex gap-3">
                                 <CancelOrderButton orderId={order.id} status={order.status} />
-                                {order.status === 'pending_payment' && order.payment_method === 'instapay' && (
-                                    <Button className="bg-rose-600 hover:bg-rose-700 text-white px-6 h-11 rounded-xl shadow-lg shadow-rose-600/20">
-                                        Upload Payment Proof
-                                    </Button>
-                                )}
                             </div>
                         </div>
                     </div>

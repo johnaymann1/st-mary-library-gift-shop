@@ -146,22 +146,6 @@ export default function OrderStatusTimeline({ status, createdAt, updatedAt, deli
                     )
                 })}
             </div>
-
-            {/* Estimated Delivery/Pickup */}
-            {status !== 'completed' && status !== 'cancelled' && (
-                <div className="mt-6 pt-6 border-t border-neutral-100">
-                    <p className="text-sm text-neutral-600">
-                        <span className="font-medium">
-                            {deliveryType === 'delivery' ? 'Estimated Delivery:' : 'Estimated Ready Time:'}
-                        </span>{' '}
-                        {new Date(new Date(createdAt).getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
-                            weekday: 'long',
-                            month: 'long',
-                            day: 'numeric'
-                        })}
-                    </p>
-                </div>
-            )}
         </div>
     )
 }

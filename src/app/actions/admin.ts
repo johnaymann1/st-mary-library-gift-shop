@@ -336,18 +336,12 @@ export async function approvePaymentProof(orderId: number) {
 export async function rejectPaymentProof(orderId: number, reason?: string) {
     const supabase = await createClient()
 
-    const updates: Record<string, string | null> = {
-        status: 'pending_payment',
-        payment_proof_url: null
-    }
-
-    if (reason) {
-        updates.admin_notes = reason
-    }
-
     const { error } = await supabase
         .from('orders')
-        .update(updates)
+        .update({ 
+            status: 'pending_payment',
+            payment_proof_url: null
+        })
         .eq('id', orderId)
 
     if (error) {
@@ -361,17 +355,9 @@ export async function rejectPaymentProof(orderId: number, reason?: string) {
 export async function cancelOrderByAdmin(orderId: number, reason?: string) {
     const supabase = await createClient()
 
-    const updates: Record<string, string> = {
-        status: 'cancelled'
-    }
-
-    if (reason) {
-        updates.admin_notes = reason
-    }
-
     const { error } = await supabase
         .from('orders')
-        .update(updates)
+        .update({ status: 'cancelled' })
         .eq('id', orderId)
 
     if (error) {

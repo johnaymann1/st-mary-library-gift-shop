@@ -93,11 +93,12 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case 'pending_payment': return 'bg-blue-100 text-blue-800 border-blue-200'
-            case 'processing': return 'bg-indigo-100 text-indigo-800 border-indigo-200'
-            case 'out_for_delivery': return 'bg-orange-100 text-orange-800 border-orange-200'
+            case 'pending_payment': return 'bg-amber-100 text-amber-800 border-amber-200'
+            case 'processing': return 'bg-blue-100 text-blue-800 border-blue-200'
+            case 'out_for_delivery': return 'bg-indigo-100 text-indigo-800 border-indigo-200'
+            case 'ready_for_pickup': return 'bg-purple-100 text-purple-800 border-purple-200'
             case 'completed': return 'bg-green-100 text-green-800 border-green-200'
-            case 'cancelled': return 'bg-red-100 text-red-800 border-red-200'
+            case 'cancelled': return 'bg-gray-100 text-gray-800 border-gray-200'
             default: return 'bg-gray-100 text-gray-800 border-gray-200'
         }
     }
@@ -423,33 +424,56 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
 
             {/* Cancel Order Modal */}
             <Dialog open={isCancelModalOpen} onOpenChange={setIsCancelModalOpen}>
-                <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                        <DialogTitle className="text-xl">Cancel Order</DialogTitle>
-                        <DialogDescription>
-                            Are you sure you want to cancel <span className="font-semibold text-neutral-900">Order #{selectedOrder?.id}</span>?
+                <DialogContent className="sm:max-w-lg">
+                    <DialogHeader className="space-y-4">
+                        <div className="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                            <Ban className="h-8 w-8 text-red-600" />
+                        </div>
+                        <DialogTitle className="text-2xl text-center">Cancel Order?</DialogTitle>
+                        <DialogDescription className="text-center text-base">
+                            You are about to cancel <span className="font-bold text-neutral-900">Order #{selectedOrder?.id}</span>
+                            <br />
+                            <span className="text-sm">This action cannot be undone.</span>
                         </DialogDescription>
                     </DialogHeader>
 
-                    <div className="my-4 space-y-4">
-                        <div>
-                            <label className="text-sm font-medium text-neutral-700 mb-2 block">
-                                Reason (Optional)
+                    <div className="my-6">
+                        <div className="bg-neutral-50 rounded-xl p-4 space-y-3 border border-neutral-200">
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm font-medium text-neutral-600">Customer</span>
+                                <span className="text-sm font-semibold text-neutral-900">{selectedOrder?.user?.full_name || 'Guest'}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm font-medium text-neutral-600">Total Amount</span>
+                                <span className="text-sm font-semibold text-neutral-900">
+                                    {selectedOrder?.total_amount.toLocaleString()} {siteConfig.currency.code}
+                                </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm font-medium text-neutral-600">Items</span>
+                                <span className="text-sm font-semibold text-neutral-900">{selectedOrder?.items?.length || 0} items</span>
+                            </div>
+                        </div>
+
+                        <div className="mt-6">
+                            <label className="text-sm font-semibold text-neutral-900 mb-3 block">
+                                Cancellation Reason (Optional)
                             </label>
                             <Textarea
-                                placeholder="Enter cancellation reason for customer records..."
+                                placeholder="E.g., Out of stock, customer request, payment issue..."
                                 value={cancelReason}
                                 onChange={(e) => setCancelReason(e.target.value)}
-                                rows={4}
-                                className="resize-none"
+                                rows={3}
+                                className="resize-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
                             />
-                            <p className="text-xs text-neutral-500 mt-2">
-                                This reason will be saved and may be visible to the customer.
+                            <p className="text-xs text-neutral-500 mt-2 flex items-start gap-1.5">
+                                <AlertCircle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
+                                <span>Customer will be notified about the cancellation.</span>
                             </p>
                         </div>
                     </div>
 
-                    <DialogFooter className="gap-2 sm:gap-2">
+                    <DialogFooter className="gap-3 sm:gap-3">
                         <Button
                             variant="outline"
                             onClick={() => {
@@ -457,17 +481,23 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                 setCancelReason('')
                             }}
                             disabled={updating}
-                            className="flex-1 border-2 border-neutral-400 text-neutral-800 hover:bg-neutral-100 hover:border-neutral-500 font-semibold"
+                            className="flex-1 h-11 border-2 hover:bg-neutral-50 font-semibold"
                         >
                             Keep Order
                         </Button>
                         <Button
-                            className="bg-red-600 hover:bg-red-700 text-white flex-1 shadow-sm"
+                            className="bg-red-600 hover:bg-red-700 text-white flex-1 h-11 shadow-lg shadow-red-600/20 font-semibold"
                             onClick={handleCancelOrder}
                             disabled={updating}
                         >
-                            <Ban className="mr-2 h-4 w-4" />
-                            Cancel Order
+                            {updating ? (
+                                <>Processing...</>
+                            ) : (
+                                <>
+                                    <Ban className="mr-2 h-4 w-4" />
+                                    Cancel Order
+                                </>
+                            )}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
