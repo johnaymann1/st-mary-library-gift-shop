@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Order } from '@/types'
 import { updateOrderStatus, approvePaymentProof, rejectPaymentProof, cancelOrderByAdmin } from '@/app/actions/admin'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog'
@@ -15,6 +16,7 @@ import Image from 'next/image'
 import { siteConfig } from '@/config/site'
 
 export default function AdminOrdersClient({ initialOrders }: { initialOrders: Order[] }) {
+    const router = useRouter()
     const [orders, setOrders] = useState<Order[]>(initialOrders)
     const [filter, setFilter] = useState('all')
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
@@ -22,6 +24,20 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false)
     const [cancelReason, setCancelReason] = useState('')
     const [updating, setUpdating] = useState(false)
+
+    // Auto-refresh orders every 10 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            router.refresh()
+        }, 10000) // 10 seconds
+
+        return () => clearInterval(interval)
+    }, [router])
+
+    // Update local state when initialOrders changes
+    useEffect(() => {
+        setOrders(initialOrders)
+    }, [initialOrders])
 
     const filteredOrders = orders.filter(order => {
         if (filter === 'all') return true
@@ -98,7 +114,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
             case 'out_for_delivery': return 'bg-indigo-100 text-indigo-800 border-indigo-200'
             case 'ready_for_pickup': return 'bg-purple-100 text-purple-800 border-purple-200'
             case 'completed': return 'bg-green-100 text-green-800 border-green-200'
-            case 'cancelled': return 'bg-gray-100 text-gray-800 border-gray-200'
+            case 'cancelled': return 'bg-red-100 text-red-800 border-red-200'
             default: return 'bg-gray-100 text-gray-800 border-gray-200'
         }
     }
@@ -429,11 +445,11 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                         <div className="mx-auto w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-red-100">
                             <Ban className="h-8 w-8 text-red-600" />
                         </div>
-                        <DialogTitle className="text-2xl text-center">Cancel Order?</DialogTitle>
-                        <DialogDescription className="text-center text-base">
+                        <DialogTitle className="text-2xl text-center text-neutral-900">Cancel Order?</DialogTitle>
+                        <DialogDescription className="text-center text-base text-neutral-700">
                             You are about to cancel <span className="font-bold text-neutral-900">Order #{selectedOrder?.id}</span>
                             <br />
-                            <span className="text-sm">This action cannot be undone.</span>
+                            <span className="text-sm text-neutral-600">This action cannot be undone.</span>
                         </DialogDescription>
                     </DialogHeader>
 

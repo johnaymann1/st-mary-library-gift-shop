@@ -62,11 +62,11 @@ export default function CancelOrderButton({ orderId, status }: CancelOrderButton
                         <div className="mx-auto w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-red-100">
                             <AlertTriangle className="h-7 w-7 text-red-600" />
                         </div>
-                        <DialogTitle className="text-xl text-center">Cancel This Order?</DialogTitle>
-                        <DialogDescription className="text-center">
+                        <DialogTitle className="text-xl text-center text-neutral-900">Cancel This Order?</DialogTitle>
+                        <DialogDescription className="text-center text-neutral-700">
                             Are you sure you want to cancel <span className="font-bold text-neutral-900">Order #{orderId}</span>?
                             <br />
-                            <span className="text-sm mt-1 block">This action cannot be undone.</span>
+                            <span className="text-sm mt-1 block text-neutral-600">This action cannot be undone.</span>
                         </DialogDescription>
                     </DialogHeader>
 
