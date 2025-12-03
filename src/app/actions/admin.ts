@@ -339,7 +339,7 @@ export async function rejectPaymentProof(orderId: number, reason?: string) {
     const { error } = await supabase
         .from('orders')
         .update({ 
-            status: 'pending_payment',
+            status: 'cancelled',
             payment_proof_url: null
         })
         .eq('id', orderId)

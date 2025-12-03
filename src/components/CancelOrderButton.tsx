@@ -57,9 +57,9 @@ export default function CancelOrderButton({ orderId, status }: CancelOrderButton
             </Button>
 
             <Dialog open={showConfirm} onOpenChange={setShowConfirm}>
-                <DialogContent className="sm:max-w-md">
+                <DialogContent className="sm:max-w-md bg-gradient-to-br from-rose-50 via-white to-red-50">
                     <DialogHeader className="space-y-4">
-                        <div className="mx-auto w-14 h-14 bg-red-100 rounded-full flex items-center justify-center">
+                        <div className="mx-auto w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-red-100">
                             <AlertTriangle className="h-7 w-7 text-red-600" />
                         </div>
                         <DialogTitle className="text-xl text-center">Cancel This Order?</DialogTitle>
@@ -75,7 +75,7 @@ export default function CancelOrderButton({ orderId, status }: CancelOrderButton
                             variant="outline"
                             onClick={() => setShowConfirm(false)}
                             disabled={loading}
-                            className="flex-1 h-11 border-2 hover:bg-neutral-50 font-semibold"
+                            className="flex-1 h-11 border-2 bg-white hover:bg-neutral-50 font-semibold"
                         >
                             Keep Order
                         </Button>

@@ -52,9 +52,9 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
         if (result.error) {
             toast.error(result.error)
         } else {
-            toast.success(approved ? 'Payment approved - Order moved to processing' : 'Payment rejected - Order returned to pending payment')
+            toast.success(approved ? 'Payment approved - Order moved to processing' : 'Payment rejected - Order cancelled (Invalid Payment)')
             // Optimistic update
-            const newStatus = approved ? 'processing' : 'pending_payment'
+            const newStatus = approved ? 'processing' : 'cancelled'
             setOrders(prev => prev.map(o => o.id === selectedOrder.id ? { ...o, status: newStatus } : o))
             setIsVerifyModalOpen(false)
             setSelectedOrder(null)
@@ -424,9 +424,9 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
 
             {/* Cancel Order Modal */}
             <Dialog open={isCancelModalOpen} onOpenChange={setIsCancelModalOpen}>
-                <DialogContent className="sm:max-w-lg">
+                <DialogContent className="sm:max-w-lg bg-gradient-to-br from-rose-50 via-white to-red-50">
                     <DialogHeader className="space-y-4">
-                        <div className="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                        <div className="mx-auto w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-red-100">
                             <Ban className="h-8 w-8 text-red-600" />
                         </div>
                         <DialogTitle className="text-2xl text-center">Cancel Order?</DialogTitle>
@@ -438,7 +438,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                     </DialogHeader>
 
                     <div className="my-6">
-                        <div className="bg-neutral-50 rounded-xl p-4 space-y-3 border border-neutral-200">
+                        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 space-y-3 border border-neutral-200 shadow-sm">
                             <div className="flex justify-between items-center">
                                 <span className="text-sm font-medium text-neutral-600">Customer</span>
                                 <span className="text-sm font-semibold text-neutral-900">{selectedOrder?.user?.full_name || 'Guest'}</span>
@@ -464,7 +464,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                 value={cancelReason}
                                 onChange={(e) => setCancelReason(e.target.value)}
                                 rows={3}
-                                className="resize-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                className="resize-none focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white"
                             />
                             <p className="text-xs text-neutral-500 mt-2 flex items-start gap-1.5">
                                 <AlertCircle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
@@ -481,7 +481,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                 setCancelReason('')
                             }}
                             disabled={updating}
-                            className="flex-1 h-11 border-2 hover:bg-neutral-50 font-semibold"
+                            className="flex-1 h-11 border-2 bg-white hover:bg-neutral-50 font-semibold"
                         >
                             Keep Order
                         </Button>
