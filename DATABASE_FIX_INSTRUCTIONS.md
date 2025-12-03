@@ -1,9 +1,11 @@
 # 🔧 Database Fix Instructions
 
-## Problem Fixed
+## Problems Fixed
 
-- ❌ Error: `column "recipient_phone" of relation "orders" does not exist`
-- ❌ Payment label showed "Cash on Delivery" even for Store Pickup
+1. ❌ Error: `column "recipient_phone" of relation "orders" does not exist`
+2. ❌ Payment label showed "Cash on Delivery" even for Store Pickup
+3. ❌ Cash orders showed "Pending Payment" status (illogical)
+4. ❌ Store Pickup orders showed "Out for Delivery" (doesn't make sense)
 
 ## ✅ Solutions Applied
 
@@ -27,15 +29,36 @@ Renamed recipient_phone to phone
 Renamed scheduled_delivery_date to delivery_date
 ```
 
-### 2. Update the Stored Procedure
+### 2. Add Smart Order Status Flow
 
-After fixing the column names, update the `place_order` function:
+Orders now have logical status transitions based on payment method and delivery type.
+
+**To Fix: Run these migration scripts**
 
 1. In Supabase SQL Editor, open a **New Query**
-2. Copy and paste the contents of: `supabase/setup_checkout_complete.sql`
+2. Copy and paste: `supabase/add_ready_for_pickup_status.sql`
 3. Click **Run**
+4. Then copy and paste: `supabase/setup_checkout_complete.sql`
+5. Click **Run**
 
-This will recreate the `place_order` function with the correct column names.
+**New Status Logic:**
+
+📦 **Cash Payment:**
+- Skips "Pending Payment"
+- Goes directly to "Processing"
+- Flow: `processing` → `[ready_for_pickup/out_for_delivery]` → `completed`
+
+💳 **InstaPay Payment:**
+- Requires approval
+- Flow: `pending_payment` → `processing` → `[ready_for_pickup/out_for_delivery]` → `completed`
+
+🏪 **Store Pickup:**
+- Uses "Ready for Pickup" status (purple badge)
+- Flow: `processing` → `ready_for_pickup` → `completed`
+
+🚚 **Home Delivery:**
+- Uses "Out for Delivery" status
+- Flow: `processing` → `out_for_delivery` → `completed`
 
 ### 3. Payment Label Fix (Already Deployed)
 
@@ -44,17 +67,62 @@ This will recreate the `place_order` function with the correct column names.
 - **Store Pickup**: "Cash Payment" (pay when you pick up)
 - **Home Delivery**: "Cash on Delivery" (pay when you receive)
 
+### 4. Admin Dashboard Improvements (Already Deployed)
+
+✅ Status dropdown is context-aware:
+- Only shows "Pending Payment" for InstaPay orders
+- Shows "Ready for Pickup" for pickup orders
+- Shows "Out for Delivery" for delivery orders
+
+## Complete Migration Steps
+
+Run these SQL scripts **in order**:
+
+1. **Fix column names:** `supabase/fix_orders_phone_column.sql`
+2. **Add new status:** `supabase/add_ready_for_pickup_status.sql`
+3. **Update RPC function:** `supabase/setup_checkout_complete.sql`
+
 ## Testing
 
 After running the migrations, test the checkout flow:
 
+### Cash Payment + Store Pickup
 1. Add items to cart
 2. Go to checkout
-3. Try both delivery options:
-   - **Store Pickup** → Should show "Cash Payment"
-   - **Home Delivery** → Should show "Cash on Delivery"
-4. Complete an order
-5. Verify it appears in Orders page
+3. Select "Store Pickup"
+4. Select "Cash Payment"
+5. Place order
+6. ✅ Should start at "Processing" (not "Pending Payment")
+7. Admin can move to "Ready for Pickup"
+
+### Cash Payment + Home Delivery
+1. Add items to cart
+2. Go to checkout
+3. Select "Home Delivery"
+4. Select "Cash on Delivery"
+5. Place order
+6. ✅ Should start at "Processing"
+7. Admin can move to "Out for Delivery"
+
+### InstaPay + Any Delivery Type
+1. Add items to cart
+2. Go to checkout
+3. Select delivery type
+4. Select "InstaPay" and upload proof
+5. Place order
+6. ✅ Should start at "Pending Payment"
+7. Admin approves → moves to "Processing"
+
+## Valid Order Statuses
+
+| Status | Description | Used For |
+|--------|-------------|----------|
+| `pending_payment` | Waiting for payment confirmation | InstaPay orders only |
+| `processing` | Order is being prepared | All orders (initial state for cash) |
+| `out_for_delivery` | On the way to customer | Home delivery only |
+| `ready_for_pickup` | Ready to be picked up | Store pickup only |
+| `completed` | Order fulfilled | All orders |
+| `cancelled` | Order cancelled | All orders |
 
 ## If You Still See Errors
 
