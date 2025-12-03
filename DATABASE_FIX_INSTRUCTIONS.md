@@ -1,5 +1,18 @@
 # 🔧 Database Fix Instructions
 
+## ⚠️ CRITICAL: Run These Migrations First!
+
+**You are seeing this error:**
+```
+new row for relation "orders" violates check constraint "orders_status_check"
+```
+
+**This means the database constraint is outdated and doesn't include the new statuses.**
+
+You **MUST** run the migration scripts below to fix this!
+
+---
+
 ## Problems Fixed
 
 1. ❌ Error: `column "recipient_phone" of relation "orders" does not exist`
@@ -44,19 +57,23 @@ Orders now have logical status transitions based on payment method and delivery 
 **New Status Logic:**
 
 📦 **Cash Payment:**
+
 - Skips "Pending Payment"
 - Goes directly to "Processing"
 - Flow: `processing` → `[ready_for_pickup/out_for_delivery]` → `completed`
 
 💳 **InstaPay Payment:**
+
 - Requires approval
 - Flow: `pending_payment` → `processing` → `[ready_for_pickup/out_for_delivery]` → `completed`
 
 🏪 **Store Pickup:**
+
 - Uses "Ready for Pickup" status (purple badge)
 - Flow: `processing` → `ready_for_pickup` → `completed`
 
 🚚 **Home Delivery:**
+
 - Uses "Out for Delivery" status
 - Flow: `processing` → `out_for_delivery` → `completed`
 
@@ -70,6 +87,7 @@ Orders now have logical status transitions based on payment method and delivery 
 ### 4. Admin Dashboard Improvements (Already Deployed)
 
 ✅ Status dropdown is context-aware:
+
 - Only shows "Pending Payment" for InstaPay orders
 - Shows "Ready for Pickup" for pickup orders
 - Shows "Out for Delivery" for delivery orders
@@ -87,6 +105,7 @@ Run these SQL scripts **in order**:
 After running the migrations, test the checkout flow:
 
 ### Cash Payment + Store Pickup
+
 1. Add items to cart
 2. Go to checkout
 3. Select "Store Pickup"
@@ -96,6 +115,7 @@ After running the migrations, test the checkout flow:
 7. Admin can move to "Ready for Pickup"
 
 ### Cash Payment + Home Delivery
+
 1. Add items to cart
 2. Go to checkout
 3. Select "Home Delivery"
@@ -105,6 +125,7 @@ After running the migrations, test the checkout flow:
 7. Admin can move to "Out for Delivery"
 
 ### InstaPay + Any Delivery Type
+
 1. Add items to cart
 2. Go to checkout
 3. Select delivery type
@@ -115,14 +136,14 @@ After running the migrations, test the checkout flow:
 
 ## Valid Order Statuses
 
-| Status | Description | Used For |
-|--------|-------------|----------|
-| `pending_payment` | Waiting for payment confirmation | InstaPay orders only |
-| `processing` | Order is being prepared | All orders (initial state for cash) |
-| `out_for_delivery` | On the way to customer | Home delivery only |
-| `ready_for_pickup` | Ready to be picked up | Store pickup only |
-| `completed` | Order fulfilled | All orders |
-| `cancelled` | Order cancelled | All orders |
+| Status             | Description                      | Used For                            |
+| ------------------ | -------------------------------- | ----------------------------------- |
+| `pending_payment`  | Waiting for payment confirmation | InstaPay orders only                |
+| `processing`       | Order is being prepared          | All orders (initial state for cash) |
+| `out_for_delivery` | On the way to customer           | Home delivery only                  |
+| `ready_for_pickup` | Ready to be picked up            | Store pickup only                   |
+| `completed`        | Order fulfilled                  | All orders                          |
+| `cancelled`        | Order cancelled                  | All orders                          |
 
 ## If You Still See Errors
 

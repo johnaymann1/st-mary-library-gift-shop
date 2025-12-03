@@ -125,19 +125,51 @@ export default function CheckoutClient({
                 : 'InstaPay'
 
             toast.success(
-                <div className="space-y-2">
-                    <p className="font-bold text-green-800">🎉 Order Placed Successfully!</p>
-                    <p className="text-sm text-neutral-700">
-                        Your order has been confirmed. We'll process it shortly.
-                    </p>
-                    <div className="text-xs text-neutral-600 space-y-1 mt-2">
-                        <p>• {deliveryMethod}</p>
-                        <p>• {paymentMethodText}</p>
-                        <p>• Total: {total.toLocaleString()} {siteConfig.currency.code}</p>
+                <div className="flex flex-col gap-3 py-2">
+                    <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">
+                            <Check className="h-6 w-6 text-white" />
+                        </div>
+                        <div className="flex-1">
+                            <p className="text-base font-bold text-neutral-900 leading-tight">
+                                Order Placed Successfully!
+                            </p>
+                            <p className="text-sm text-neutral-600 mt-1">
+                                Your order has been confirmed. We'll process it shortly.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div className="pl-13 space-y-2">
+                        <div className="flex items-center gap-2 text-sm">
+                            <Truck className="h-4 w-4 text-rose-500" />
+                            <span className="font-medium text-neutral-700">{deliveryMethod}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                            {paymentMethod === 'cash' ? (
+                                <Banknote className="h-4 w-4 text-green-500" />
+                            ) : (
+                                <CreditCard className="h-4 w-4 text-blue-500" />
+                            )}
+                            <span className="font-medium text-neutral-700">{paymentMethodText}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm pt-2 border-t border-neutral-200">
+                            <span className="text-neutral-600">Total:</span>
+                            <span className="font-bold text-neutral-900">
+                                {total.toLocaleString()} {siteConfig.currency.code}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div className="pl-13 pt-2">
+                        <p className="text-xs text-neutral-500">
+                            Redirecting to your orders...
+                        </p>
                     </div>
                 </div>,
                 {
                     duration: 6000,
+                    className: 'max-w-md',
                 }
             )
 
