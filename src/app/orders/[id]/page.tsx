@@ -193,7 +193,9 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
                                 <div>
                                     <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Method</p>
                                     <p className="text-neutral-900 font-semibold text-base">
-                                        {order.payment_method === 'instapay' ? 'InstaPay' : 'Cash on Delivery'}
+                                        {order.payment_method === 'instapay' 
+                                            ? 'InstaPay' 
+                                            : (order.delivery_type === 'delivery' ? 'Cash on Delivery' : 'Cash Payment')}
                                     </p>
                                 </div>
                                 <div>

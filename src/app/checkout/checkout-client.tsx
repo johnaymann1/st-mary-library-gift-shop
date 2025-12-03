@@ -120,7 +120,9 @@ export default function CheckoutClient({
         } else {
             // Show success message with order details
             const deliveryMethod = deliveryType === 'delivery' ? 'Home Delivery' : 'Store Pickup'
-            const paymentMethodText = paymentMethod === 'cash' ? 'Cash on Delivery' : 'InstaPay'
+            const paymentMethodText = paymentMethod === 'cash' 
+                ? (deliveryType === 'delivery' ? 'Cash on Delivery' : 'Cash Payment')
+                : 'InstaPay'
 
             toast.success(
                 <div className="space-y-2">
@@ -537,8 +539,14 @@ export default function CheckoutClient({
                                 />
                                 <Banknote className="h-6 w-6 text-neutral-600 mr-4" />
                                 <div>
-                                    <span className="block font-semibold text-neutral-900">Cash on Delivery</span>
-                                    <span className="block text-xs sm:text-sm text-neutral-500">Pay when you receive your order</span>
+                                    <span className="block font-semibold text-neutral-900">
+                                        {deliveryType === 'delivery' ? 'Cash on Delivery' : 'Cash Payment'}
+                                    </span>
+                                    <span className="block text-xs sm:text-sm text-neutral-500">
+                                        {deliveryType === 'delivery' 
+                                            ? 'Pay when you receive your order' 
+                                            : 'Pay when you pick up your order'}
+                                    </span>
                                 </div>
                             </label>
 
