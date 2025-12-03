@@ -110,7 +110,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
     const stats = {
         total: orders.length,
         pending: orders.filter(o => o.status === 'pending_payment').length,
-        processing: orders.filter(o => ['processing', 'out_for_delivery'].includes(o.status)).length,
+        processing: orders.filter(o => ['processing', 'out_for_delivery', 'ready_for_pickup'].includes(o.status)).length,
         completed: orders.filter(o => o.status === 'completed').length,
     }
 
@@ -186,6 +186,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                         <SelectItem value="pending_payment" className="text-neutral-900">Pending Payment</SelectItem>
                         <SelectItem value="processing" className="text-neutral-900">Processing</SelectItem>
                         <SelectItem value="out_for_delivery" className="text-neutral-900">Out for Delivery</SelectItem>
+                        <SelectItem value="ready_for_pickup" className="text-neutral-900">Ready for Pickup</SelectItem>
                         <SelectItem value="completed" className="text-neutral-900">Completed</SelectItem>
                         <SelectItem value="cancelled" className="text-neutral-900">Cancelled</SelectItem>
                     </SelectContent>
@@ -316,9 +317,17 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                                     <SelectValue />
                                                 </SelectTrigger>
                                                 <SelectContent className="bg-white border-neutral-200">
-                                                    <SelectItem value="pending_payment" className="text-neutral-900 text-xs">Pending</SelectItem>
+                                                    {/* Only show pending_payment for InstaPay orders */}
+                                                    {order.payment_method === 'instapay' && (
+                                                        <SelectItem value="pending_payment" className="text-neutral-900 text-xs">Pending Payment</SelectItem>
+                                                    )}
                                                     <SelectItem value="processing" className="text-neutral-900 text-xs">Processing</SelectItem>
-                                                    <SelectItem value="out_for_delivery" className="text-neutral-900 text-xs">Shipping</SelectItem>
+                                                    {/* Show different statuses based on delivery type */}
+                                                    {order.delivery_type === 'delivery' ? (
+                                                        <SelectItem value="out_for_delivery" className="text-neutral-900 text-xs">Out for Delivery</SelectItem>
+                                                    ) : (
+                                                        <SelectItem value="ready_for_pickup" className="text-neutral-900 text-xs">Ready for Pickup</SelectItem>
+                                                    )}
                                                     <SelectItem value="completed" className="text-neutral-900 text-xs">Completed</SelectItem>
                                                 </SelectContent>
                                             </Select>

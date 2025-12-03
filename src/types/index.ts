@@ -59,7 +59,7 @@ export interface OrderItem {
 export interface Order {
     id: number
     user_id: string
-    status: 'pending_payment' | 'payment_confirmation_pending' | 'processing' | 'wrapping' | 'out_for_delivery' | 'completed' | 'cancelled'
+    status: 'pending_payment' | 'processing' | 'out_for_delivery' | 'ready_for_pickup' | 'completed' | 'cancelled'
     total_amount: number
     delivery_type: 'delivery' | 'pickup'
     delivery_address: string | null

@@ -14,9 +14,9 @@ SET status = CASE
     ELSE status
 END;
 
--- Add the updated constraint with correct status values
+-- Add the updated constraint with correct status values including ready_for_pickup
 ALTER TABLE orders ADD CONSTRAINT orders_status_check 
-CHECK (status IN ('pending_payment', 'processing', 'out_for_delivery', 'completed', 'cancelled'));
+CHECK (status IN ('pending_payment', 'processing', 'out_for_delivery', 'ready_for_pickup', 'completed', 'cancelled'));
 
 -- Rename recipient_phone to phone for consistency (only if it exists)
 DO $$ 

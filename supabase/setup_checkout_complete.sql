@@ -81,7 +81,9 @@ begin
     created_at
   ) values (
     p_user_id,
-    case when p_payment_method = 'instapay' then 'payment_pending' else 'processing' end,
+    -- InstaPay starts at pending_payment (needs approval)
+    -- Cash payment starts at processing (already confirmed)
+    case when p_payment_method = 'instapay' then 'pending_payment' else 'processing' end,
     v_total,
     v_delivery_fee,
     p_payment_method,
