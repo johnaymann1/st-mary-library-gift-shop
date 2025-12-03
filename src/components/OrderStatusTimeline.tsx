@@ -1,41 +1,54 @@
-import { CheckCircle2, Clock, Truck, Package, XCircle } from 'lucide-react'
+import { CheckCircle2, Clock, Truck, Package, XCircle, Store } from 'lucide-react'
 
 interface OrderStatusTimelineProps {
     status: string
     createdAt: string
     updatedAt: string
+    deliveryType?: string
+    paymentMethod?: string
 }
 
-const statusSteps = [
-    {
-        key: 'pending_payment',
-        label: 'Pending Payment',
-        icon: Clock,
-        description: 'Waiting for payment confirmation'
-    },
-    {
-        key: 'processing',
-        label: 'Processing',
-        icon: Package,
-        description: 'Your order is being prepared'
-    },
-    {
-        key: 'out_for_delivery',
-        label: 'Out for Delivery',
-        icon: Truck,
-        description: 'Your order is on the way'
-    },
-    {
-        key: 'completed',
-        label: 'Completed',
-        icon: CheckCircle2,
-        description: 'Order delivered successfully'
-    }
-]
-
-export default function OrderStatusTimeline({ status, createdAt, updatedAt }: OrderStatusTimelineProps) {
-    const currentStepIndex = statusSteps.findIndex(step => step.key === status)
+export default function OrderStatusTimeline({ status, createdAt, updatedAt, deliveryType = 'delivery', paymentMethod = 'cash' }: OrderStatusTimelineProps) {
     const isCancelled = status === 'cancelled'
+    
+    // Build dynamic status steps based on delivery type and payment method
+    const statusSteps = [
+        // InstaPay orders start with pending_payment
+        ...(paymentMethod === 'instapay' ? [{
+            key: 'pending_payment',
+            label: 'Pending Payment',
+            icon: Clock,
+            description: 'Waiting for payment confirmation'
+        }] : []),
+        {
+            key: 'processing',
+            label: 'Processing',
+            icon: Package,
+            description: 'Your order is being prepared'
+        },
+        // Delivery orders use out_for_delivery
+        ...(deliveryType === 'delivery' ? [{
+            key: 'out_for_delivery',
+            label: 'Out for Delivery',
+            icon: Truck,
+            description: 'Your order is on the way'
+        }] : []),
+        // Pickup orders use ready_for_pickup
+        ...(deliveryType === 'pickup' ? [{
+            key: 'ready_for_pickup',
+            label: 'Ready for Pickup',
+            icon: Store,
+            description: 'Your order is ready to be collected'
+        }] : []),
+        {
+            key: 'completed',
+            label: 'Completed',
+            icon: CheckCircle2,
+            description: deliveryType === 'delivery' ? 'Order delivered successfully' : 'Order collected successfully'
+        }
+    ]
+    
+    const currentStepIndex = statusSteps.findIndex(step => step.key === status)
 
     if (isCancelled) {
         return (
@@ -134,11 +147,13 @@ export default function OrderStatusTimeline({ status, createdAt, updatedAt }: Or
                 })}
             </div>
 
-            {/* Estimated Delivery */}
+            {/* Estimated Delivery/Pickup */}
             {status !== 'completed' && status !== 'cancelled' && (
                 <div className="mt-6 pt-6 border-t border-neutral-100">
                     <p className="text-sm text-neutral-600">
-                        <span className="font-medium">Estimated Delivery:</span>{' '}
+                        <span className="font-medium">
+                            {deliveryType === 'delivery' ? 'Estimated Delivery:' : 'Estimated Ready Time:'}
+                        </span>{' '}
                         {new Date(new Date(createdAt).getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
                             weekday: 'long',
                             month: 'long',

@@ -3,6 +3,7 @@
 ## ⚠️ CRITICAL: Run These Migrations First!
 
 **You are seeing this error:**
+
 ```
 new row for relation "orders" violates check constraint "orders_status_check"
 ```

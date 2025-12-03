@@ -30,7 +30,15 @@ export default async function OrdersPage() {
     }
 
     const getStatusLabel = (status: string) => {
-        return status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+        const labels: Record<string, string> = {
+            'pending_payment': 'Pending Payment',
+            'processing': 'Processing',
+            'out_for_delivery': 'Out for Delivery',
+            'ready_for_pickup': 'Ready for Pickup',
+            'completed': 'Completed',
+            'cancelled': 'Cancelled'
+        }
+        return labels[status] || status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
     }
 
     return (
