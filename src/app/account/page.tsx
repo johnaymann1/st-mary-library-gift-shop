@@ -2,7 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { logout } from '@/app/actions/auth'
-import { User, Package, LogOut, Phone, Mail, Heart } from 'lucide-react'
+import { User, Package, LogOut, Phone, Mail, Heart, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function AccountPage() {
@@ -18,6 +18,11 @@ export default async function AccountPage() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                {/* Back Button */}
+                <Link href="/" className="inline-flex items-center gap-2 text-neutral-600 hover:text-rose-600 transition-colors mb-6">
+                    <ArrowLeft className="h-5 w-5" />
+                    Back to Home
+                </Link>
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-neutral-900 mb-2">My Account</h1>

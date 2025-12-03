@@ -66,20 +66,28 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
     return (
         <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                {/* Breadcrumb Navigation */}
-                <nav className="flex items-center gap-2 text-sm text-neutral-600 mb-6">
-                    <Link href="/" className="hover:text-rose-600 transition-colors">Home</Link>
-                    <span>/</span>
+                {/* Back Navigation */}
+                <div className="flex items-center gap-4 mb-6">
+                    <Button
+                        variant="ghost"
+                        onClick={() => router.back()}
+                        className="text-neutral-600 hover:text-rose-600 hover:bg-rose-50"
+                    >
+                        <ArrowLeft className="h-5 w-5 mr-2" />
+                        Back
+                    </Button>
                     {product.categories && (
-                        <>
+                        <nav className="flex items-center gap-2 text-sm text-neutral-600">
+                            <Link href="/" className="hover:text-rose-600 transition-colors">Home</Link>
+                            <span>/</span>
                             <Link href={`/category/${product.category_id}`} className="hover:text-rose-600 transition-colors">
                                 {product.categories.name_en}
                             </Link>
                             <span>/</span>
-                        </>
+                            <span className="text-neutral-900 font-medium">{product.name_en}</span>
+                        </nav>
                     )}
-                    <span className="text-neutral-900 font-medium">{product.name_en}</span>
-                </nav>
+                </div>
 
                 <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-white">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">

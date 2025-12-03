@@ -1,5 +1,6 @@
+'use client'
+
 import { getOrderDetails } from '@/app/actions/orders'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -8,22 +9,66 @@ import { ChevronLeft, MapPin, Phone, CreditCard, Package, Truck } from 'lucide-r
 import CancelOrderButton from '@/components/CancelOrderButton'
 import OrderStatusTimeline from '@/components/OrderStatusTimeline'
 import { siteConfig } from '@/config/site'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import type { Order } from '@/types'
 
-export default async function OrderDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params
-    const orderId = parseInt(id)
+export default function OrderDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+    const router = useRouter()
+    const [order, setOrder] = useState<Order | null>(null)
+    const [loading, setLoading] = useState(true)
+    const [orderId, setOrderId] = useState<number>(0)
 
-    if (isNaN(orderId)) {
-        redirect('/orders')
+    useEffect(() => {
+        async function initialize() {
+            const { id } = await params
+            const parsedId = parseInt(id)
+            
+            if (isNaN(parsedId)) {
+                router.push('/orders')
+                return
+            }
+            
+            setOrderId(parsedId)
+            const result = await getOrderDetails(parsedId)
+            
+            if (result.error || !result.order) {
+                router.push('/orders')
+                return
+            }
+            
+            setOrder(result.order)
+            setLoading(false)
+        }
+        initialize()
+    }, [params, router])
+
+    // Auto-refresh order every 10 seconds
+    useEffect(() => {
+        if (!orderId) return
+        
+        const interval = setInterval(async () => {
+            const result = await getOrderDetails(orderId)
+            if (result.order) {
+                setOrder(result.order)
+            }
+        }, 10000)
+        
+        return () => clearInterval(interval)
+    }, [orderId])
+
+    if (loading || !order) {
+        return (
+            <div className="min-h-screen bg-gradient-to-b from-white to-neutral-50">
+                <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                    <div className="animate-pulse space-y-6">
+                        <div className="h-10 w-48 bg-neutral-200 rounded-xl"></div>
+                        <div className="h-96 bg-white rounded-3xl"></div>
+                    </div>
+                </main>
+            </div>
+        )
     }
-
-    const result = await getOrderDetails(orderId)
-
-    if (result.error || !result.order) {
-        redirect('/orders')
-    }
-
-    const { order } = result
 
     const getStatusColor = (status: string) => {
         switch (status) {

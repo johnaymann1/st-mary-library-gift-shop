@@ -1,21 +1,49 @@
+'use client'
+
 import { getUserOrders } from '@/app/actions/orders'
-import { createClient } from '@/utils/supabase/server'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Package, ChevronRight } from 'lucide-react'
+import { Package, ChevronRight, ArrowLeft } from 'lucide-react'
 import { siteConfig } from '@/config/site'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/utils/supabase/client'
+import type { Order } from '@/types'
 
-export default async function OrdersPage() {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+export default function OrdersPage() {
+    const router = useRouter()
+    const [orders, setOrders] = useState<Order[]>([])
+    const [loading, setLoading] = useState(true)
 
-    if (!user) {
-        redirect('/login')
-    }
+    useEffect(() => {
+        async function checkAuth() {
+            const supabase = createClient()
+            const { data: { user } } = await supabase.auth.getUser()
+            if (!user) {
+                router.push('/login')
+            }
+        }
+        checkAuth()
+    }, [])
 
-    const orders = await getUserOrders()
+    useEffect(() => {
+        async function fetchOrders() {
+            const fetchedOrders = await getUserOrders()
+            setOrders(fetchedOrders)
+            setLoading(false)
+        }
+        fetchOrders()
+    }, [])
+
+    // Auto-refresh orders every 10 seconds
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            const fetchedOrders = await getUserOrders()
+            setOrders(fetchedOrders)
+        }, 10000)
+        return () => clearInterval(interval)
+    }, [])
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -41,9 +69,28 @@ export default async function OrdersPage() {
         return labels[status] || status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
     }
 
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gradient-to-b from-white to-neutral-50">
+                <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                    <div className="animate-pulse space-y-6">
+                        <div className="h-10 w-48 bg-neutral-200 rounded-xl"></div>
+                        <div className="h-64 bg-white rounded-3xl"></div>
+                    </div>
+                </main>
+            </div>
+        )
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-neutral-50">
             <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <Button variant="ghost" asChild className="mb-6 -ml-4 text-neutral-600 hover:text-rose-600 hover:bg-rose-50">
+                    <Link href="/" className="flex items-center gap-2">
+                        <ArrowLeft className="h-5 w-5" />
+                        Back to Home
+                    </Link>
+                </Button>
                 <div className="mb-12">
                     <h1 className="text-4xl font-bold text-neutral-900 mb-3">My Orders</h1>
                     <p className="text-neutral-600 text-lg">Track and manage your orders</p>

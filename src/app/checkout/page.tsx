@@ -1,5 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
+import { ChevronLeft } from 'lucide-react'
 import CheckoutClient from './checkout-client'
 import { getStoreSettings } from '@/utils/settings'
 
@@ -32,6 +34,10 @@ export default async function CheckoutPage() {
     return (
         <div className="min-h-screen bg-neutral-50">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <Link href="/cart" className="inline-flex items-center gap-2 text-neutral-600 hover:text-rose-600 transition-colors mb-6">
+                    <ChevronLeft className="h-5 w-5" />
+                    Back to Cart
+                </Link>
                 <h1 className="text-3xl font-bold text-neutral-900 mb-8">Checkout</h1>
                 <CheckoutClient 
                     userPhone={userProfile?.phone || ''} 
