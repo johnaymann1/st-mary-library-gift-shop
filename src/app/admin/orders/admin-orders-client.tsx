@@ -497,7 +497,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                 setCancelReason('')
                             }}
                             disabled={updating}
-                            className="flex-1 h-11 border-2 bg-white hover:bg-neutral-50 font-semibold"
+                            className="flex-1 h-11 border-2 bg-white hover:bg-neutral-50 font-semibold text-neutral-900"
                         >
                             Keep Order
                         </Button>
