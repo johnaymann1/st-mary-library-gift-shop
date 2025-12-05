@@ -98,7 +98,7 @@ export default function Navbar({ storeName = siteConfig.displayName }: NavbarPro
                                 <Home className="h-5 w-5" />
                             </Button>
                         </Link>
-                        {isAdmin && (
+                        {user && isAdmin && (
                             <Link href="/admin">
                                 <Button variant="ghost" size="icon" className="text-neutral-700 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Admin Dashboard">
                                     <LayoutDashboard className="h-5 w-5" />
