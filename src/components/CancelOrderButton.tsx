@@ -50,9 +50,10 @@ export default function CancelOrderButton({ orderId, status }: CancelOrderButton
             <Button 
                 variant="outline" 
                 onClick={() => setShowConfirm(true)}
-                className="border-2 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 font-semibold h-11 px-6 rounded-xl"
+                className="border-2 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 font-semibold h-11 px-6 rounded-xl focus:ring-4 focus:ring-red-500 focus:ring-offset-2"
+                aria-label={`Cancel order number ${orderId}`}
             >
-                <X className="h-4 w-4 mr-2" />
+                <X className="h-4 w-4 mr-2" aria-hidden="true" />
                 Cancel Order
             </Button>
 

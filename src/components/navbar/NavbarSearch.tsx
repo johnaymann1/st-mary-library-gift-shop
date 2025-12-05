@@ -18,14 +18,15 @@ export default function NavbarSearch() {
     }
 
     return (
-        <form onSubmit={handleSearch} className="relative hidden md:block w-full max-w-md mx-8">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
+        <form onSubmit={handleSearch} className="relative hidden md:block w-full max-w-md mx-8" role="search" aria-label="Search products">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" aria-hidden="true" />
             <Input
                 type="search"
                 placeholder="Search for gifts..."
-                className="pl-10 bg-neutral-50 border-neutral-200 focus:bg-white transition-all rounded-full"
+                className="pl-10 bg-neutral-50 border-neutral-200 focus:bg-white transition-all rounded-full focus:ring-2 focus:ring-rose-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Search for products"
             />
         </form>
     )

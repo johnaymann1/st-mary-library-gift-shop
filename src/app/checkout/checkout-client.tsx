@@ -295,8 +295,8 @@ export default function CheckoutClient({
                             <Truck className="h-5 w-5 text-rose-600" />
                             Delivery Method
                         </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                            <label className={`relative flex flex-col p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all ${deliveryType === 'delivery' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4" role="radiogroup" aria-label="Delivery method">
+                            <label className={`relative flex flex-col p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${deliveryType === 'delivery' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
                                 <input
                                     type="radio"
                                     name="delivery_type"
@@ -304,12 +304,13 @@ export default function CheckoutClient({
                                     checked={deliveryType === 'delivery'}
                                     onChange={() => setDeliveryType('delivery')}
                                     className="sr-only"
+                                    aria-label="Home delivery"
                                 />
                                 <span className="font-semibold text-neutral-900">Home Delivery</span>
                                 <span className="text-xs sm:text-sm text-neutral-500">Delivery to your doorstep</span>
                                 <span className="mt-2 font-bold text-rose-600">{deliveryFee.toFixed(2)} {currencyCode}</span>
                             </label>
-                            <label className={`relative flex flex-col p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all ${deliveryType === 'pickup' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
+                            <label className={`relative flex flex-col p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${deliveryType === 'pickup' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
                                 <input
                                     type="radio"
                                     name="delivery_type"
@@ -317,6 +318,7 @@ export default function CheckoutClient({
                                     checked={deliveryType === 'pickup'}
                                     onChange={() => setDeliveryType('pickup')}
                                     className="sr-only"
+                                    aria-label="Store pickup"
                                 />
                                 <span className="font-semibold text-neutral-900">Store Pickup</span>
                                 <span className="text-xs sm:text-sm text-neutral-500">Pick up from {siteConfig.name}</span>
@@ -339,7 +341,8 @@ export default function CheckoutClient({
                                                     setShowAddressForm(true)
                                                     setEditingAddress(null)
                                                 }}
-                                                className="text-rose-600 hover:text-rose-700"
+                                                className="text-rose-600 hover:text-rose-700 focus:ring-2 focus:ring-rose-500"
+                                                aria-label="Add new address"
                                             >
                                                 <Plus className="h-4 w-4 mr-1" />
                                                 Add New
@@ -349,11 +352,20 @@ export default function CheckoutClient({
                                             {addresses.map((addr) => (
                                                 <div
                                                     key={addr.id}
-                                                    className={`p-3 border-2 rounded-xl cursor-pointer transition-all ${selectedAddress?.id === addr.id
+                                                    className={`p-3 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${selectedAddress?.id === addr.id
                                                         ? 'border-rose-600 bg-rose-50'
                                                         : 'border-neutral-200 hover:border-rose-300'
                                                         }`}
                                                     onClick={() => setSelectedAddress(addr)}
+                                                    role="button"
+                                                    tabIndex={0}
+                                                    aria-label={`Select ${addr.label} address${addr.is_default ? ' (default)' : ''}${selectedAddress?.id === addr.id ? ' - currently selected' : ''}`}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter' || e.key === ' ') {
+                                                            e.preventDefault()
+                                                            setSelectedAddress(addr)
+                                                        }
+                                                    }}
                                                 >
                                                     <div className="flex items-start justify-between">
                                                         <div className="flex-1">
@@ -379,7 +391,8 @@ export default function CheckoutClient({
                                                                     setEditingAddress(addr)
                                                                     setShowAddressForm(true)
                                                                 }}
-                                                                className="h-8 w-8 p-0"
+                                                                className="h-8 w-8 p-0 focus:ring-2 focus:ring-rose-500"
+                                                                aria-label={`Edit ${addr.label} address`}
                                                             >
                                                                 <Edit2 className="h-3.5 w-3.5" />
                                                             </Button>
@@ -392,7 +405,8 @@ export default function CheckoutClient({
                                                                     setAddressToDelete(addr.id)
                                                                     setDeleteDialogOpen(true)
                                                                 }}
-                                                                className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                                                                className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 focus:ring-2 focus:ring-red-500"
+                                                                aria-label={`Delete ${addr.label} address`}
                                                             >
                                                                 <Trash2 className="h-3.5 w-3.5" />
                                                             </Button>
@@ -432,26 +446,30 @@ export default function CheckoutClient({
                                             }
                                         }}>
                                             <div>
-                                                <label className="block text-sm font-medium text-neutral-700 mb-1">Label *</label>
+                                                <label htmlFor="address-label-input" className="block text-sm font-medium text-neutral-700 mb-1">Label * <span className="sr-only">(required field)</span></label>
                                                 <Input
                                                     name="label"
                                                     defaultValue={editingAddress?.label || ''}
                                                     placeholder="e.g., Home, Work"
                                                     required
-                                                    className="h-11"
+                                                    className="h-11 focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
                                                     id="address-label-input"
+                                                    aria-required="true"
+                                                    aria-label="Address label"
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-sm font-medium text-neutral-700 mb-1">Full Address *</label>
+                                                <label htmlFor="address-text-input" className="block text-sm font-medium text-neutral-700 mb-1">Full Address * <span className="sr-only">(required field)</span></label>
                                                 <textarea
                                                     name="address"
                                                     defaultValue={editingAddress?.address || ''}
                                                     placeholder="Street, Building, Apartment..."
                                                     required
                                                     rows={3}
-                                                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-neutral-900"
+                                                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900"
                                                     id="address-text-input"
+                                                    aria-required="true"
+                                                    aria-label="Full address"
                                                 />
                                             </div>
                                             <div className="flex items-center gap-2">
@@ -467,14 +485,20 @@ export default function CheckoutClient({
                                             </div>
                                             <Button
                                                 type="button"
-                                                className="w-full"
+                                                className="w-full focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
                                                 onClick={async () => {
                                                     const labelInput = document.getElementById('address-label-input') as HTMLInputElement
                                                     const addressInput = document.getElementById('address-text-input') as HTMLTextAreaElement
                                                     const defaultInput = document.getElementById('address-default-input') as HTMLInputElement
 
                                                     if (!labelInput.value || !addressInput.value) {
-                                                        toast.error('Please fill in all required fields')
+                                                        toast.error('Please fill in all required fields', {
+                                                            description: 'Both label and address are required',
+                                                            duration: 4000,
+                                                        })
+                                                        // Focus the first empty field
+                                                        if (!labelInput.value) labelInput.focus()
+                                                        else if (!addressInput.value) addressInput.focus()
                                                         return
                                                     }
 
@@ -487,6 +511,7 @@ export default function CheckoutClient({
 
                                                     await handleSaveAddress(formData)
                                                 }}
+                                                aria-label={editingAddress ? 'Update address' : 'Save new address'}
                                             >
                                                 {editingAddress ? 'Update Address' : 'Save Address'}
                                             </Button>
@@ -497,30 +522,36 @@ export default function CheckoutClient({
                                 {/* Custom Address Input */}
                                 {selectedAddress && !showAddressForm && (
                                     <div>
-                                        <label className="block text-sm font-medium text-neutral-700 mb-1">Delivery Address *</label>
+                                        <label htmlFor="custom-address-input" className="block text-sm font-medium text-neutral-700 mb-1">Delivery Address * <span className="sr-only">(required field)</span></label>
                                         <textarea
+                                            id="custom-address-input"
                                             value={customAddress}
                                             onChange={(e) => setCustomAddress(e.target.value)}
                                             placeholder="Street, Building, Apartment..."
                                             required
                                             rows={3}
-                                            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-neutral-900"
+                                            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900"
+                                            aria-required="true"
+                                            aria-label="Delivery address"
                                         />
                                     </div>
                                 )}
 
                                 {/* Phone Number */}
                                 <div>
-                                    <label className="block text-sm font-medium text-neutral-700 mb-1">Phone Number *</label>
+                                    <label htmlFor="phone-input" className="block text-sm font-medium text-neutral-700 mb-1">Phone Number * <span className="sr-only">(required field)</span></label>
                                     <div className="flex gap-2">
                                         <Input
+                                            id="phone-input"
                                             value={phone}
                                             onChange={(e) => setPhone(e.target.value)}
                                             type="tel"
                                             required
                                             placeholder="01xxxxxxxxx"
-                                            className="h-11"
+                                            className="h-11 focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
                                             disabled={!editingPhone && !!userPhone}
+                                            aria-required="true"
+                                            aria-label="Phone number"
                                         />
                                         {userPhone && (
                                             <Button
@@ -560,16 +591,17 @@ export default function CheckoutClient({
                             <CreditCard className="h-5 w-5 text-rose-600" />
                             Payment Method
                         </h2>
-                        <div className="space-y-3 sm:space-y-4">
-                            <label className={`relative flex items-center p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'cash' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
+                        <div className="space-y-3 sm:space-y-4" role="radiogroup" aria-label="Payment method">
+                            <label className={`relative flex items-center p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${paymentMethod === 'cash' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
                                 <input
                                     type="radio"
                                     value="cash"
                                     checked={paymentMethod === 'cash'}
                                     onChange={() => setPaymentMethod('cash')}
                                     className="sr-only"
+                                    aria-label={deliveryType === 'delivery' ? 'Cash on delivery' : 'Cash payment'}
                                 />
-                                <Banknote className="h-6 w-6 text-neutral-600 mr-4" />
+                                <Banknote className="h-6 w-6 text-neutral-600 mr-4" aria-hidden="true" />
                                 <div>
                                     <span className="block font-semibold text-neutral-900">
                                         {deliveryType === 'delivery' ? 'Cash on Delivery' : 'Cash Payment'}
@@ -582,15 +614,16 @@ export default function CheckoutClient({
                                 </div>
                             </label>
 
-                            <label className={`relative flex items-center p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'instapay' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
+                            <label className={`relative flex items-center p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${paymentMethod === 'instapay' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
                                 <input
                                     type="radio"
                                     value="instapay"
                                     checked={paymentMethod === 'instapay'}
                                     onChange={() => setPaymentMethod('instapay')}
                                     className="sr-only"
+                                    aria-label="InstaPay payment"
                                 />
-                                <div className="h-6 w-6 mr-4 flex items-center justify-center bg-purple-600 rounded text-white text-[10px] font-bold">IP</div>
+                                <div className="h-6 w-6 mr-4 flex items-center justify-center bg-purple-600 rounded text-white text-[10px] font-bold" aria-hidden="true">IP</div>
                                 <div>
                                     <span className="block font-semibold text-neutral-900">InstaPay</span>
                                     <span className="block text-xs sm:text-sm text-neutral-500">Transfer to our wallet and upload screenshot</span>
@@ -607,26 +640,29 @@ export default function CheckoutClient({
                                     <span className="text-lg font-mono bg-white px-2 py-1 rounded border border-purple-200 mt-1 inline-block">01234567890</span>
                                 </p>
 
-                                <label className="block text-sm font-medium text-purple-900 mb-2">Upload Transfer Screenshot</label>
-                                <div className="relative">
+                                <label htmlFor="proof-image-upload" className="block text-sm font-medium text-purple-900 mb-2">Upload Transfer Screenshot * <span className="sr-only">(required field)</span></label>
+                                <div className="relative" role="group" aria-label="Payment proof upload">
                                     {!uploadedImage ? (
-                                        <label className="flex items-center justify-center gap-2 w-full h-32 px-4 py-6 border-2 border-dashed border-purple-300 rounded-xl cursor-pointer hover:border-purple-500 hover:bg-white/50 transition-all group">
-                                            <Upload className="h-5 w-5 text-purple-400 group-hover:text-purple-600 transition-colors" />
+                                        <label htmlFor="proof-image-upload" className="flex items-center justify-center gap-2 w-full h-32 px-4 py-6 border-2 border-dashed border-purple-300 rounded-xl cursor-pointer hover:border-purple-500 hover:bg-white/50 transition-all group focus-within:ring-4 focus-within:ring-purple-500 focus-within:ring-offset-2">
+                                            <Upload className="h-5 w-5 text-purple-400 group-hover:text-purple-600 transition-colors" aria-hidden="true" />
                                             <span className="text-sm text-purple-600 font-medium">Click to upload screenshot</span>
                                             <input
+                                                id="proof-image-upload"
                                                 type="file"
                                                 accept="image/*"
                                                 required={paymentMethod === 'instapay'}
                                                 className="sr-only"
                                                 onChange={handleImageUpload}
+                                                aria-required={paymentMethod === 'instapay' ? 'true' : 'false'}
+                                                aria-label="Upload payment proof screenshot"
                                             />
                                         </label>
                                     ) : (
                                         <div className="space-y-3">
-                                            <div className="relative rounded-xl overflow-hidden border-2 border-green-300 bg-green-50">
+                                            <div className="relative rounded-xl overflow-hidden border-2 border-green-300 bg-green-50" role="img" aria-label="Uploaded payment proof preview">
                                                 <img
                                                     src={uploadedImage}
-                                                    alt="Payment proof preview"
+                                                    alt="Payment proof screenshot"
                                                     className="w-full h-48 object-contain"
                                                 />
                                                 <div className="absolute top-2 right-2 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
@@ -662,10 +698,13 @@ export default function CheckoutClient({
                     <Button
                         type="submit"
                         disabled={submitting || cart.length === 0}
-                        className="w-full h-12 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full h-12 text-lg font-semibold disabled:opacity-60 disabled:cursor-not-allowed focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
                         size="lg"
+                        aria-label="Place order"
+                        aria-live="polite"
+                        aria-busy={submitting}
                     >
-                        {submitting && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+                        {submitting && <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />}
                         {submitting ? 'Processing Order...' : `Place Order • ${total.toLocaleString()} EGP`}
                     </Button>                </form>
             </div>

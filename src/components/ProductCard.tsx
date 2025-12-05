@@ -30,13 +30,14 @@ export default function ProductCard({ product }: { product: Product }) {
                     {product.image_url ? (
                         <Image
                             src={product.image_url}
-                            alt={product.name_en}
+                            alt={`${product.name_en} - ${product.name_ar}`}
                             fill
                             className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
+                            priority={false}
                         />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-rose-50 to-pink-50 text-neutral-400">
-                            <span className="text-sm">No Image</span>
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-rose-50 to-pink-50 text-neutral-400" role="img" aria-label="No product image available">
+                            <span className="text-sm" aria-hidden="true">No Image</span>
                         </div>
                     )}
 
@@ -74,8 +75,9 @@ export default function ProductCard({ product }: { product: Product }) {
                 <Button
                     onClick={handleAddToCart}
                     disabled={!product.in_stock}
-                    className="w-full gap-2 mt-2"
+                    className="w-full gap-2 mt-2 disabled:opacity-60 disabled:cursor-not-allowed focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
                     variant={product.in_stock ? "primary" : "secondary"}
+                    aria-label={product.in_stock ? `Add ${product.name_en} to cart` : `${product.name_en} is out of stock`}
                 >
                     <ShoppingBag className="h-4 w-4" />
                     {product.in_stock ? 'Add to Cart' : 'Out of Stock'}

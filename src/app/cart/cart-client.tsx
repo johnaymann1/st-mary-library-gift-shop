@@ -59,12 +59,12 @@ export default function CartClient({ user }: { user: User | null }) {
                                     {item.product.image_url ? (
                                         <Image
                                             src={item.product.image_url}
-                                            alt={item.product.name_en}
+                                            alt={`${item.product.name_en} - ${item.product.name_ar}`}
                                             fill
                                             className="object-cover"
                                         />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-neutral-100 text-neutral-400 text-xs">
+                                        <div className="w-full h-full flex items-center justify-center bg-neutral-100 text-neutral-400 text-xs" role="img" aria-label="No product image">
                                             No Img
                                         </div>
                                     )}
@@ -89,18 +89,20 @@ export default function CartClient({ user }: { user: User | null }) {
 
                                     <div className="flex items-center justify-between mt-4">
                                         {/* Quantity Controls */}
-                                        <div className="flex items-center gap-2 sm:gap-3 bg-neutral-50 rounded-lg p-1 border border-neutral-200">
+                                        <div className="flex items-center gap-2 sm:gap-3 bg-neutral-50 rounded-lg p-1 border border-neutral-200" role="group" aria-label="Quantity controls">
                                             <button
                                                 onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
-                                                className="p-1 hover:bg-white rounded-md transition-colors text-neutral-600 disabled:opacity-50 h-11 w-11 flex items-center justify-center"
+                                                className="p-1 hover:bg-white rounded-md transition-colors text-neutral-600 disabled:opacity-30 disabled:cursor-not-allowed h-11 w-11 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
                                                 disabled={item.quantity <= 1}
+                                                aria-label="Decrease quantity"
                                             >
                                                 <Minus className="h-4 w-4" />
                                             </button>
-                                            <span className="text-sm font-medium w-8 text-center text-neutral-900">{item.quantity}</span>
+                                            <span className="text-sm font-medium w-8 text-center text-neutral-900" aria-label="Quantity" aria-live="polite">{item.quantity}</span>
                                             <button
                                                 onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
-                                                className="p-1 hover:bg-white rounded-md transition-colors text-neutral-600 h-11 w-11 flex items-center justify-center"
+                                                className="p-1 hover:bg-white rounded-md transition-colors text-neutral-600 h-11 w-11 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
+                                                aria-label="Increase quantity"
                                             >
                                                 <Plus className="h-4 w-4" />
                                             </button>
@@ -109,7 +111,8 @@ export default function CartClient({ user }: { user: User | null }) {
                                         {/* Remove Button */}
                                         <button
                                             onClick={() => removeFromCart(item.product_id)}
-                                            className="text-xs sm:text-sm font-medium text-rose-600 hover:text-rose-700 flex items-center gap-1 p-2 hover:bg-rose-50 rounded-lg transition-colors"
+                                            className="text-xs sm:text-sm font-medium text-rose-600 hover:text-rose-700 flex items-center gap-1 p-2 hover:bg-rose-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
+                                            aria-label={`Remove ${item.product.name_en} from cart`}
                                         >
                                             <Trash2 className="h-4 w-4" />
                                             <span className="hidden sm:inline">Remove</span>
@@ -144,8 +147,10 @@ export default function CartClient({ user }: { user: User | null }) {
 
                     <Button
                         onClick={handleCheckout}
-                        className="w-full gap-2 h-12 text-base"
+                        className="w-full gap-2 h-12 text-base disabled:opacity-60 disabled:cursor-not-allowed focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
                         size="lg"
+                        disabled={cart.length === 0}
+                        aria-label="Proceed to checkout"
                     >
                         Proceed to Checkout
                         <ArrowRight className="h-4 w-4" />
