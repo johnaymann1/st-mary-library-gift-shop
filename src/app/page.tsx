@@ -25,22 +25,22 @@ export default async function Home() {
 
 
       <main>
-        {/* Hero Section - Premium Split Layout */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-rose-50 via-white to-pink-50">
+        {/* Hero Section - Christmas Theme */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-red-50 via-white to-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Left: Content */}
               <div className="text-center sm:text-left space-y-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-rose-100 text-rose-700 rounded-full text-sm font-medium">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">
                   <Sparkles className="h-4 w-4" />
-                  Premium Gift Collection
+                  🎄 Festive Gift Collection
                 </div>
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900 leading-tight">
-                  Make Someone&apos;s
-                  <span className="block text-rose-600">Day Special</span>
+                  Deliver Joy This
+                  <span className="block text-red-600">Christmas 🎅</span>
                 </h1>
                 <p className="text-xl text-neutral-600 max-w-xl leading-relaxed">
-                  Discover our curated collection of premium gifts, handpicked to bring joy and create lasting memories.
+                  Find the perfect gifts for everyone on your list. From Secret Santa to family surprises, make this holiday season magical.
                 </p>
                 <div>
                   <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl" asChild>
@@ -54,7 +54,7 @@ export default async function Home() {
 
               {/* Right: Image */}
               <div className="relative lg:h-[500px] h-[400px]">
-                <div className="absolute inset-0 bg-gradient-to-br from-rose-400 to-pink-600 rounded-3xl transform rotate-3 opacity-20"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-green-600 rounded-3xl transform rotate-3 opacity-20"></div>
                 <div className="relative h-full rounded-3xl overflow-hidden shadow-2xl">
                   <Image
                     src={settings.hero_image_url || '/hero-image.jpg'}
@@ -62,6 +62,7 @@ export default async function Home() {
                     fill
                     className="object-cover"
                     priority
+                    quality={100}
                   />
                 </div>
               </div>

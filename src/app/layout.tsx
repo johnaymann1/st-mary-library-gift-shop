@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/context/CartContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SnowOverlay from "@/components/ui/snow-overlay";
 import { siteConfig } from "@/config/site";
 import { getStoreSettings } from "@/utils/settings";
 
@@ -82,6 +83,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <SnowOverlay />
         <CartProvider>
           <Navbar storeName={settings.store_name} />
           <div className="pt-20">

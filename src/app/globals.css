@@ -1,24 +1,52 @@
 @import "tailwindcss";
 
 :root {
+  /* STANDARD THEME */
   /* Premium Gift Shop Theme - Light Mode */
-  --background: #fafafa;
+  /* --background: #fafafa;
   --foreground: #1a1a1a;
   
-  /* Rose/Pink Primary Colors */
   --primary: #e11d48;
   --primary-hover: #be123c;
   --primary-light: #ffe4e6;
   
-  /* Neutral Colors */
   --secondary: #f5f5f5;
   --secondary-foreground: #525252;
   --muted: #f5f5f5;
   --muted-foreground: #737373;
   
-  /* Border & Accent */
   --border: #e5e5e5;
   --ring: #e11d48;
+  
+  --success: #16a34a;
+  --warning: #eab308;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  
+  --radius: 0.5rem; */
+
+  /* CHRISTMAS THEME */
+  /* Festive Holiday Colors */
+  --background: #fafafa;
+  --foreground: #1a1a1a;
+  
+  /* Rich Christmas Red */
+  --primary: #D42426;
+  --primary-hover: #b91c1c;
+  --primary-light: #fee2e2;
+  
+  /* Deep Forest Green */
+  --secondary: #166534;
+  --secondary-foreground: #f0fdf4;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  
+  /* Border & Accent */
+  --border: #e5e5e5;
+  --ring: #D42426;
   
   /* Status Colors */
   --success: #16a34a;
@@ -30,8 +58,8 @@
   --card: #ffffff;
   --card-foreground: #1a1a1a;
   
-  /* Radius */
-  --radius: 0.5rem;
+  /* Softer radius for gift box feel */
+  --radius: 0.75rem;
 }
 
 @theme inline {
@@ -48,7 +76,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    /* STANDARD THEME - DARK */
+    /* --background: #0a0a0a;
     --foreground: #ededed;
     --primary: #fb7185;
     --primary-hover: #f43f5e;
@@ -57,7 +86,19 @@
     --card-foreground: #ededed;
     --border: #262626;
     --secondary: #1a1a1a;
-    --secondary-foreground: #a3a3a3;
+    --secondary-foreground: #a3a3a3; */
+
+    /* CHRISTMAS THEME - DARK */
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --primary: #ef4444;
+    --primary-hover: #dc2626;
+    --primary-light: #4c0519;
+    --card: #1a1a1a;
+    --card-foreground: #ededed;
+    --border: #262626;
+    --secondary: #166534;
+    --secondary-foreground: #dcfce7;
   }
 }
 
