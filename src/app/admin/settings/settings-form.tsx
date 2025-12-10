@@ -12,10 +12,27 @@ import Image from 'next/image'
 export default function SettingsForm({ settings }: { settings: StoreSettings }) {
     const [loading, setLoading] = useState(false)
     const [heroImagePreview, setHeroImagePreview] = useState<string | null>(settings.hero_image_url || null)
+    const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
     function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0]
         if (file) {
+            // Validate file size (2MB max)
+            if (file.size > 2 * 1024 * 1024) {
+                toast.error('Image must be less than 2MB. Please choose a smaller file.')
+                e.target.value = '' // Clear the input
+                return
+            }
+
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+            if (!validTypes.includes(file.type)) {
+                toast.error('Please select a JPG, PNG, or WebP image file.')
+                e.target.value = ''
+                return
+            }
+
+            setSelectedFile(file)
             const reader = new FileReader()
             reader.onloadend = () => {
                 setHeroImagePreview(reader.result as string)
@@ -50,7 +67,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
             <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
                 <h2 className="text-lg font-semibold text-neutral-900">Hero Image</h2>
                 <p className="text-sm text-neutral-600">
-                    Upload a new hero image for your homepage. Recommended size: 1920x1080px
+                    Upload a new hero image for your homepage. Recommended size: 1920x1080px (max 2MB)
                 </p>
                 
                 <div className="space-y-4">
@@ -78,7 +95,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                             />
                         </label>
                         <p className="text-sm text-neutral-500">
-                            JPG, PNG or WebP (max 5MB)
+                            JPG, PNG or WebP (max 2MB)
                         </p>
                     </div>
                 </div>

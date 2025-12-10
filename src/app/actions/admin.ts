@@ -397,9 +397,9 @@ export async function updateStoreSettings(formData: FormData) {
     // Handle hero image upload if provided
     let heroImageUrl: string | undefined
     if (heroImage && heroImage.size > 0) {
-        // Validate file size (5MB max)
-        if (heroImage.size > 5 * 1024 * 1024) {
-            return { error: 'Hero image must be less than 5MB' }
+        // Validate file size (2MB max)
+        if (heroImage.size > 2 * 1024 * 1024) {
+            return { error: 'Hero image must be less than 2MB' }
         }
 
         // Validate file type
