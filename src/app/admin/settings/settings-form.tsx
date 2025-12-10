@@ -17,9 +17,9 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
     function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0]
         if (file) {
-            // Validate file size (5MB max)
-            if (file.size > 5 * 1024 * 1024) {
-                toast.error('Image must be less than 5MB. Please choose a smaller file.')
+            // Validate file size (20MB max)
+            if (file.size > 20 * 1024 * 1024) {
+                toast.error('Image must be less than 20MB. Please choose a smaller file.')
                 e.target.value = '' // Clear the input
                 return
             }
@@ -67,7 +67,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
             <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
                 <h2 className="text-lg font-semibold text-neutral-900">Hero Image</h2>
                 <p className="text-sm text-neutral-600">
-                    Upload a new hero image for your homepage. Recommended size: 1920x1080px (max 5MB)
+                    Upload a new hero image for your homepage. Recommended size: 1920x1080px (max 20MB)
                 </p>
                 
                 <div className="space-y-4">
@@ -95,7 +95,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                             />
                         </label>
                         <p className="text-sm text-neutral-500">
-                            JPG, PNG or WebP (max 5MB)
+                            JPG, PNG or WebP (max 20MB)
                         </p>
                     </div>
                 </div>
