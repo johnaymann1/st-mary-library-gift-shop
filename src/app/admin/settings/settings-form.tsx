@@ -4,12 +4,25 @@ import { updateStoreSettings } from '@/app/actions/admin'
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Save } from 'lucide-react'
+import { Save, Upload, Image as ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { StoreSettings } from '@/utils/settings'
+import Image from 'next/image'
 
 export default function SettingsForm({ settings }: { settings: StoreSettings }) {
     const [loading, setLoading] = useState(false)
+    const [heroImagePreview, setHeroImagePreview] = useState<string | null>(settings.hero_image_url || null)
+
+    function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0]
+        if (file) {
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                setHeroImagePreview(reader.result as string)
+            }
+            reader.readAsDataURL(file)
+        }
+    }
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -33,6 +46,44 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Hero Image */}
+            <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
+                <h2 className="text-lg font-semibold text-neutral-900">Hero Image</h2>
+                <p className="text-sm text-neutral-600">
+                    Upload a new hero image for your homepage. Recommended size: 1920x1080px
+                </p>
+                
+                <div className="space-y-4">
+                    {heroImagePreview && (
+                        <div className="relative w-full h-64 rounded-lg overflow-hidden border border-neutral-200">
+                            <Image
+                                src={heroImagePreview}
+                                alt="Hero image preview"
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
+                    )}
+                    
+                    <div className="flex items-center gap-4">
+                        <label className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 cursor-pointer transition-colors">
+                            <Upload className="w-4 h-4" />
+                            Choose Image
+                            <input
+                                type="file"
+                                name="hero_image"
+                                accept="image/jpeg,image/jpg,image/png,image/webp"
+                                onChange={handleImageChange}
+                                className="hidden"
+                            />
+                        </label>
+                        <p className="text-sm text-neutral-500">
+                            JPG, PNG or WebP (max 5MB)
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             {/* Store Information */}
             <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
                 <h2 className="text-lg font-semibold text-neutral-900">Store Information</h2>

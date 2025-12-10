@@ -1,5 +1,6 @@
 
 import { createClient } from '@/utils/supabase/server'
+import { getStoreSettings } from '@/utils/settings'
 import Link from 'next/link'
 
 import Image from 'next/image'
@@ -8,6 +9,9 @@ import { ArrowRight, Sparkles } from 'lucide-react'
 
 export default async function Home() {
   const supabase = await createClient()
+
+  // Fetch store settings for hero image
+  const settings = await getStoreSettings()
 
   // Fetch Categories
   const { data: categories } = await supabase
@@ -53,7 +57,7 @@ export default async function Home() {
                 <div className="absolute inset-0 bg-gradient-to-br from-rose-400 to-pink-600 rounded-3xl transform rotate-3 opacity-20"></div>
                 <div className="relative h-full rounded-3xl overflow-hidden shadow-2xl">
                   <Image
-                    src="/hero-image.jpg"
+                    src={settings.hero_image_url || '/hero-image.jpg'}
                     alt="Premium Gifts"
                     fill
                     className="object-cover"

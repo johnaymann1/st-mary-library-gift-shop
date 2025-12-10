@@ -383,6 +383,7 @@ export async function updateStoreSettings(formData: FormData) {
     const address = formData.get('address') as string
     const deliveryFee = parseFloat(formData.get('delivery_fee') as string)
     const freeDeliveryThreshold = formData.get('free_delivery_threshold') as string
+    const heroImage = formData.get('hero_image') as File | null
     const facebookUrl = formData.get('facebook_url') as string
     const instagramUrl = formData.get('instagram_url') as string
     const twitterUrl = formData.get('twitter_url') as string
@@ -391,6 +392,44 @@ export async function updateStoreSettings(formData: FormData) {
     // Validation
     if (!storeName || !phone || !supportEmail || !address || isNaN(deliveryFee)) {
         return { error: 'Please fill in all required fields' }
+    }
+
+    // Handle hero image upload if provided
+    let heroImageUrl: string | undefined
+    if (heroImage && heroImage.size > 0) {
+        // Validate file size (5MB max)
+        if (heroImage.size > 5 * 1024 * 1024) {
+            return { error: 'Hero image must be less than 5MB' }
+        }
+
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+        if (!validTypes.includes(heroImage.type)) {
+            return { error: 'Hero image must be JPG, PNG, or WebP format' }
+        }
+
+        // Upload to Supabase Storage
+        const fileExt = heroImage.name.split('.').pop()
+        const fileName = `hero-${Date.now()}.${fileExt}`
+        const filePath = `settings/${fileName}`
+
+        const { error: uploadError } = await supabase.storage
+            .from('product-images')
+            .upload(filePath, heroImage, {
+                cacheControl: '3600',
+                upsert: false
+            })
+
+        if (uploadError) {
+            return { error: `Failed to upload hero image: ${uploadError.message}` }
+        }
+
+        // Get public URL
+        const { data: urlData } = supabase.storage
+            .from('product-images')
+            .getPublicUrl(filePath)
+
+        heroImageUrl = urlData.publicUrl
     }
 
     const { error } = await supabase
@@ -403,6 +442,7 @@ export async function updateStoreSettings(formData: FormData) {
             address: address,
             delivery_fee: deliveryFee,
             free_delivery_threshold: freeDeliveryThreshold ? parseFloat(freeDeliveryThreshold) : null,
+            ...(heroImageUrl && { hero_image_url: heroImageUrl }),
             facebook_url: facebookUrl || null,
             instagram_url: instagramUrl || null,
             twitter_url: twitterUrl || null,

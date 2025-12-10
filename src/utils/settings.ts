@@ -12,6 +12,7 @@ export type StoreSettings = {
   free_delivery_threshold: number | null
   currency_code: string
   currency_symbol: string
+  hero_image_url: string | null
   facebook_url: string | null
   instagram_url: string | null
   twitter_url: string | null
@@ -64,6 +65,7 @@ function getFallbackSettings(): StoreSettings {
     free_delivery_threshold: siteConfig.delivery.freeThreshold,
     currency_code: siteConfig.currency.code,
     currency_symbol: siteConfig.currency.symbol,
+    hero_image_url: '/hero-image.jpg',
     facebook_url: siteConfig.links.facebook || null,
     instagram_url: siteConfig.links.instagram || null,
     twitter_url: siteConfig.links.twitter || null,
