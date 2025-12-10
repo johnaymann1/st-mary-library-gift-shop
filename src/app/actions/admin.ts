@@ -414,7 +414,7 @@ export async function updateStoreSettings(formData: FormData) {
         const filePath = `settings/${fileName}`
 
         const { error: uploadError } = await supabase.storage
-            .from('product-images')
+            .from('products')
             .upload(filePath, heroImage, {
                 cacheControl: '3600',
                 upsert: false
@@ -426,7 +426,7 @@ export async function updateStoreSettings(formData: FormData) {
 
         // Get public URL
         const { data: urlData } = supabase.storage
-            .from('product-images')
+            .from('products')
             .getPublicUrl(filePath)
 
         heroImageUrl = urlData.publicUrl
