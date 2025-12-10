@@ -397,7 +397,7 @@ export async function updateStoreSettings(formData: FormData) {
     // Handle hero image upload if provided
     let heroImageUrl: string | undefined
     if (heroImage && heroImage.size > 0) {
-        // Validate file size (20MB max)
+        // Validate file size (20MB max before compression)
         if (heroImage.size > 20 * 1024 * 1024) {
             return { error: 'Hero image must be less than 20MB' }
         }
@@ -408,14 +408,27 @@ export async function updateStoreSettings(formData: FormData) {
             return { error: 'Hero image must be JPG, PNG, or WebP format' }
         }
 
-        // Upload to Supabase Storage
-        const fileExt = heroImage.name.split('.').pop()
-        const fileName = `hero-${Date.now()}.${fileExt}`
+        // Convert File to Buffer and compress with high quality
+        const arrayBuffer = await heroImage.arrayBuffer()
+        const buffer = Buffer.from(arrayBuffer)
+
+        // Compress image using sharp (max 1920x1080 for hero, 95% quality for best results)
+        const compressedBuffer = await sharp(buffer)
+            .resize(1920, 1080, {
+                fit: 'inside',
+                withoutEnlargement: true
+            })
+            .jpeg({ quality: 95 })
+            .toBuffer()
+
+        // Upload compressed image
+        const fileName = `hero-${Date.now()}.jpg`
         const filePath = `settings/${fileName}`
 
         const { error: uploadError } = await supabase.storage
             .from('products')
-            .upload(filePath, heroImage, {
+            .upload(filePath, compressedBuffer, {
+                contentType: 'image/jpeg',
                 cacheControl: '3600',
                 upsert: false
             })
