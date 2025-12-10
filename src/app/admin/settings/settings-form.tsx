@@ -137,15 +137,14 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
 
                 <div className="space-y-2">
                     <label htmlFor="support_email" className="block text-sm font-medium text-neutral-700">
-                        Support Email <span className="text-red-500">*</span>
+                        Support Email
                     </label>
                     <Input
                         type="email"
                         id="support_email"
                         name="support_email"
-                        defaultValue={settings.support_email}
-                        required
-                        placeholder="support@stmarylibrary.com"
+                        defaultValue={settings.support_email || ''}
+                        placeholder="support@stmarylibrary.com (optional)"
                     />
                 </div>
 

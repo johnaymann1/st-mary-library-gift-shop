@@ -390,7 +390,7 @@ export async function updateStoreSettings(formData: FormData) {
     const linkedinUrl = formData.get('linkedin_url') as string
 
     // Validation
-    if (!storeName || !phone || !supportEmail || !address || isNaN(deliveryFee)) {
+    if (!storeName || !phone || !address || isNaN(deliveryFee)) {
         return { error: 'Please fill in all required fields' }
     }
 

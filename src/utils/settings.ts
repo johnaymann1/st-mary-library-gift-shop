@@ -6,7 +6,7 @@ export type StoreSettings = {
   store_name: string
   description: string
   phone: string
-  support_email: string
+  support_email: string | null
   address: string
   delivery_fee: number
   free_delivery_threshold: number | null
