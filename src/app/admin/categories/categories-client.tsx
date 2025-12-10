@@ -15,6 +15,8 @@ export default function CategoriesClientPage() {
     const [filteredCategories, setFilteredCategories] = useState<Category[]>([])
     const [searchQuery, setSearchQuery] = useState('')
     const [loading, setLoading] = useState(true)
+    const [currentPage, setCurrentPage] = useState(1)
+    const itemsPerPage = 10
 
     const fetchData = useCallback(async () => {
         const supabase = createClient()
@@ -48,7 +50,19 @@ export default function CategoriesClientPage() {
         }
 
         setFilteredCategories(result)
+        setCurrentPage(1) // Reset to first page on filter change
     }, [allCategories, searchQuery])
+
+    // Calculate pagination
+    const totalPages = Math.ceil(filteredCategories.length / itemsPerPage)
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    const paginatedCategories = filteredCategories.slice(startIndex, endIndex)
+
+    const goToPage = (page: number) => {
+        setCurrentPage(Math.max(1, Math.min(page, totalPages)))
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
 
     if (loading) {
         return (
@@ -100,7 +114,7 @@ export default function CategoriesClientPage() {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-neutral-200">
-                        {filteredCategories.map((category) => (
+                        {paginatedCategories.map((category) => (
                             <tr key={category.id} className="hover:bg-neutral-50 transition-colors">
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     {category.image_url ? (
@@ -147,7 +161,7 @@ export default function CategoriesClientPage() {
 
             {/* Mobile Card View */}
             <div className="md:hidden space-y-4">
-                {filteredCategories.map((category) => (
+                {paginatedCategories.map((category) => (
                     <div key={category.id} className="bg-white shadow-sm rounded-xl border border-neutral-200 overflow-hidden">
                         <div className="p-4 space-y-4">
                             {/* Image and Title */}
@@ -194,6 +208,68 @@ export default function CategoriesClientPage() {
                     </div>
                 )}
             </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+                <div className="bg-white shadow-sm rounded-xl border border-neutral-200 p-4">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        {/* Results info */}
+                        <div className="text-sm text-neutral-700 font-medium">
+                            Showing {startIndex + 1}-{Math.min(endIndex, filteredCategories.length)} of {filteredCategories.length}
+                        </div>
+
+                        {/* Pagination buttons */}
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => goToPage(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className="px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                Previous
+                            </button>
+                            
+                            {/* Page numbers */}
+                            <div className="hidden sm:flex items-center gap-1">
+                                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                    .filter(page => {
+                                        // Show first, last, current, and adjacent pages
+                                        return page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1
+                                    })
+                                    .map((page, idx, arr) => (
+                                        <div key={page} className="flex items-center gap-1">
+                                            {idx > 0 && arr[idx - 1] !== page - 1 && (
+                                                <span className="px-2 text-neutral-400">...</span>
+                                            )}
+                                            <button
+                                                onClick={() => goToPage(page)}
+                                                className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
+                                                    currentPage === page
+                                                        ? 'bg-rose-600 text-white shadow-md'
+                                                        : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                                }`}
+                                            >
+                                                {page}
+                                            </button>
+                                        </div>
+                                    ))}
+                            </div>
+
+                            {/* Mobile page indicator */}
+                            <div className="sm:hidden px-3 py-2 text-sm font-medium text-neutral-700">
+                                Page {currentPage} of {totalPages}
+                            </div>
+
+                            <button
+                                onClick={() => goToPage(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                                className="px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
