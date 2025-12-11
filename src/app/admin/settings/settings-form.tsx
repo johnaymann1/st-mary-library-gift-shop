@@ -140,7 +140,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                 
                 <div className="space-y-2">
                     <label htmlFor="phone" className="block text-sm font-medium text-neutral-700">
-                        Phone Number <span className="text-red-500">*</span>
+                        Primary Phone Number <span className="text-red-500">*</span>
                     </label>
                     <Input
                         type="tel"
@@ -153,15 +153,28 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                 </div>
 
                 <div className="space-y-2">
-                    <label htmlFor="support_email" className="block text-sm font-medium text-neutral-700">
-                        Support Email
+                    <label htmlFor="phone_2" className="block text-sm font-medium text-neutral-700">
+                        Secondary Phone Number
                     </label>
                     <Input
-                        type="email"
-                        id="support_email"
-                        name="support_email"
-                        defaultValue={settings.support_email || ''}
-                        placeholder="support@stmarylibrary.com (optional)"
+                        type="tel"
+                        id="phone_2"
+                        name="phone_2"
+                        defaultValue={settings.phone_2 || ''}
+                        placeholder="+20 123 456 7891 (optional)"
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <label htmlFor="phone_3" className="block text-sm font-medium text-neutral-700">
+                        Third Phone Number
+                    </label>
+                    <Input
+                        type="tel"
+                        id="phone_3"
+                        name="phone_3"
+                        defaultValue={settings.phone_3 || ''}
+                        placeholder="+20 123 456 7892 (optional)"
                     />
                 </div>
 
@@ -177,6 +190,22 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                         required
                         placeholder="St Mary Church Faggalah, Cairo, Egypt"
                     />
+                </div>
+
+                <div className="space-y-2">
+                    <label htmlFor="working_hours" className="block text-sm font-medium text-neutral-700">
+                        Working Hours
+                    </label>
+                    <Input
+                        type="text"
+                        id="working_hours"
+                        name="working_hours"
+                        defaultValue={settings.working_hours || ''}
+                        placeholder="Sunday - Thursday: 9:00 AM - 9:00 PM"
+                    />
+                    <p className="text-xs text-neutral-500">
+                        Example: Sunday - Thursday: 9:00 AM - 9:00 PM
+                    </p>
                 </div>
             </div>
 
@@ -218,6 +247,56 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                             Leave empty for no free delivery threshold
                         </p>
                     </div>
+                </div>
+
+                <div className="space-y-2">
+                    <label htmlFor="delivery_time_days" className="block text-sm font-medium text-neutral-700">
+                        Delivery Time
+                    </label>
+                    <Input
+                        type="text"
+                        id="delivery_time_days"
+                        name="delivery_time_days"
+                        defaultValue={settings.delivery_time_days || ''}
+                        placeholder="1-3 business days"
+                    />
+                    <p className="text-xs text-neutral-500">
+                        Example: 1-3 business days, 2-5 days, Same day delivery
+                    </p>
+                </div>
+            </div>
+
+            {/* Payment Settings */}
+            <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
+                <h2 className="text-lg font-semibold text-neutral-900">Payment Settings</h2>
+                
+                <div className="flex items-center gap-3 p-4 bg-neutral-50 rounded-lg">
+                    <input
+                        type="checkbox"
+                        id="instapay_enabled"
+                        name="instapay_enabled"
+                        defaultChecked={settings.instapay_enabled}
+                        className="w-5 h-5 text-rose-600 border-neutral-300 rounded focus:ring-2 focus:ring-rose-500"
+                    />
+                    <label htmlFor="instapay_enabled" className="text-sm font-medium text-neutral-700 cursor-pointer">
+                        Enable InstaPay Payments
+                    </label>
+                </div>
+
+                <div className="space-y-2">
+                    <label htmlFor="instapay_phone" className="block text-sm font-medium text-neutral-700">
+                        InstaPay Phone Number
+                    </label>
+                    <Input
+                        type="tel"
+                        id="instapay_phone"
+                        name="instapay_phone"
+                        defaultValue={settings.instapay_phone || ''}
+                        placeholder="01000000000"
+                    />
+                    <p className="text-xs text-neutral-500">
+                        Phone number for InstaPay payments (11 digits)
+                    </p>
                 </div>
             </div>
 
