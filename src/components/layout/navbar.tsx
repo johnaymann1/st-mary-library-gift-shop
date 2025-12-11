@@ -124,12 +124,6 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                                         </Link>
                                     </SheetClose>
                                     <SheetClose asChild>
-                                        <Link href="/search" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-rose-50 transition-colors min-h-[44px]">
-                                            <SearchIcon className="h-5 w-5 text-neutral-700" />
-                                            <span className="text-[16px] font-medium text-neutral-900">Search Products</span>
-                                        </Link>
-                                    </SheetClose>
-                                    <SheetClose asChild>
                                         <Link href="/cart" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-rose-50 transition-colors min-h-[44px]">
                                             <Gift className="h-5 w-5 text-neutral-700" />
                                             <span className="text-[16px] font-medium text-neutral-900">Cart</span>
