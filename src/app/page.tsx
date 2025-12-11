@@ -1,6 +1,7 @@
 
 import * as categoryService from '@/services/categories'
 import { getStoreSettings } from '@/utils/settings'
+import { getActiveTheme } from '@/config/themes'
 import Link from 'next/link'
 
 import Image from 'next/image'
@@ -13,6 +14,9 @@ export const revalidate = 3600
 export default async function Home() {
   // Fetch store settings for hero image
   const settings = await getStoreSettings()
+  
+  // Get active theme for hero text
+  const theme = await getActiveTheme()
 
   // Fetch Categories using service
   const categories = await categoryService.getCategories(true)
@@ -30,11 +34,11 @@ export default async function Home() {
               <div className="text-center sm:text-left space-y-8">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-100 text-neutral-700 rounded-full text-sm font-medium">
                   <Sparkles className="h-4 w-4" />
-                  🎁 Premium Gift Collection
+                  {theme.hero.badge}
                 </div>
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900 leading-tight">
-                  Discover the Perfect
-                  <span className="block text-neutral-900">Gift for Everyone</span>
+                  {theme.hero.title}
+                  <span className="block text-neutral-900">{theme.hero.subtitle}</span>
                 </h1>
                 <p className="text-xl text-neutral-600 max-w-xl leading-relaxed">
                   Browse our curated collection of premium gifts. From thoughtful presents to everyday treasures, find something special for every occasion.

@@ -22,7 +22,7 @@ export type StoreSettings = {
   instagram_url: string | null
   twitter_url: string | null
   linkedin_url: string | null
-  active_theme?: 'default' | 'christmas' | 'easter' | 'summer' | 'halloween'
+  active_theme?: 'default' | 'christmas'
   created_at: string
   updated_at: string
 }

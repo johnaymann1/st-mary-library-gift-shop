@@ -12,7 +12,7 @@ BEGIN
     ) THEN
         ALTER TABLE public.store_settings 
         ADD COLUMN active_theme TEXT NOT NULL DEFAULT 'default' 
-        CHECK (active_theme IN ('default', 'christmas', 'easter', 'summer', 'halloween'));
+        CHECK (active_theme IN ('default', 'christmas'));
         
         RAISE NOTICE 'Column active_theme added successfully';
     ELSE

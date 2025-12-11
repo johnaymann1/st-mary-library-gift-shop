@@ -9,6 +9,11 @@ export interface Theme {
   id: string
   name: string
   description: string
+  hero: {
+    title: string
+    subtitle: string
+    badge: string
+  }
   colors: {
     primary: string
     primaryHover: string
@@ -35,6 +40,11 @@ export const themes: Record<string, Theme> = {
     id: 'default',
     name: 'Default Theme',
     description: 'Classic rose and pink theme for St. Mary Gift Shop',
+    hero: {
+      title: 'Discover the Perfect',
+      subtitle: 'Gift for Everyone',
+      badge: '🎁 Premium Gift Collection',
+    },
     colors: {
       primary: 'rgb(225, 29, 72)', // rose-600
       primaryHover: 'rgb(190, 18, 60)', // rose-700
@@ -56,6 +66,11 @@ export const themes: Record<string, Theme> = {
     id: 'christmas',
     name: 'Christmas Theme',
     description: 'Festive red and green theme for the Christmas season',
+    hero: {
+      title: 'Celebrate the Season',
+      subtitle: 'with Christmas Magic 🎄',
+      badge: '🎅 Festive Gift Collection',
+    },
     colors: {
       primary: 'rgb(220, 38, 38)', // red-600
       primaryHover: 'rgb(185, 28, 28)', // red-700
@@ -70,69 +85,6 @@ export const themes: Record<string, Theme> = {
       button: 'linear-gradient(to right, rgb(220, 38, 38), rgb(22, 163, 74))',
       card: 'linear-gradient(to bottom right, rgb(255, 255, 255), rgb(254, 242, 242))',
       navbar: 'linear-gradient(to right, rgb(220, 38, 38), rgb(22, 163, 74))',
-    },
-  },
-
-  easter: {
-    id: 'easter',
-    name: 'Easter Theme',
-    description: 'Soft pastels for the Easter celebration',
-    colors: {
-      primary: 'rgb(168, 85, 247)', // purple-500
-      primaryHover: 'rgb(147, 51, 234)', // purple-600
-      primaryLight: 'rgb(250, 245, 255)', // purple-50
-      secondary: 'rgb(251, 191, 36)', // amber-400
-      accent: 'rgb(254, 249, 195)', // yellow-100
-      background: 'rgb(255, 255, 255)',
-      text: 'rgb(23, 23, 23)',
-    },
-    gradients: {
-      hero: 'linear-gradient(to bottom right, rgb(250, 245, 255), rgb(255, 255, 255), rgb(254, 249, 195))',
-      button: 'linear-gradient(to right, rgb(168, 85, 247), rgb(251, 191, 36))',
-      card: 'linear-gradient(to bottom right, rgb(255, 255, 255), rgb(250, 245, 255))',
-      navbar: 'linear-gradient(to right, rgb(168, 85, 247), rgb(251, 191, 36))',
-    },
-  },
-
-  summer: {
-    id: 'summer',
-    name: 'Summer Theme',
-    description: 'Bright and vibrant colors for summer',
-    colors: {
-      primary: 'rgb(14, 165, 233)', // sky-500
-      primaryHover: 'rgb(2, 132, 199)', // sky-600
-      primaryLight: 'rgb(240, 249, 255)', // sky-50
-      secondary: 'rgb(251, 146, 60)', // orange-400
-      accent: 'rgb(254, 243, 199)', // amber-100
-      background: 'rgb(255, 255, 255)',
-      text: 'rgb(23, 23, 23)',
-    },
-    gradients: {
-      hero: 'linear-gradient(to bottom right, rgb(240, 249, 255), rgb(255, 255, 255), rgb(254, 243, 199))',
-      button: 'linear-gradient(to right, rgb(14, 165, 233), rgb(251, 146, 60))',
-      card: 'linear-gradient(to bottom right, rgb(255, 255, 255), rgb(240, 249, 255))',
-      navbar: 'linear-gradient(to right, rgb(14, 165, 233), rgb(251, 146, 60))',
-    },
-  },
-
-  halloween: {
-    id: 'halloween',
-    name: 'Halloween Theme',
-    description: 'Spooky orange and purple for Halloween',
-    colors: {
-      primary: 'rgb(249, 115, 22)', // orange-500
-      primaryHover: 'rgb(234, 88, 12)', // orange-600
-      primaryLight: 'rgb(255, 247, 237)', // orange-50
-      secondary: 'rgb(124, 58, 237)', // violet-600
-      accent: 'rgb(245, 243, 255)', // violet-50
-      background: 'rgb(255, 255, 255)',
-      text: 'rgb(23, 23, 23)',
-    },
-    gradients: {
-      hero: 'linear-gradient(to bottom right, rgb(255, 247, 237), rgb(255, 255, 255), rgb(245, 243, 255))',
-      button: 'linear-gradient(to right, rgb(249, 115, 22), rgb(124, 58, 237))',
-      card: 'linear-gradient(to bottom right, rgb(255, 255, 255), rgb(255, 247, 237))',
-      navbar: 'linear-gradient(to right, rgb(249, 115, 22), rgb(124, 58, 237))',
     },
   },
 }
