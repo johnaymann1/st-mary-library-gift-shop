@@ -7,6 +7,9 @@ import { ProductDetailsClient } from '@/components/modules/products/product-deta
 import * as productService from '@/services/products'
 import type { Metadata } from 'next'
 
+// Enable ISR with 1 hour revalidation
+export const revalidate = 3600
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params
     const product = await productService.getProductById(parseInt(id))

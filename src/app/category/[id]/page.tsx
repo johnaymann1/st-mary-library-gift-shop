@@ -3,6 +3,9 @@ import * as categoryService from '@/services/categories'
 import * as productService from '@/services/products'
 import CategoryPageClient from './category-client'
 
+// Enable ISR with 1 hour revalidation
+export const revalidate = 3600
+
 interface CategoryPageProps {
     params: Promise<{ id: string }>
 }

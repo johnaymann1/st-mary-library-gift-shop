@@ -7,6 +7,9 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
 
+// Enable ISR with 1 hour revalidation for homepage
+export const revalidate = 3600
+
 export default async function Home() {
   // Fetch store settings for hero image
   const settings = await getStoreSettings()

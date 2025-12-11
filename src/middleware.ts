@@ -8,6 +8,22 @@ export async function middleware(request: NextRequest) {
         },
     })
 
+    // Add performance and security headers
+    response.headers.set('X-Frame-Options', 'DENY')
+    response.headers.set('X-Content-Type-Options', 'nosniff')
+    response.headers.set('Referrer-Policy', 'origin-when-cross-origin')
+
+    // Add cache control for static assets
+    if (
+        request.nextUrl.pathname.startsWith('/_next/static') ||
+        request.nextUrl.pathname.startsWith('/images')
+    ) {
+        response.headers.set(
+            'Cache-Control',
+            'public, max-age=31536000, immutable'
+        )
+    }
+
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
