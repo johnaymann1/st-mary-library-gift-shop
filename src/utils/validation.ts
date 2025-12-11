@@ -1,14 +1,15 @@
 import { z } from 'zod'
 
-// Egyptian phone number format: 01xxxxxxxxx (11 digits starting with 01)
-const egyptianPhoneRegex = /^01[0-9]{9}$/
+// Egyptian phone number format: Flexible to accept +20, 20, or 01 prefixes
+// Will be normalized to 01xxxxxxxxx format
+const egyptianPhoneRegex = /^((\+?20)|0)?1[0-9]{9}$/
 
 // User Registration Schema
 export const registerSchema = z.object({
     email: z.string().email('Invalid email address'),
     password: z.string().min(8, 'Password must be at least 8 characters'),
     full_name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long'),
-    phone: z.string().regex(egyptianPhoneRegex, 'Phone must be 11 digits starting with 01 (e.g., 01012345678)').optional()
+    phone: z.string().regex(egyptianPhoneRegex, 'Phone must be a valid Egyptian number (e.g., 01012345678, +201012345678)').optional()
 })
 
 // Login Schema
@@ -26,14 +27,14 @@ export const addressSchema = z.object({
 
 // Phone Update Schema
 export const phoneSchema = z.object({
-    phone: z.string().regex(egyptianPhoneRegex, 'Phone must be 11 digits starting with 01 (e.g., 01012345678)')
+    phone: z.string().regex(egyptianPhoneRegex, 'Phone must be a valid Egyptian number (e.g., 01012345678, +201012345678)')
 })
 
 // Checkout Schema
 export const checkoutSchema = z.object({
     delivery_type: z.enum(['delivery', 'pickup']),
     address: z.string().min(10, 'Address is required for delivery').max(500, 'Address is too long').optional(),
-    phone: z.string().regex(egyptianPhoneRegex, 'Phone must be 11 digits starting with 01').optional(),
+    phone: z.string().regex(egyptianPhoneRegex, 'Phone must be a valid Egyptian number (e.g., 01012345678, +201012345678)').optional(),
     payment_method: z.enum(['cash', 'instapay']),
     proof_image: z.any().optional() // File validation done separately
 }).refine(

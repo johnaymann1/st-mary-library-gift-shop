@@ -75,15 +75,17 @@ export async function placeOrder(formData: FormData) {
 
     const orderId = orderResult.orderId!
 
-    // Fetch order details for email
-    try {
-        const orderData = await orderService.getOrderForEmail(orderId)
+    // Send emails asynchronously without blocking response
+    // This significantly speeds up checkout (emails sent in background)
+    Promise.all([
+        (async () => {
+            try {
+                const orderData = await orderService.getOrderForEmail(orderId)
+                if (!orderData) return
 
-        if (orderData) {
-            // Fetch user details
-            const userData = await userService.getUserById(orderData.user_id)
+                const userData = await userService.getUserById(orderData.user_id)
+                if (!userData) return
 
-            if (userData) {
                 // Send order receipt to customer
                 await resend.emails.send({
                     from: siteConfig.email.from,
@@ -115,11 +117,14 @@ export async function placeOrder(formData: FormData) {
                         `
                     })
                 }
+            } catch (error) {
+                // Log error but don't fail the order
+                console.error('Email send failed:', error)
             }
-        }
-    } catch {
-        // Email send failed - don't block order completion
-    }
+        })()
+    ]).catch(() => {
+        // Emails failed, but order succeeded - this is ok
+    })
 
     revalidatePath('/orders')
     return { success: true, orderId }

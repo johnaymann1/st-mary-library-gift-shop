@@ -80,6 +80,21 @@ export default function CheckoutClient({
     function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0]
         if (file) {
+            // Validate image size (10MB limit)
+            const maxSize = 10 * 1024 * 1024 // 10MB
+            if (file.size > maxSize) {
+                toast.error('Image size must be less than 10MB. Please upload a smaller image.')
+                e.target.value = '' // Clear input
+                return
+            }
+
+            // Validate image type
+            if (!file.type.startsWith('image/')) {
+                toast.error('Please upload a valid image file (JPG, PNG, etc.)')
+                e.target.value = '' // Clear input
+                return
+            }
+
             setUploadedFile(file)
             setUploadedFileName(file.name)
             const reader = new FileReader()
@@ -115,15 +130,31 @@ export default function CheckoutClient({
             formData.set('proof_image', uploadedFile)
         }
 
-        const result = await placeOrder(formData)
+        try {
+            const result = await placeOrder(formData)
 
-        // Dismiss loading toast
-        toast.dismiss('place-order')
+            // Dismiss loading toast
+            toast.dismiss('place-order')
 
-        if (result?.error) {
-            toast.error(result.error)
-            setSubmitting(false)
-        } else {
+            if (result?.error) {
+                // Show specific error message
+                if (result.error.includes('image') || result.error.includes('proof')) {
+                    toast.error('Image upload failed. Please try uploading a smaller image (max 10MB).', {
+                        duration: 5000
+                    })
+                    setSubmitting(false)
+                    return
+                }
+                toast.error(result.error)
+                setSubmitting(false)
+                return
+            }
+
+            if (!result?.success) {
+                toast.error('Failed to place order. Please try again.')
+                setSubmitting(false)
+                return
+            }
             const deliveryMethodText = deliveryType === 'delivery' ? 'Home Delivery' : 'Store Pickup'
             const paymentMethodText = paymentMethod === 'cash'
                 ? (deliveryType === 'delivery' ? 'Cash on Delivery' : 'Cash Payment')
@@ -171,6 +202,10 @@ export default function CheckoutClient({
             setTimeout(() => {
                 window.location.href = '/orders'
             }, 2000)
+        } catch (error) {
+            toast.dismiss('place-order')
+            toast.error('An unexpected error occurred. Please try again.')
+            setSubmitting(false)
         }
     }
 
