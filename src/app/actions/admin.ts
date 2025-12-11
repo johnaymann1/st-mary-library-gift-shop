@@ -379,7 +379,7 @@ export async function updateStoreSettings(formData: FormData) {
     const instagramUrl = formData.get('instagram_url') as string
     const twitterUrl = formData.get('twitter_url') as string
     const linkedinUrl = formData.get('linkedin_url') as string
-    const activeTheme = formData.get('active_theme') as string
+    const activeTheme = (formData.get('active_theme') as string) || 'default'
 
     // Validation
     if (!storeName || !phone || !address || isNaN(deliveryFee)) {
@@ -414,14 +414,14 @@ export async function updateStoreSettings(formData: FormData) {
         instagram_url: instagramUrl || null,
         twitter_url: twitterUrl || null,
         linkedin_url: linkedinUrl || null,
-        active_theme: activeTheme || 'default',
+        active_theme: activeTheme,
     })
 
     if (result.error) {
         return { error: result.error }
     }
 
-    // Revalidate all pages that use settings
+    // Revalidate all pages that use settings including root layout for theme changes
     revalidatePath('/', 'layout')
     revalidatePath('/admin/settings')
     revalidatePath('/checkout')

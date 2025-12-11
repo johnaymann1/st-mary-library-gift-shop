@@ -378,10 +378,10 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                         id="active_theme"
                         name="active_theme"
                         defaultValue={settings.active_theme}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-neutral-900"
                     >
                         {Object.entries(themes).map(([key, theme]) => (
-                            <option key={key} value={key}>
+                            <option key={key} value={key} className="text-neutral-900">
                                 {theme.name} 
                                 {theme.seasonal && ` (${theme.seasonal.startDate} - ${theme.seasonal.endDate})`}
                             </option>
