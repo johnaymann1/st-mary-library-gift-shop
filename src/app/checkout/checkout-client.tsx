@@ -68,7 +68,10 @@ export default function CheckoutClient({
     const [addressToDelete, setAddressToDelete] = useState<number | null>(null)
 
     // Calculate totals
-    const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0)
+    const subtotal = cart.reduce((acc, item) => {
+        if (!item.product || item.product.price == null) return acc
+        return acc + (item.product.price * item.quantity)
+    }, 0)
     const shippingCost = deliveryType === 'delivery' ? deliveryFee : 0
     const total = subtotal + shippingCost
 

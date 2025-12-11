@@ -67,13 +67,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
                 // Fetch server cart
                 const serverCart = await getCart()
-                setCart(serverCart)
+                // Filter out items with null products
+                const validCart = serverCart.filter(item => item.product !== null)
+                setCart(validCart)
             } else {
                 // Guest user - load from local storage
                 const localCartJson = localStorage.getItem('cart')
                 if (localCartJson) {
                     try {
-                        setCart(JSON.parse(localCartJson))
+                        const localCart = JSON.parse(localCartJson)
+                        // Filter out items with null products
+                        const validCart = localCart.filter((item: CartItem) => item.product !== null)
+                        setCart(validCart)
                     } catch {
                         localStorage.removeItem('cart')
                     }

@@ -27,7 +27,7 @@ export function OrderSummarySection({
             <h2 className="text-lg font-bold text-neutral-900 mb-6">Order Summary</h2>
 
             <div className="space-y-4 mb-6 max-h-60 overflow-y-auto pr-2">
-                {cart.map((item) => (
+                {cart.filter(item => item.product).map((item) => (
                     <div key={item.product_id} className="flex gap-3">
                         <div className="h-12 w-12 rounded-lg bg-neutral-100 overflow-hidden flex-shrink-0">
                             {item.product.image_url && (

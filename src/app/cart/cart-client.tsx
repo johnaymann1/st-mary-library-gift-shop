@@ -17,7 +17,10 @@ export default function CartClient({ user }: { user: User | null }) {
     const { cart, removeFromCart, updateQuantity, isLoading, addToCart } = useCart()
     const router = useRouter()
 
-    const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0)
+    const subtotal = cart.reduce((acc, item) => {
+        if (!item.product || item.product.price == null) return acc
+        return acc + (item.product.price * item.quantity)
+    }, 0)
 
     const handleCheckout = () => {
         if (user) {
@@ -70,7 +73,7 @@ export default function CartClient({ user }: { user: User | null }) {
             <div className="lg:col-span-8">
                 <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
                     <ul className="divide-y divide-neutral-200">
-                        {cart.map((item) => (
+                        {cart.filter(item => item.product).map((item) => (
                             <li key={item.product_id} className="p-4 sm:p-6 flex gap-4 sm:gap-6">
                                 {/* Image */}
                                 <div className="relative h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-200">
