@@ -136,8 +136,9 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
 
             {/* Orders Table */}
             <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm overflow-hidden">
+                {/* Mobile scroll wrapper */}
                 <div className="overflow-x-auto">
-                    <table className="w-full table-fixed">
+                    <table className="w-full table-fixed min-w-[1200px]">
                         <thead className="bg-neutral-50 border-b border-neutral-100">
                             <tr>
                                 <th className="w-20 px-4 py-4 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">Order</th>
