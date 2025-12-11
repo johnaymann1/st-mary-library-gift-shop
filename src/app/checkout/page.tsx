@@ -44,6 +44,8 @@ export default async function CheckoutPage() {
                     savedAddresses={addresses || []} 
                     deliveryFee={settings.delivery_fee}
                     currencyCode={settings.currency_code}
+                    instapayEnabled={settings.instapay_enabled}
+                    instapayPhone={settings.instapay_phone || '01000000000'}
                 />
             </main>
         </div>

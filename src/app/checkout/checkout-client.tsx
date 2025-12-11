@@ -24,12 +24,16 @@ export default function CheckoutClient({
     userPhone,
     savedAddresses,
     deliveryFee,
-    currencyCode
+    currencyCode,
+    instapayEnabled,
+    instapayPhone
 }: {
     userPhone: string
     savedAddresses: SavedAddress[]
     deliveryFee: number
     currencyCode: string
+    instapayEnabled: boolean
+    instapayPhone: string
 }) {
     const { cart, isLoading: cartLoading } = useCart()
     const [submitting, setSubmitting] = useState(false)
@@ -614,21 +618,23 @@ export default function CheckoutClient({
                                 </div>
                             </label>
 
-                            <label className={`relative flex items-center p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${paymentMethod === 'instapay' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
-                                <input
-                                    type="radio"
-                                    value="instapay"
-                                    checked={paymentMethod === 'instapay'}
-                                    onChange={() => setPaymentMethod('instapay')}
-                                    className="sr-only"
-                                    aria-label="InstaPay payment"
-                                />
-                                <div className="h-6 w-6 mr-4 flex items-center justify-center bg-purple-600 rounded text-white text-[10px] font-bold" aria-hidden="true">IP</div>
-                                <div>
-                                    <span className="block font-semibold text-neutral-900">InstaPay</span>
-                                    <span className="block text-xs sm:text-sm text-neutral-500">Transfer to our wallet and upload screenshot</span>
-                                </div>
-                            </label>
+                            {instapayEnabled && (
+                                <label className={`relative flex items-center p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${paymentMethod === 'instapay' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
+                                    <input
+                                        type="radio"
+                                        value="instapay"
+                                        checked={paymentMethod === 'instapay'}
+                                        onChange={() => setPaymentMethod('instapay')}
+                                        className="sr-only"
+                                        aria-label="InstaPay payment"
+                                    />
+                                    <div className="h-6 w-6 mr-4 flex items-center justify-center bg-purple-600 rounded text-white text-[10px] font-bold" aria-hidden="true">IP</div>
+                                    <div>
+                                        <span className="block font-semibold text-neutral-900">InstaPay</span>
+                                        <span className="block text-xs sm:text-sm text-neutral-500">Transfer to our wallet and upload screenshot</span>
+                                    </div>
+                                </label>
+                            )}
                         </div>
 
                         {paymentMethod === 'instapay' && (
@@ -637,7 +643,7 @@ export default function CheckoutClient({
                                 <p className="text-sm text-purple-800 mb-4">
                                     Please transfer <span className="font-bold">{total.toLocaleString()} {siteConfig.currency.code}</span> to:
                                     <br />
-                                    <span className="text-lg font-mono bg-white px-2 py-1 rounded border border-purple-200 mt-1 inline-block">01234567890</span>
+                                    <span className="text-lg font-mono bg-white px-2 py-1 rounded border border-purple-200 mt-1 inline-block">{instapayPhone}</span>
                                 </p>
 
                                 <label htmlFor="proof-image-upload" className="block text-sm font-medium text-purple-900 mb-2">Upload Transfer Screenshot * <span className="sr-only">(required field)</span></label>
