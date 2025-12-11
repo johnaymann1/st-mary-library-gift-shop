@@ -56,20 +56,20 @@ export function ProductCard({ product }: ProductCardProps) {
             </Link>
 
             {/* Product Info */}
-            <div className="flex-1 p-5 space-y-3 flex flex-col">
+            <div className="flex-1 p-3 md:p-5 space-y-2 md:space-y-3 flex flex-col">
                 <div className="flex-1">
                     <Link href={`/product/${product.id}`}>
-                        <h3 className="text-base font-semibold text-neutral-900 group-hover:text-rose-600 transition-colors duration-400 ease-out line-clamp-2 mb-1">
+                        <h3 className="text-sm md:text-base font-semibold text-neutral-900 group-hover:text-rose-600 transition-colors duration-400 ease-out line-clamp-2 mb-1">
                             {product.name_en}
                         </h3>
                     </Link>
-                    <p className="text-base text-neutral-500 line-clamp-1" dir="rtl">{product.name_ar}</p>
+                    <p className="text-xs md:text-base text-neutral-500 line-clamp-1" dir="rtl">{product.name_ar}</p>
                 </div>
 
                 {/* Price */}
                 <div className="pt-2 border-t border-neutral-100">
-                    <p className="text-2xl font-bold text-neutral-900">{product.price.toLocaleString()}
-                        <span className="text-sm font-normal text-neutral-500 ml-1">{siteConfig.currency.code}</span>
+                    <p className="text-lg md:text-2xl font-bold text-neutral-900">{product.price.toLocaleString()}
+                        <span className="text-xs md:text-sm font-normal text-neutral-500 ml-1">{siteConfig.currency.code}</span>
                     </p>
                 </div>
 
@@ -77,12 +77,13 @@ export function ProductCard({ product }: ProductCardProps) {
                 <Button
                     onClick={handleAddToCart}
                     disabled={!product.in_stock}
-                    className="w-full gap-2 mt-2 disabled:opacity-60 disabled:cursor-not-allowed focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
+                    className="w-full gap-1 md:gap-2 mt-2 text-xs md:text-sm h-9 md:h-10 disabled:opacity-60 disabled:cursor-not-allowed focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
                     variant={product.in_stock ? "primary" : "secondary"}
                     aria-label={product.in_stock ? `Add ${product.name_en} to cart` : `${product.name_en} is out of stock`}
                 >
-                    <ShoppingBag className="h-4 w-4" />
-                    {product.in_stock ? 'Add to Cart' : 'Out of Stock'}
+                    <ShoppingBag className="h-3 w-3 md:h-4 md:w-4" />
+                    <span className="hidden sm:inline">{product.in_stock ? 'Add to Cart' : 'Out of Stock'}</span>
+                    <span className="sm:hidden">{product.in_stock ? 'Add' : 'Out'}</span>
                 </Button>
             </div>
         </div>

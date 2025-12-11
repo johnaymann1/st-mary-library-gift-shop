@@ -119,7 +119,7 @@ export default async function SearchPage({
                 {/* Results Grid */}
                 {products && products.length > 0 ? (
                     <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
                             {products.map((product) => (
                                 <ProductCard key={product.id} product={product} />
                             ))}

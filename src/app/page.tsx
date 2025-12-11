@@ -75,7 +75,7 @@ export default async function Home() {
               Explore our carefully organized collections to find the perfect gift
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8 max-w-5xl mx-auto">
             {categories?.map((category) => (
               <Link key={category.id} href={`/category/${category.id}`} className="group">
                 <div className="relative rounded-3xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-1000 ease-in-out aspect-[4/5] transform hover:-translate-y-2">
