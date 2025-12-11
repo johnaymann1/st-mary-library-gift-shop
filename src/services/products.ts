@@ -230,7 +230,7 @@ export async function searchProductsWithCount(filters: SearchFilters): Promise<{
 
     let query = supabase
         .from('products')
-        .select('*', { count: 'exact' })
+        .select('*, categories(name_en)', { count: 'exact' })
         .eq('is_active', true)
 
     // Apply search filter
