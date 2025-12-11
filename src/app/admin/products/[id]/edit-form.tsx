@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
-import { Upload, Save, ArrowLeft, Loader2 } from 'lucide-react'
+import { Upload, Save, ArrowLeft, Loader2, ExternalLink } from 'lucide-react'
 import { toast } from 'sonner'
 import { siteConfig } from '@/config/site'
 
@@ -69,14 +69,26 @@ export default function EditProductForm({ product, categories }: { product: Prod
 
     return (
         <div className="bg-white p-8 rounded-2xl shadow-md border border-neutral-200">
-            <Button
-                variant="ghost"
-                onClick={() => router.push('/admin/products')}
-                className="mb-4 text-neutral-600 hover:text-rose-600 hover:bg-rose-50"
-            >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Products
-            </Button>
+            <div className="flex items-center justify-between mb-6">
+                <Button
+                    variant="ghost"
+                    onClick={() => router.push('/admin/products')}
+                    className="text-neutral-600 hover:text-rose-600 hover:bg-rose-50"
+                >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Products
+                </Button>
+                <Button
+                    variant="outline"
+                    asChild
+                    className="border-2 border-rose-500 text-rose-600 hover:bg-rose-50"
+                >
+                    <a href={`/product/${product.id}`} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        View Live
+                    </a>
+                </Button>
+            </div>
             <h2 className="text-2xl font-bold mb-6 text-neutral-900">Edit Product</h2>
 
             <form action={handleSubmit} className="space-y-6">

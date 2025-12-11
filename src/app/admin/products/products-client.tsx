@@ -3,6 +3,7 @@
 import { getProductsAction } from './actions'
 import CreateProductForm from './create-form'
 import DeleteProductButton from './delete-button'
+import DuplicateProductButton from './duplicate-button'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -190,6 +191,7 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                                                 </svg>
                                                 Edit
                                             </a>
+                                            <DuplicateProductButton product={product} />
                                             <DeleteProductButton id={product.id} onDelete={fetchData} />
                                         </div>
                                     </td>
@@ -258,6 +260,7 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                                     </svg>
                                     Edit
                                 </a>
+                                <DuplicateProductButton product={product} />
                                 <DeleteProductButton id={product.id} onDelete={fetchData} />
                             </div>
                         </div>
