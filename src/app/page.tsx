@@ -8,8 +8,9 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
 
-// Enable ISR with 1 hour revalidation for homepage
-export const revalidate = 3600
+// Force dynamic rendering to ensure theme updates are reflected immediately
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function Home() {
   // Fetch store settings for hero image
@@ -36,11 +37,11 @@ export default async function Home() {
                   <Sparkles className="h-4 w-4" />
                   {theme.hero.badge}
                 </div>
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900 leading-tight">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-900 leading-[1.1]">
                   {theme.hero.title}
-                  <span className="block text-neutral-900">{theme.hero.subtitle}</span>
+                  <span className="block text-neutral-900 mt-2">{theme.hero.subtitle}</span>
                 </h1>
-                <p className="text-xl text-neutral-600 max-w-xl leading-relaxed">
+                <p className="text-lg sm:text-xl text-neutral-600 max-w-xl leading-relaxed">
                   Browse our curated collection of premium gifts. From thoughtful presents to everyday treasures, find something special for every occasion.
                 </p>
                 <div>
