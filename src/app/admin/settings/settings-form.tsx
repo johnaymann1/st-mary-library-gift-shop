@@ -4,10 +4,11 @@ import { updateStoreSettings } from '@/app/actions/admin'
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Save, Upload, Image as ImageIcon } from 'lucide-react'
+import { Save, Upload, Image as ImageIcon, Palette } from 'lucide-react'
 import { toast } from 'sonner'
 import { StoreSettings } from '@/utils/settings'
 import Image from 'next/image'
+import { themes } from '@/config/themes'
 
 export default function SettingsForm({ settings }: { settings: StoreSettings }) {
     const [loading, setLoading] = useState(false)
@@ -356,6 +357,39 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                             placeholder="https://linkedin.com/company/yourpage"
                         />
                     </div>
+                </div>
+            </div>
+
+            {/* Theme Selection */}
+            <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
+                <div className="flex items-center gap-2">
+                    <Palette className="w-5 h-5 text-neutral-700" />
+                    <h2 className="text-lg font-semibold text-neutral-900">Store Theme</h2>
+                </div>
+                <p className="text-sm text-neutral-600">
+                    Choose a theme for your store. Seasonal themes automatically activate during their designated periods, but you can override this selection.
+                </p>
+                
+                <div className="space-y-2">
+                    <label htmlFor="active_theme" className="block text-sm font-medium text-neutral-700">
+                        Active Theme
+                    </label>
+                    <select
+                        id="active_theme"
+                        name="active_theme"
+                        defaultValue={settings.active_theme}
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    >
+                        {Object.entries(themes).map(([key, theme]) => (
+                            <option key={key} value={key}>
+                                {theme.name} 
+                                {theme.seasonal && ` (${theme.seasonal.startDate} - ${theme.seasonal.endDate})`}
+                            </option>
+                        ))}
+                    </select>
+                    <p className="text-xs text-neutral-500 mt-1">
+                        Current selection will override automatic seasonal switching
+                    </p>
                 </div>
             </div>
 

@@ -22,6 +22,7 @@ export type StoreSettings = {
   instagram_url: string | null
   twitter_url: string | null
   linkedin_url: string | null
+  active_theme: 'default' | 'christmas' | 'easter' | 'summer' | 'halloween'
   created_at: string
   updated_at: string
 }
@@ -78,6 +79,7 @@ function getFallbackSettings(): StoreSettings {
     instagram_url: siteConfig.links.instagram || null,
     twitter_url: siteConfig.links.twitter || null,
     linkedin_url: siteConfig.links.linkedin || null,
+    active_theme: 'default',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   }

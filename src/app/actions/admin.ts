@@ -379,6 +379,7 @@ export async function updateStoreSettings(formData: FormData) {
     const instagramUrl = formData.get('instagram_url') as string
     const twitterUrl = formData.get('twitter_url') as string
     const linkedinUrl = formData.get('linkedin_url') as string
+    const activeTheme = formData.get('active_theme') as string
 
     // Validation
     if (!storeName || !phone || !address || isNaN(deliveryFee)) {
@@ -413,6 +414,7 @@ export async function updateStoreSettings(formData: FormData) {
         instagram_url: instagramUrl || null,
         twitter_url: twitterUrl || null,
         linkedin_url: linkedinUrl || null,
+        active_theme: activeTheme || 'default',
     })
 
     if (result.error) {

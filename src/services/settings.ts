@@ -48,6 +48,7 @@ export interface UpdateSettingsData {
     instagram_url?: string | null
     twitter_url?: string | null
     linkedin_url?: string | null
+    active_theme?: string
 }
 
 /**
