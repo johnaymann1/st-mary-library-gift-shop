@@ -12,35 +12,34 @@ export function formatPrice(price: number, includeSymbol: boolean = true): strin
 }
 
 /**
- * Formats a phone number to Egyptian international format
+ * Formats a phone number to consistent storage format (01xxxxxxxxx)
  * @param phone - The phone number to format
- * @returns Formatted phone number with +20 country code
+ * @returns Formatted phone number as 01xxxxxxxxx
  */
 export function formatPhoneNumber(phone: string): string {
     // 1. Remove all non-digit characters
     const cleaned = phone.replace(/\D/g, '')
 
-    // 2. Check for Egyptian mobile numbers starting with '01'
-    // e.g., 01234567890 -> +201234567890
-    if (cleaned.startsWith('01')) {
-        return `+20${cleaned.substring(1)}`
+    // 2. If it starts with 20 (country code), remove it to get local format
+    if (cleaned.startsWith('20') && cleaned.length === 12) {
+        return `0${cleaned.substring(2)}`
     }
 
-    // 3. Check if it starts with '1' (assuming user omitted the leading 0 for Egypt)
-    // e.g., 1234567890 -> +201234567890
+    // 3. If it starts with 1 and is 10 digits, add 0 at the start
     if (cleaned.startsWith('1') && cleaned.length === 10) {
-        return `+20${cleaned}`
+        return `0${cleaned}`
     }
 
-    // 4. If it already has country code (starts with 20), just prepend +
-    if (cleaned.startsWith('20')) {
-        return `+${cleaned}`
+    // 4. If it already starts with 0 and is 11 digits, return as is
+    if (cleaned.startsWith('0') && cleaned.length === 11) {
+        return cleaned
     }
 
-    // 5. Fallback: If it doesn't start with +, add it (assuming it's a full number)
-    if (!phone.startsWith('+')) {
-        return `+${cleaned}`
+    // 5. If it's already in correct format (01xxxxxxxxx), return it
+    if (cleaned.startsWith('01') && cleaned.length === 11) {
+        return cleaned
     }
 
-    return phone
+    // 6. Fallback: return cleaned digits
+    return cleaned
 }

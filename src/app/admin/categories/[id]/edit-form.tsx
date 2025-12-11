@@ -44,6 +44,12 @@ export default function EditCategoryForm({ category }: { category: Category }) {
         setLoading(true)
 
         try {
+            // Ensure the image file is in the FormData if preview exists
+            const fileInput = document.querySelector('input[name=\"image\"]') as HTMLInputElement
+            if (fileInput?.files?.[0]) {
+                formData.set('image', fileInput.files[0])
+            }
+
             const result = await updateCategory(formData)
 
             if (result?.error) {

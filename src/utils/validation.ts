@@ -63,8 +63,8 @@ export const checkoutSchema = z.object({
 export const productSchema = z.object({
     name_en: z.string().min(2, 'English name is required').max(200, 'Name is too long'),
     name_ar: z.string().min(2, 'Arabic name is required').max(200, 'Name is too long'),
-    desc_en: z.string().min(10, 'Description must be at least 10 characters').max(2000, 'Description is too long'),
-    desc_ar: z.string().min(10, 'Arabic description must be at least 10 characters').max(2000, 'Description is too long'),
+    desc_en: z.string().max(2000, 'Description is too long').optional().or(z.literal('')),
+    desc_ar: z.string().max(2000, 'Description is too long').optional().or(z.literal('')),
     price: z.number().min(0.01, 'Price must be greater than 0').max(1000000, 'Price is too high'),
     in_stock: z.boolean(),
     category_id: z.number().int('Invalid category').min(1, 'Category is required'),

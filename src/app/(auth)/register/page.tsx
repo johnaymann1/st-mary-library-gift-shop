@@ -10,15 +10,29 @@ import { Gift, User, Mail, Phone, Lock, Loader2 } from 'lucide-react'
 
 export default function RegisterPage() {
     const [loading, setLoading] = useState(false)
+    const [formData, setFormData] = useState({
+        fullName: '',
+        phone: '',
+        email: '',
+        password: ''
+    })
 
-    async function handleSubmit(formData: FormData) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
         setLoading(true)
-        const result = await signup(formData)
+        
+        const formDataObj = new FormData(e.currentTarget)
+        const result = await signup(formDataObj)
 
         if (result?.error) {
             toast.error(result.error)
+            setLoading(false)
         }
-        setLoading(false)
+        // On success, the action will redirect, no need to setLoading(false)
+    }
+
+    function handleInputChange(field: string, value: string) {
+        setFormData(prev => ({ ...prev, [field]: value }))
     }
 
     return (
@@ -69,7 +83,7 @@ export default function RegisterPage() {
                     </div>
                 </div>
 
-                <form className="space-y-5 sm:space-y-6" action={handleSubmit}>
+                <form className="space-y-5 sm:space-y-6" onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-4">
                         <div className="space-y-2">
                             <label htmlFor="fullName" className="block text-sm font-semibold text-neutral-700">
@@ -84,6 +98,8 @@ export default function RegisterPage() {
                                     name="fullName"
                                     type="text"
                                     required
+                                    value={formData.fullName}
+                                    onChange={(e) => handleInputChange('fullName', e.target.value)}
                                     className="pl-4 sm:pl-12 pr-4 h-11 text-sm"
                                     placeholder="John Doe"
                                 />
@@ -103,8 +119,10 @@ export default function RegisterPage() {
                                     type="tel"
                                     autoComplete="tel"
                                     required
+                                    value={formData.phone}
+                                    onChange={(e) => handleInputChange('phone', e.target.value)}
                                     className="pl-4 sm:pl-12 pr-4 h-11 text-sm"
-                                    placeholder="+20 123 456 7890"
+                                    placeholder="01012345678"
                                 />
                             </div>
                         </div>
@@ -122,6 +140,8 @@ export default function RegisterPage() {
                                     type="email"
                                     autoComplete="email"
                                     required
+                                    value={formData.email}
+                                    onChange={(e) => handleInputChange('email', e.target.value)}
                                     className="pl-4 sm:pl-12 pr-4 h-11 text-sm"
                                     placeholder="you@example.com"
                                 />
@@ -141,11 +161,13 @@ export default function RegisterPage() {
                                     type="password"
                                     autoComplete="new-password"
                                     required
+                                    value={formData.password}
+                                    onChange={(e) => handleInputChange('password', e.target.value)}
                                     className="pl-4 sm:pl-12 pr-4 h-11 text-sm"
-                                    placeholder="Create a strong password"
+                                    placeholder="At least 8 characters"
                                 />
                             </div>
-                                        </div>
+                        </div>
                     </div>
 
                     <div className="pt-4 sm:pt-2">

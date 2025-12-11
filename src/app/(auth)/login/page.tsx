@@ -129,7 +129,13 @@ export default function LoginPage() {
                         </div>
                     </div>
 
-                    <div className="pt-4 sm:pt-2">
+                    <div className="flex items-center justify-end mb-4">
+                        <Link href="/forgot-password" className="text-sm font-medium text-rose-600 hover:text-rose-700 transition-colors">
+                            Forgot password?
+                        </Link>
+                    </div>
+
+                    <div className="pt-2">
                         <Button
                             type="submit"
                             disabled={loading || googleLoading}

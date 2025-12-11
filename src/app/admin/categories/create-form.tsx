@@ -4,7 +4,7 @@ import { createCategory } from '@/app/actions/admin'
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Plus, Upload, Check } from 'lucide-react'
+import { Plus, Upload, Check, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 
 export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => void }) {
@@ -17,6 +17,12 @@ export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => vo
         setLoading(true)
 
         try {
+            // Ensure the image file is in the FormData if preview exists
+            const fileInput = document.querySelector('input[name="image"]') as HTMLInputElement
+            if (fileInput?.files?.[0]) {
+                formData.set('image', fileInput.files[0])
+            }
+
             const result = await createCategory(formData)
 
             if (result?.error) {
@@ -106,11 +112,20 @@ export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => vo
                 <Button
                     type="submit"
                     disabled={loading}
-                    className="w-full gap-2"
+                    className="w-full gap-2 min-w-[140px]"
                     size="lg"
                 >
-                    <Plus className="h-4 w-4" />
-                    {loading ? 'Creating...' : 'Create Category'}
+                    {loading ? (
+                        <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Creating...
+                        </>
+                    ) : (
+                        <>
+                            <Plus className="h-4 w-4" />
+                            Create Category
+                        </>
+                    )}
                 </Button>
             </form>
         </div>

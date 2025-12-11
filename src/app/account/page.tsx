@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { logout } from '@/app/actions/auth'
-import { User, Package, LogOut, Phone, Mail, Heart, ArrowLeft } from 'lucide-react'
+import { User, Package, LogOut, Phone, Mail, Heart, ArrowLeft, Edit } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function AccountPage() {
@@ -62,6 +62,15 @@ export default async function AccountPage() {
                                         </p>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div className="mb-6">
+                                <Link href="/account/edit">
+                                    <Button variant="outline" className="w-full gap-2 border-2 border-neutral-300 hover:border-rose-300 hover:bg-rose-50" size="lg">
+                                        <Edit className="h-5 w-5" />
+                                        Edit Profile
+                                    </Button>
+                                </Link>
                             </div>
 
                             <div className="pt-6 border-t border-neutral-200">
