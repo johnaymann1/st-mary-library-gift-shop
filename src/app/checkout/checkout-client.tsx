@@ -26,7 +26,8 @@ export default function CheckoutClient({
     deliveryFee,
     currencyCode,
     instapayEnabled,
-    instapayPhone
+    instapayPhone,
+    deliveryTimeDays
 }: {
     userPhone: string
     savedAddresses: SavedAddress[]
@@ -34,6 +35,7 @@ export default function CheckoutClient({
     currencyCode: string
     instapayEnabled: boolean
     instapayPhone: string
+    deliveryTimeDays: string
 }) {
     const { cart, isLoading: cartLoading } = useCart()
     const [submitting, setSubmitting] = useState(false)
@@ -753,6 +755,16 @@ export default function CheckoutClient({
                             <span>{total.toLocaleString()} EGP</span>
                         </div>
                     </div>
+
+                    {deliveryType === 'delivery' && (
+                        <div className="mt-4 pt-4 border-t border-neutral-200">
+                            <div className="flex items-center gap-2 text-sm text-neutral-600">
+                                <Truck className="h-4 w-4 text-green-600" />
+                                <span className="font-medium">Estimated Delivery:</span>
+                                <span>{deliveryTimeDays}</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 

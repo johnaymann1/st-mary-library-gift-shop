@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Gift, Mail, Phone, MapPin, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react'
+import { Gift, Mail, Phone, MapPin, Facebook, Instagram, Twitter, Linkedin, Truck } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import type { StoreSettings } from '@/utils/settings'
 
@@ -119,6 +119,14 @@ export default function Footer({ settings }: FooterProps) {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                         <span>{settings.working_hours}</span>
+                                    </div>
+                                </li>
+                            )}
+                            {settings.delivery_time_days && (
+                                <li>
+                                    <div className="text-neutral-400 text-sm flex items-start gap-2">
+                                        <Truck className="h-4 w-4 text-rose-500 mt-0.5" />
+                                        <span>Delivery: {settings.delivery_time_days}</span>
                                     </div>
                                 </li>
                             )}

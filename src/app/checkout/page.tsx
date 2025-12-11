@@ -46,6 +46,7 @@ export default async function CheckoutPage() {
                     currencyCode={settings.currency_code}
                     instapayEnabled={settings.instapay_enabled}
                     instapayPhone={settings.instapay_phone || '01000000000'}
+                    deliveryTimeDays={settings.delivery_time_days || '1-3 business days'}
                 />
             </main>
         </div>
