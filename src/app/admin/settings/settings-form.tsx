@@ -367,7 +367,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                     <h2 className="text-lg font-semibold text-neutral-900">Store Theme</h2>
                 </div>
                 <p className="text-sm text-neutral-600">
-                    Choose a theme for your store. Seasonal themes automatically activate during their designated periods, but you can override this selection.
+                    Choose a theme for your store. You have full control over which theme is active.
                 </p>
                 
                 <div className="space-y-2">
@@ -382,13 +382,12 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                     >
                         {Object.entries(themes).map(([key, theme]) => (
                             <option key={key} value={key} className="text-neutral-900">
-                                {theme.name} 
-                                {theme.seasonal && ` (${theme.seasonal.startDate} - ${theme.seasonal.endDate})`}
+                                {theme.name}
                             </option>
                         ))}
                     </select>
                     <p className="text-xs text-neutral-500 mt-1">
-                        Current selection will override automatic seasonal switching
+                        The selected theme will be applied across your entire store
                     </p>
                 </div>
             </div>

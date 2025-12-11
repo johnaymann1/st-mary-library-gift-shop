@@ -28,10 +28,6 @@ export interface Theme {
     url?: string
     text?: string
   }
-  seasonal?: {
-    startDate?: string // Format: 'MM-DD'
-    endDate?: string   // Format: 'MM-DD'
-  }
 }
 
 export const themes: Record<string, Theme> = {
@@ -75,10 +71,6 @@ export const themes: Record<string, Theme> = {
       card: 'linear-gradient(to bottom right, rgb(255, 255, 255), rgb(254, 242, 242))',
       navbar: 'linear-gradient(to right, rgb(220, 38, 38), rgb(22, 163, 74))',
     },
-    seasonal: {
-      startDate: '12-01', // December 1st
-      endDate: '12-31',   // December 31st
-    },
   },
 
   easter: {
@@ -99,10 +91,6 @@ export const themes: Record<string, Theme> = {
       button: 'linear-gradient(to right, rgb(168, 85, 247), rgb(251, 191, 36))',
       card: 'linear-gradient(to bottom right, rgb(255, 255, 255), rgb(250, 245, 255))',
       navbar: 'linear-gradient(to right, rgb(168, 85, 247), rgb(251, 191, 36))',
-    },
-    seasonal: {
-      startDate: '03-15', // Mid-March
-      endDate: '04-30',   // End of April
     },
   },
 
@@ -125,10 +113,6 @@ export const themes: Record<string, Theme> = {
       card: 'linear-gradient(to bottom right, rgb(255, 255, 255), rgb(240, 249, 255))',
       navbar: 'linear-gradient(to right, rgb(14, 165, 233), rgb(251, 146, 60))',
     },
-    seasonal: {
-      startDate: '06-01', // June 1st
-      endDate: '08-31',   // August 31st
-    },
   },
 
   halloween: {
@@ -150,37 +134,20 @@ export const themes: Record<string, Theme> = {
       card: 'linear-gradient(to bottom right, rgb(255, 255, 255), rgb(255, 247, 237))',
       navbar: 'linear-gradient(to right, rgb(249, 115, 22), rgb(124, 58, 237))',
     },
-    seasonal: {
-      startDate: '10-01', // October 1st
-      endDate: '10-31',   // October 31st
-    },
   },
 }
 
 /**
- * Get the active theme based on current date and admin settings
+ * Get the active theme based on admin settings
+ * Falls back to default theme if selection is invalid
  */
 export function getActiveTheme(selectedThemeId?: string): Theme {
-  // If admin selected a theme, use it
+  // If admin selected a theme and it exists, use it
   if (selectedThemeId && themes[selectedThemeId]) {
     return themes[selectedThemeId]
   }
 
-  // Otherwise check for seasonal themes
-  const now = new Date()
-  const currentMonth = String(now.getMonth() + 1).padStart(2, '0')
-  const currentDay = String(now.getDate()).padStart(2, '0')
-  const currentDate = `${currentMonth}-${currentDay}`
-
-  for (const theme of Object.values(themes)) {
-    if (theme.seasonal?.startDate && theme.seasonal?.endDate) {
-      if (currentDate >= theme.seasonal.startDate && currentDate <= theme.seasonal.endDate) {
-        return theme
-      }
-    }
-  }
-
-  // Default theme
+  // Default theme as fallback
   return themes.default
 }
 
