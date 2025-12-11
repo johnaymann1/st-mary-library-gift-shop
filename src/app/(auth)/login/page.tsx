@@ -107,9 +107,11 @@ export default function LoginPage() {
                                     id="email-address"
                                     name="email"
                                     type="email"
+                                    autoCapitalize="none"
+                                    autoCorrect="off"
                                     autoComplete="email"
                                     required
-                                    className="pl-4 sm:pl-12 pr-4 h-12 text-sm"
+                                    className="pl-4 sm:pl-12 pr-4 h-12 text-[16px] sm:text-sm"
                                     placeholder="you@example.com"
                                 />
                             </div>

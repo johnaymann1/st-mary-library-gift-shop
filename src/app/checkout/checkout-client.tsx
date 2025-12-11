@@ -2,6 +2,7 @@
 
 import { useCart } from '@/context/CartContext'
 import { Button } from '@/components/ui/button'
+import { BackButton } from '@/components/ui/back-button'
 import { placeOrder } from '@/app/actions/checkout'
 import { saveAddress, updateAddress, deleteAddress, updateUserPhone } from '@/app/actions/address'
 import { useState, useEffect } from 'react'
@@ -306,14 +307,7 @@ export default function CheckoutClient({
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             {/* Checkout Form */}
             <div className="lg:col-span-8">
-                <Button
-                    variant="ghost"
-                    onClick={() => router.back()}
-                    className="mb-6 text-neutral-600 hover:text-rose-600 hover:bg-rose-50"
-                >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back to Cart
-                </Button>
+                <BackButton href="/cart" label="Back to Cart" className="mb-6" />
 
                 <form action={handleSubmit} className="space-y-6 sm:space-y-8">
                     {/* Step 1: Delivery Method */}

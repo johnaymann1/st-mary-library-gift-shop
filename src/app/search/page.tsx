@@ -2,6 +2,7 @@ import { ProductCard } from '@/components/modules/products'
 import * as categoryService from '@/services/categories'
 import * as productService from '@/services/products'
 import { Badge } from '@/components/ui/badge'
+import { EmptyState } from '@/components/ui/empty-state'
 import { Search, SlidersHorizontal } from 'lucide-react'
 import Link from 'next/link'
 import { SearchFilters } from './search-filters'
@@ -137,43 +138,19 @@ export default async function SearchPage({
                         )}
                     </>
                 ) : (
-                    <div className="text-center py-16 bg-white rounded-2xl">
-                        <div className="mb-4">
-                            <div className="mx-auto h-16 w-16 bg-neutral-100 rounded-full flex items-center justify-center">
-                                <Search className="h-8 w-8 text-neutral-400" />
-                            </div>
-                        </div>
-                        <h3 className="text-xl font-semibold text-neutral-900 mb-2">
-                            No products found
-                        </h3>
-                        <p className="text-neutral-600 mb-4">
-                            {query
-                                ? `We couldn't find any products matching "${query}"`
-                                : 'Try searching for something'}
-                        </p>
-
-                        {/* Category Suggestions */}
-                        {categories && categories.length > 0 && (
-                            <div className="mb-6">
-                                <p className="text-sm text-neutral-600 mb-3">Try browsing these categories:</p>
-                                <div className="flex flex-wrap gap-2 justify-center">
-                                    {categories.slice(0, 4).map((cat) => (
-                                        <a
-                                            key={cat.id}
-                                            href={`/category/${cat.id}`}
-                                            className="px-4 py-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition-colors text-sm font-medium"
-                                        >
-                                            {cat.name_en}
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        <a href="/" className="inline-flex items-center justify-center px-6 py-3 bg-rose-600 text-white rounded-xl hover:bg-rose-700 transition-colors">
-                            Browse All Products
-                        </a>
-                    </div>
+                    <EmptyState
+                        variant="search"
+                        title={query ? `No results for "${query}"` : "No products found"}
+                        description="Check your spelling or browse our categories to find what you're looking for."
+                        primaryAction={{
+                            label: "Browse All Products",
+                            href: "/"
+                        }}
+                        secondaryAction={categories && categories.length > 0 ? {
+                            label: `Browse ${categories[0].name_en}`,
+                            href: `/category/${categories[0].id}`
+                        } : undefined}
+                    />
                 )}
             </main>
         </div>

@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { BackButton } from '@/components/ui/back-button'
 import { Gift, User, Mail, Phone, Lock, Loader2 } from 'lucide-react'
 
 export default function RegisterPage() {
@@ -38,6 +39,7 @@ export default function RegisterPage() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-white to-pink-50 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl w-full space-y-6 sm:space-y-6 bg-white p-8 sm:p-8 rounded-2xl shadow-lg border border-neutral-200">
+                <BackButton href="/" label="Back to Home" className="-mt-2" />
                 {/* Logo & Title */}
                 <div className="text-center">
                     <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl mb-3">
@@ -97,10 +99,11 @@ export default function RegisterPage() {
                                     id="fullName"
                                     name="fullName"
                                     type="text"
+                                    autoCapitalize="words"
                                     required
                                     value={formData.fullName}
                                     onChange={(e) => handleInputChange('fullName', e.target.value)}
-                                    className="pl-4 sm:pl-12 pr-4 h-11 text-sm"
+                                    className="pl-4 sm:pl-12 pr-4 h-11 text-[16px] sm:text-sm"
                                     placeholder="John Doe"
                                 />
                             </div>
@@ -121,7 +124,7 @@ export default function RegisterPage() {
                                     required
                                     value={formData.phone}
                                     onChange={(e) => handleInputChange('phone', e.target.value)}
-                                    className="pl-4 sm:pl-12 pr-4 h-11 text-sm"
+                                    className="pl-4 sm:pl-12 pr-4 h-11 text-[16px] sm:text-sm"
                                     placeholder="01012345678"
                                 />
                             </div>
@@ -138,11 +141,13 @@ export default function RegisterPage() {
                                     id="email-address"
                                     name="email"
                                     type="email"
+                                    autoCapitalize="none"
+                                    autoCorrect="off"
                                     autoComplete="email"
                                     required
                                     value={formData.email}
                                     onChange={(e) => handleInputChange('email', e.target.value)}
-                                    className="pl-4 sm:pl-12 pr-4 h-11 text-sm"
+                                    className="pl-4 sm:pl-12 pr-4 h-11 text-[16px] sm:text-sm"
                                     placeholder="you@example.com"
                                 />
                             </div>

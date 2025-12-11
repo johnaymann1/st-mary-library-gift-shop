@@ -4,6 +4,7 @@ import { getUserOrders } from '@/app/actions/orders'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { EmptyState } from '@/components/ui/empty-state'
 import { Package, ChevronRight, ArrowLeft } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import { useEffect, useState } from 'react'
@@ -64,16 +65,15 @@ export default function OrdersPageClient({ initialOrders }: OrdersPageClientProp
                 </div>
 
                 {orders.length === 0 ? (
-                    <div className="text-center py-24 bg-white rounded-3xl shadow-sm">
-                        <div className="inline-flex items-center justify-center w-24 h-24 bg-rose-100 rounded-3xl mb-6">
-                            <Package className="h-12 w-12 text-white" />
-                        </div>
-                        <h2 className="text-2xl font-bold text-neutral-900 mb-3">No orders yet</h2>
-                        <p className="text-neutral-600 mb-8 max-w-sm mx-auto">Start exploring our collection and place your first order.</p>
-                        <Button asChild className="bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white px-8 h-12 rounded-xl shadow-lg">
-                            <Link href="/">Start Shopping</Link>
-                        </Button>
-                    </div>
+                    <EmptyState
+                        variant="orders"
+                        title="No orders yet"
+                        description="Treat yourself today! Start exploring our collection."
+                        primaryAction={{
+                            label: "Start Shopping",
+                            href: "/"
+                        }}
+                    />
                 ) : (
                     <div className="space-y-6">
                         {orders.map((order) => (
