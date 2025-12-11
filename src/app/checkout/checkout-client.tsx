@@ -2,23 +2,32 @@
 
 import { useCart } from '@/context/CartContext'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { placeOrder } from '@/app/actions/checkout'
 import { saveAddress, updateAddress, deleteAddress, updateUserPhone } from '@/app/actions/address'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { Loader2, Upload, CreditCard, Banknote, Truck, MapPin, ArrowLeft, Trash2, Plus, Edit2, Check } from 'lucide-react'
+import { Loader2, ArrowLeft, Truck, CreditCard, Banknote, Check } from 'lucide-react'
 import { SavedAddress } from '@/types'
 import { siteConfig } from '@/config/site'
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog'
+    DeliveryMethodSection,
+    AddressSection,
+    PickupInfo,
+    PaymentMethodSection,
+    OrderSummarySection,
+    DeleteAddressDialog
+} from '@/components/modules/checkout'
+
+interface CheckoutClientProps {
+    userPhone: string
+    savedAddresses: SavedAddress[]
+    deliveryFee: number
+    currencyCode: string
+    instapayEnabled: boolean
+    instapayPhone: string
+    deliveryTimeDays: string
+}
 
 export default function CheckoutClient({
     userPhone,
@@ -28,44 +37,39 @@ export default function CheckoutClient({
     instapayEnabled,
     instapayPhone,
     deliveryTimeDays
-}: {
-    userPhone: string
-    savedAddresses: SavedAddress[]
-    deliveryFee: number
-    currencyCode: string
-    instapayEnabled: boolean
-    instapayPhone: string
-    deliveryTimeDays: string
-}) {
+}: CheckoutClientProps) {
     const { cart, isLoading: cartLoading } = useCart()
     const [submitting, setSubmitting] = useState(false)
     const router = useRouter()
 
     // Form State
-    const [deliveryType, setDeliveryType] = useState('delivery') // 'delivery' or 'pickup'
-    const [paymentMethod, setPaymentMethod] = useState('cash') // 'cash' or 'instapay'
+    const [deliveryType, setDeliveryType] = useState<'delivery' | 'pickup'>('delivery')
+    const [paymentMethod, setPaymentMethod] = useState<'cash' | 'instapay'>('cash')
 
     // Address Management
     const [addresses, setAddresses] = useState<SavedAddress[]>(savedAddresses)
     const [selectedAddress, setSelectedAddress] = useState<SavedAddress | null>(
         savedAddresses.find(a => a.is_default) || savedAddresses[0] || null
     )
-    const [showAddressForm, setShowAddressForm] = useState(false)
-    const [editingAddress, setEditingAddress] = useState<SavedAddress | null>(null)
     const [customAddress, setCustomAddress] = useState('')
 
     // Phone Management
     const [phone, setPhone] = useState(userPhone)
     const [editingPhone, setEditingPhone] = useState(false)
 
-    // Image Upload Preview
+    // Image Upload
     const [uploadedImage, setUploadedImage] = useState<string | null>(null)
     const [uploadedFileName, setUploadedFileName] = useState<string>('')
     const [uploadedFile, setUploadedFile] = useState<File | null>(null)
 
-    // Delete Address Dialog State
+    // Delete Address Dialog
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [addressToDelete, setAddressToDelete] = useState<number | null>(null)
+
+    // Calculate totals
+    const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0)
+    const shippingCost = deliveryType === 'delivery' ? deliveryFee : 0
+    const total = subtotal + shippingCost
 
     useEffect(() => {
         if (selectedAddress) {
@@ -92,27 +96,18 @@ export default function CheckoutClient({
         setUploadedFile(null)
     }
 
-    const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0)
-    const shippingCost = deliveryType === 'delivery' ? deliveryFee : 0
-    const total = subtotal + shippingCost
-
     async function handleSubmit(formData: FormData) {
-        // Prevent double submission
         if (submitting) return
-
         setSubmitting(true)
 
-        // Explicitly set both values from state
         formData.set('delivery_type', deliveryType)
         formData.set('payment_method', paymentMethod)
 
-        // Set address and phone from state
         if (deliveryType === 'delivery') {
             formData.set('address', customAddress)
             formData.set('phone', phone)
         }
 
-        // Add the uploaded file if InstaPay is selected
         if (paymentMethod === 'instapay' && uploadedFile) {
             formData.set('proof_image', uploadedFile)
         }
@@ -120,13 +115,11 @@ export default function CheckoutClient({
         const result = await placeOrder(formData)
 
         if (result?.error) {
-            console.error('Order error:', result.error)
             toast.error(result.error)
             setSubmitting(false)
         } else {
-            // Show success message with order details
-            const deliveryMethod = deliveryType === 'delivery' ? 'Home Delivery' : 'Store Pickup'
-            const paymentMethodText = paymentMethod === 'cash' 
+            const deliveryMethodText = deliveryType === 'delivery' ? 'Home Delivery' : 'Store Pickup'
+            const paymentMethodText = paymentMethod === 'cash'
                 ? (deliveryType === 'delivery' ? 'Cash on Delivery' : 'Cash Payment')
                 : 'InstaPay'
 
@@ -141,15 +134,14 @@ export default function CheckoutClient({
                                 Order Placed Successfully!
                             </p>
                             <p className="text-sm text-neutral-600 mt-1">
-                                Your order has been confirmed. We'll process it shortly.
+                                Your order has been confirmed.
                             </p>
                         </div>
                     </div>
-                    
                     <div className="pl-13 space-y-2">
                         <div className="flex items-center gap-2 text-sm">
                             <Truck className="h-4 w-4 text-rose-500" />
-                            <span className="font-medium text-neutral-700">{deliveryMethod}</span>
+                            <span className="font-medium text-neutral-700">{deliveryMethodText}</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm">
                             {paymentMethod === 'cash' ? (
@@ -166,20 +158,10 @@ export default function CheckoutClient({
                             </span>
                         </div>
                     </div>
-                    
-                    <div className="pl-13 pt-2">
-                        <p className="text-xs text-neutral-500">
-                            Redirecting to your orders...
-                        </p>
-                    </div>
                 </div>,
-                {
-                    duration: 6000,
-                    className: 'max-w-md',
-                }
+                { duration: 6000, className: 'max-w-md' }
             )
 
-            // Redirect after showing message
             setTimeout(() => {
                 window.location.href = '/orders'
             }, 2000)
@@ -197,6 +179,11 @@ export default function CheckoutClient({
     }
 
     async function handleSaveAddress(formData: FormData) {
+        const editingAddress = addresses.find(a =>
+            document.getElementById('address-label-input') &&
+            (document.getElementById('address-label-input') as HTMLInputElement).defaultValue === a.label
+        ) || null
+
         const result = editingAddress
             ? await updateAddress(editingAddress.id, formData)
             : await saveAddress(formData)
@@ -211,7 +198,6 @@ export default function CheckoutClient({
             toast.success(editingAddress ? 'Address updated!' : 'Address saved!')
 
             if (editingAddress) {
-                // Update existing address in local state
                 setAddresses(prev => prev.map(addr =>
                     addr.id === editingAddress.id
                         ? { ...addr, label, address, is_default: isDefault }
@@ -222,9 +208,8 @@ export default function CheckoutClient({
                     setCustomAddress(address)
                 }
             } else {
-                // Add new address to local state with temporary ID
                 const newAddress: SavedAddress = {
-                    id: Date.now(), // Temporary ID until page refresh
+                    id: Date.now(),
                     label,
                     address,
                     is_default: isDefault
@@ -236,23 +221,20 @@ export default function CheckoutClient({
                 setSelectedAddress(newAddress)
                 setCustomAddress(address)
             }
-
-            setShowAddressForm(false)
-            setEditingAddress(null)
         }
     }
 
-    async function handleDeleteAddress(addressId: number) {
-        const result = await deleteAddress(addressId)
+    async function handleDeleteAddress() {
+        if (!addressToDelete) return
+
+        const result = await deleteAddress(addressToDelete)
         if (result?.error) {
             toast.error(result.error)
         } else {
             toast.success('Address deleted!')
-            // Remove from local state
-            setAddresses(prev => prev.filter(addr => addr.id !== addressId))
-            // Clear selection if deleted address was selected
-            if (selectedAddress?.id === addressId) {
-                const remainingAddresses = addresses.filter(addr => addr.id !== addressId)
+            setAddresses(prev => prev.filter(addr => addr.id !== addressToDelete))
+            if (selectedAddress?.id === addressToDelete) {
+                const remainingAddresses = addresses.filter(addr => addr.id !== addressToDelete)
                 const newSelected = remainingAddresses[0] || null
                 setSelectedAddress(newSelected)
                 setCustomAddress(newSelected?.address || '')
@@ -283,7 +265,6 @@ export default function CheckoutClient({
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             {/* Checkout Form */}
             <div className="lg:col-span-8">
-                {/* Back Button */}
                 <Button
                     variant="ghost"
                     onClick={() => router.back()}
@@ -294,414 +275,53 @@ export default function CheckoutClient({
                 </Button>
 
                 <form action={handleSubmit} className="space-y-6 sm:space-y-8">
-
                     {/* Step 1: Delivery Method */}
-                    <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-neutral-200">
-                        <h2 className="text-lg sm:text-xl font-semibold text-neutral-900 mb-4 flex items-center gap-2">
-                            <Truck className="h-5 w-5 text-rose-600" />
-                            Delivery Method
-                        </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4" role="radiogroup" aria-label="Delivery method">
-                            <label className={`relative flex flex-col p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${deliveryType === 'delivery' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
-                                <input
-                                    type="radio"
-                                    name="delivery_type"
-                                    value="delivery"
-                                    checked={deliveryType === 'delivery'}
-                                    onChange={() => setDeliveryType('delivery')}
-                                    className="sr-only"
-                                    aria-label="Home delivery"
-                                />
-                                <span className="font-semibold text-neutral-900">Home Delivery</span>
-                                <span className="text-xs sm:text-sm text-neutral-500">Delivery to your doorstep</span>
-                                <span className="mt-2 font-bold text-rose-600">{deliveryFee.toFixed(2)} {currencyCode}</span>
-                            </label>
-                            <label className={`relative flex flex-col p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${deliveryType === 'pickup' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
-                                <input
-                                    type="radio"
-                                    name="delivery_type"
-                                    value="pickup"
-                                    checked={deliveryType === 'pickup'}
-                                    onChange={() => setDeliveryType('pickup')}
-                                    className="sr-only"
-                                    aria-label="Store pickup"
-                                />
-                                <span className="font-semibold text-neutral-900">Store Pickup</span>
-                                <span className="text-xs sm:text-sm text-neutral-500">Pick up from {siteConfig.name}</span>
-                                <span className="mt-2 font-bold text-green-600">Free</span>
-                            </label>
-                        </div>
+                    <div>
+                        <DeliveryMethodSection
+                            deliveryType={deliveryType}
+                            onDeliveryTypeChange={setDeliveryType}
+                            deliveryFee={deliveryFee}
+                            currencyCode={currencyCode}
+                        />
 
                         {deliveryType === 'delivery' && (
-                            <div className="mt-6 space-y-4">
-                                {/* Saved Addresses */}
-                                {addresses.length > 0 && !showAddressForm && (
-                                    <div>
-                                        <div className="flex items-center justify-between mb-3">
-                                            <label className="block text-sm font-semibold text-neutral-700">Saved Addresses</label>
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() => {
-                                                    setShowAddressForm(true)
-                                                    setEditingAddress(null)
-                                                }}
-                                                className="text-rose-600 hover:text-rose-700 focus:ring-2 focus:ring-rose-500"
-                                                aria-label="Add new address"
-                                            >
-                                                <Plus className="h-4 w-4 mr-1" />
-                                                Add New
-                                            </Button>
-                                        </div>
-                                        <div className="space-y-2">
-                                            {addresses.map((addr) => (
-                                                <div
-                                                    key={addr.id}
-                                                    className={`p-3 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${selectedAddress?.id === addr.id
-                                                        ? 'border-rose-600 bg-rose-50'
-                                                        : 'border-neutral-200 hover:border-rose-300'
-                                                        }`}
-                                                    onClick={() => setSelectedAddress(addr)}
-                                                    role="button"
-                                                    tabIndex={0}
-                                                    aria-label={`Select ${addr.label} address${addr.is_default ? ' (default)' : ''}${selectedAddress?.id === addr.id ? ' - currently selected' : ''}`}
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === 'Enter' || e.key === ' ') {
-                                                            e.preventDefault()
-                                                            setSelectedAddress(addr)
-                                                        }
-                                                    }}
-                                                >
-                                                    <div className="flex items-start justify-between">
-                                                        <div className="flex-1">
-                                                            <div className="flex items-center gap-2">
-                                                                <MapPin className="h-4 w-4 text-rose-600" />
-                                                                <span className="font-semibold text-neutral-900">{addr.label}</span>
-                                                                {addr.is_default && (
-                                                                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Default</span>
-                                                                )}
-                                                                {selectedAddress?.id === addr.id && (
-                                                                    <Check className="h-4 w-4 text-rose-600" />
-                                                                )}
-                                                            </div>
-                                                            <p className="text-sm text-neutral-600 mt-1">{addr.address}</p>
-                                                        </div>
-                                                        <div className="flex gap-1 ml-2">
-                                                            <Button
-                                                                type="button"
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation()
-                                                                    setEditingAddress(addr)
-                                                                    setShowAddressForm(true)
-                                                                }}
-                                                                className="h-8 w-8 p-0 focus:ring-2 focus:ring-rose-500"
-                                                                aria-label={`Edit ${addr.label} address`}
-                                                            >
-                                                                <Edit2 className="h-3.5 w-3.5" />
-                                                            </Button>
-                                                            <Button
-                                                                type="button"
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation()
-                                                                    setAddressToDelete(addr.id)
-                                                                    setDeleteDialogOpen(true)
-                                                                }}
-                                                                className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 focus:ring-2 focus:ring-red-500"
-                                                                aria-label={`Delete ${addr.label} address`}
-                                                            >
-                                                                <Trash2 className="h-3.5 w-3.5" />
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Address Form */}
-                                {(showAddressForm || addresses.length === 0) && (
-                                    <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200">
-                                        <div className="flex items-center justify-between mb-3">
-                                            <h3 className="font-semibold text-neutral-900">
-                                                {editingAddress ? 'Edit Address' : 'Add New Address'}
-                                            </h3>
-                                            {addresses.length > 0 && (
-                                                <Button
-                                                    type="button"
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => {
-                                                        setShowAddressForm(false)
-                                                        setEditingAddress(null)
-                                                    }}
-                                                >
-                                                    Cancel
-                                                </Button>
-                                            )}
-                                        </div>
-                                        <div className="space-y-3" key={editingAddress?.id || 'new'} onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                e.preventDefault()
-                                                // Optional: Trigger save on Enter if desired, but safer to just prevent default
-                                            }
-                                        }}>
-                                            <div>
-                                                <label htmlFor="address-label-input" className="block text-sm font-medium text-neutral-700 mb-1">Label * <span className="sr-only">(required field)</span></label>
-                                                <Input
-                                                    name="label"
-                                                    defaultValue={editingAddress?.label || ''}
-                                                    placeholder="e.g., Home, Work"
-                                                    required
-                                                    className="h-11 focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
-                                                    id="address-label-input"
-                                                    aria-required="true"
-                                                    aria-label="Address label"
-                                                />
-                                            </div>
-                                            <div>
-                                                <label htmlFor="address-text-input" className="block text-sm font-medium text-neutral-700 mb-1">Full Address * <span className="sr-only">(required field)</span></label>
-                                                <textarea
-                                                    name="address"
-                                                    defaultValue={editingAddress?.address || ''}
-                                                    placeholder="Street, Building, Apartment..."
-                                                    required
-                                                    rows={3}
-                                                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900"
-                                                    id="address-text-input"
-                                                    aria-required="true"
-                                                    aria-label="Full address"
-                                                />
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    name="is_default"
-                                                    value="true"
-                                                    defaultChecked={editingAddress?.is_default || false}
-                                                    className="h-4 w-4 text-rose-600 rounded"
-                                                    id="address-default-input"
-                                                />
-                                                <label htmlFor="address-default-input" className="text-sm text-neutral-700">Set as default address</label>
-                                            </div>
-                                            <Button
-                                                type="button"
-                                                className="w-full focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
-                                                onClick={async () => {
-                                                    const labelInput = document.getElementById('address-label-input') as HTMLInputElement
-                                                    const addressInput = document.getElementById('address-text-input') as HTMLTextAreaElement
-                                                    const defaultInput = document.getElementById('address-default-input') as HTMLInputElement
-
-                                                    if (!labelInput.value || !addressInput.value) {
-                                                        toast.error('Please fill in all required fields', {
-                                                            description: 'Both label and address are required',
-                                                            duration: 4000,
-                                                        })
-                                                        // Focus the first empty field
-                                                        if (!labelInput.value) labelInput.focus()
-                                                        else if (!addressInput.value) addressInput.focus()
-                                                        return
-                                                    }
-
-                                                    const formData = new FormData()
-                                                    formData.append('label', labelInput.value)
-                                                    formData.append('address', addressInput.value)
-                                                    if (defaultInput.checked) {
-                                                        formData.append('is_default', 'on')
-                                                    }
-
-                                                    await handleSaveAddress(formData)
-                                                }}
-                                                aria-label={editingAddress ? 'Update address' : 'Save new address'}
-                                            >
-                                                {editingAddress ? 'Update Address' : 'Save Address'}
-                                            </Button>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Custom Address Input */}
-                                {selectedAddress && !showAddressForm && (
-                                    <div>
-                                        <label htmlFor="custom-address-input" className="block text-sm font-medium text-neutral-700 mb-1">Delivery Address * <span className="sr-only">(required field)</span></label>
-                                        <textarea
-                                            id="custom-address-input"
-                                            value={customAddress}
-                                            onChange={(e) => setCustomAddress(e.target.value)}
-                                            placeholder="Street, Building, Apartment..."
-                                            required
-                                            rows={3}
-                                            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900"
-                                            aria-required="true"
-                                            aria-label="Delivery address"
-                                        />
-                                    </div>
-                                )}
-
-                                {/* Phone Number */}
-                                <div>
-                                    <label htmlFor="phone-input" className="block text-sm font-medium text-neutral-700 mb-1">Phone Number * <span className="sr-only">(required field)</span></label>
-                                    <div className="flex gap-2">
-                                        <Input
-                                            id="phone-input"
-                                            value={phone}
-                                            onChange={(e) => setPhone(e.target.value)}
-                                            type="tel"
-                                            required
-                                            placeholder="01xxxxxxxxx"
-                                            className="h-11 focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
-                                            disabled={!editingPhone && !!userPhone}
-                                            aria-required="true"
-                                            aria-label="Phone number"
-                                        />
-                                        {userPhone && (
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                onClick={() => {
-                                                    if (editingPhone) {
-                                                        handleSavePhone()
-                                                    } else {
-                                                        setEditingPhone(true)
-                                                    }
-                                                }}
-                                                className="border-2 border-neutral-400 text-neutral-800 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-400 font-semibold"
-                                            >
-                                                {editingPhone ? 'Save' : 'Edit'}
-                                            </Button>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
+                            <AddressSection
+                                addresses={addresses}
+                                selectedAddress={selectedAddress}
+                                customAddress={customAddress}
+                                phone={phone}
+                                userPhone={userPhone}
+                                editingPhone={editingPhone}
+                                onAddressSelect={setSelectedAddress}
+                                onCustomAddressChange={setCustomAddress}
+                                onPhoneChange={setPhone}
+                                onEditingPhoneChange={setEditingPhone}
+                                onSaveAddress={handleSaveAddress}
+                                onDeleteAddress={handleDeleteAddress}
+                                onSavePhone={handleSavePhone}
+                                onOpenDeleteDialog={(id) => {
+                                    setAddressToDelete(id)
+                                    setDeleteDialogOpen(true)
+                                }}
+                            />
                         )}
 
-                        {deliveryType === 'pickup' && (
-                            <div className="mt-6 p-4 bg-green-50 rounded-xl border border-green-200">
-                                <p className="text-sm text-green-800">
-                                    <strong>Pickup Location:</strong> St Mary Library, Main Street
-                                    <br />
-                                    <strong>Hours:</strong> 9 AM - 8 PM, Daily
-                                </p>
-                            </div>
-                        )}
+                        {deliveryType === 'pickup' && <PickupInfo />}
                     </div>
 
                     {/* Step 2: Payment Method */}
-                    <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-neutral-200">
-                        <h2 className="text-lg sm:text-xl font-semibold text-neutral-900 mb-4 flex items-center gap-2">
-                            <CreditCard className="h-5 w-5 text-rose-600" />
-                            Payment Method
-                        </h2>
-                        <div className="space-y-3 sm:space-y-4" role="radiogroup" aria-label="Payment method">
-                            <label className={`relative flex items-center p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${paymentMethod === 'cash' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
-                                <input
-                                    type="radio"
-                                    value="cash"
-                                    checked={paymentMethod === 'cash'}
-                                    onChange={() => setPaymentMethod('cash')}
-                                    className="sr-only"
-                                    aria-label={deliveryType === 'delivery' ? 'Cash on delivery' : 'Cash payment'}
-                                />
-                                <Banknote className="h-6 w-6 text-neutral-600 mr-4" aria-hidden="true" />
-                                <div>
-                                    <span className="block font-semibold text-neutral-900">
-                                        {deliveryType === 'delivery' ? 'Cash on Delivery' : 'Cash Payment'}
-                                    </span>
-                                    <span className="block text-xs sm:text-sm text-neutral-500">
-                                        {deliveryType === 'delivery' 
-                                            ? 'Pay when you receive your order' 
-                                            : 'Pay when you pick up your order'}
-                                    </span>
-                                </div>
-                            </label>
-
-                            {instapayEnabled && (
-                                <label className={`relative flex items-center p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${paymentMethod === 'instapay' ? 'border-rose-600 bg-rose-50' : 'border-neutral-200 hover:border-rose-200'}`}>
-                                    <input
-                                        type="radio"
-                                        value="instapay"
-                                        checked={paymentMethod === 'instapay'}
-                                        onChange={() => setPaymentMethod('instapay')}
-                                        className="sr-only"
-                                        aria-label="InstaPay payment"
-                                    />
-                                    <div className="h-6 w-6 mr-4 flex items-center justify-center bg-purple-600 rounded text-white text-[10px] font-bold" aria-hidden="true">IP</div>
-                                    <div>
-                                        <span className="block font-semibold text-neutral-900">InstaPay</span>
-                                        <span className="block text-xs sm:text-sm text-neutral-500">Transfer to our wallet and upload screenshot</span>
-                                    </div>
-                                </label>
-                            )}
-                        </div>
-
-                        {paymentMethod === 'instapay' && (
-                            <div className="mt-6 p-4 bg-purple-50 rounded-xl border border-purple-100">
-                                <h3 className="font-semibold text-purple-900 mb-2">InstaPay Instructions</h3>
-                                <p className="text-sm text-purple-800 mb-4">
-                                    Please transfer <span className="font-bold">{total.toLocaleString()} {siteConfig.currency.code}</span> to:
-                                    <br />
-                                    <span className="text-lg font-mono bg-white px-2 py-1 rounded border border-purple-200 mt-1 inline-block">{instapayPhone}</span>
-                                </p>
-
-                                <label htmlFor="proof-image-upload" className="block text-sm font-medium text-purple-900 mb-2">Upload Transfer Screenshot * <span className="sr-only">(required field)</span></label>
-                                <div className="relative" role="group" aria-label="Payment proof upload">
-                                    {!uploadedImage ? (
-                                        <label htmlFor="proof-image-upload" className="flex items-center justify-center gap-2 w-full h-32 px-4 py-6 border-2 border-dashed border-purple-300 rounded-xl cursor-pointer hover:border-purple-500 hover:bg-white/50 transition-all group focus-within:ring-4 focus-within:ring-purple-500 focus-within:ring-offset-2">
-                                            <Upload className="h-5 w-5 text-purple-400 group-hover:text-purple-600 transition-colors" aria-hidden="true" />
-                                            <span className="text-sm text-purple-600 font-medium">Click to upload screenshot</span>
-                                            <input
-                                                id="proof-image-upload"
-                                                type="file"
-                                                accept="image/*"
-                                                required={paymentMethod === 'instapay'}
-                                                className="sr-only"
-                                                onChange={handleImageUpload}
-                                                aria-required={paymentMethod === 'instapay' ? 'true' : 'false'}
-                                                aria-label="Upload payment proof screenshot"
-                                            />
-                                        </label>
-                                    ) : (
-                                        <div className="space-y-3">
-                                            <div className="relative rounded-xl overflow-hidden border-2 border-green-300 bg-green-50" role="img" aria-label="Uploaded payment proof preview">
-                                                <img
-                                                    src={uploadedImage}
-                                                    alt="Payment proof screenshot"
-                                                    className="w-full h-48 object-contain"
-                                                />
-                                                <div className="absolute top-2 right-2 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                                                    <Check className="h-3 w-3" />
-                                                    Uploaded
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-neutral-200">
-                                                <div className="flex items-center gap-2 flex-1 min-w-0">
-                                                    <div className="h-8 w-8 rounded bg-purple-100 flex items-center justify-center flex-shrink-0">
-                                                        <Upload className="h-4 w-4 text-purple-600" />
-                                                    </div>
-                                                    <span className="text-sm text-neutral-900 font-medium truncate">{uploadedFileName}</span>
-                                                </div>
-                                                <Button
-                                                    type="button"
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={handleRemoveImage}
-                                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 flex-shrink-0"
-                                                >
-                                                    <Trash2 className="h-4 w-4 mr-1" />
-                                                    Remove
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    <PaymentMethodSection
+                        paymentMethod={paymentMethod}
+                        deliveryType={deliveryType}
+                        instapayEnabled={instapayEnabled}
+                        instapayPhone={instapayPhone}
+                        total={total}
+                        uploadedImage={uploadedImage}
+                        uploadedFileName={uploadedFileName}
+                        onPaymentMethodChange={setPaymentMethod}
+                        onImageUpload={handleImageUpload}
+                        onRemoveImage={handleRemoveImage}
+                    />
 
                     <Button
                         type="submit"
@@ -709,100 +329,33 @@ export default function CheckoutClient({
                         className="w-full h-12 text-lg font-semibold disabled:opacity-60 disabled:cursor-not-allowed focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
                         size="lg"
                         aria-label="Place order"
-                        aria-live="polite"
                         aria-busy={submitting}
                     >
                         {submitting && <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />}
                         {submitting ? 'Processing Order...' : `Place Order • ${total.toLocaleString()} EGP`}
-                    </Button>                </form>
+                    </Button>
+                </form>
             </div>
 
             {/* Order Summary Sidebar */}
             <div className="lg:col-span-4 mt-6 lg:mt-0">
-                <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-5 sm:p-6 sticky top-24">
-                    <h2 className="text-lg font-bold text-neutral-900 mb-6">Order Summary</h2>
-
-                    <div className="space-y-4 mb-6 max-h-60 overflow-y-auto pr-2">
-                        {cart.map((item) => (
-                            <div key={item.product_id} className="flex gap-3">
-                                <div className="h-12 w-12 rounded-lg bg-neutral-100 overflow-hidden flex-shrink-0">
-                                    {item.product.image_url && (
-                                        <img src={item.product.image_url} alt={item.product.name_en} className="h-full w-full object-cover" />
-                                    )}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-neutral-900 truncate">{item.product.name_en}</p>
-                                    <p className="text-xs text-neutral-500">{item.quantity} x {item.product.price.toLocaleString()}</p>
-                                </div>
-                                <div className="text-sm font-semibold text-neutral-900">
-                                    {(item.product.price * item.quantity).toLocaleString()}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="border-t border-neutral-200 pt-4 space-y-2">
-                        <div className="flex justify-between text-neutral-600">
-                            <span>Subtotal</span>
-                            <span>{subtotal.toLocaleString()} EGP</span>
-                        </div>
-                        <div className="flex justify-between text-neutral-600">
-                            <span>Shipping</span>
-                            <span>{shippingCost === 0 ? 'Free' : `${shippingCost.toLocaleString()} EGP`}</span>
-                        </div>
-                        <div className="border-t border-neutral-200 pt-4 flex justify-between font-bold text-lg text-neutral-900">
-                            <span>Total</span>
-                            <span>{total.toLocaleString()} EGP</span>
-                        </div>
-                    </div>
-
-                    {deliveryType === 'delivery' && (
-                        <div className="mt-4 pt-4 border-t border-neutral-200">
-                            <div className="flex items-center gap-2 text-sm text-neutral-600">
-                                <Truck className="h-4 w-4 text-green-600" />
-                                <span className="font-medium">Estimated Delivery:</span>
-                                <span>{deliveryTimeDays}</span>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                <OrderSummarySection
+                    cart={cart}
+                    subtotal={subtotal}
+                    shippingCost={shippingCost}
+                    total={total}
+                    deliveryType={deliveryType}
+                    deliveryTimeDays={deliveryTimeDays}
+                    currencyCode={currencyCode}
+                />
             </div>
 
             {/* Delete Address Dialog */}
-            <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent className="sm:max-w-md bg-gradient-to-br from-white to-rose-50 border-2 border-rose-200">
-                    <DialogHeader>
-                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 mb-4">
-                            <Trash2 className="h-6 w-6 text-red-600" />
-                        </div>
-                        <DialogTitle className="text-xl font-bold text-neutral-900 text-center">Delete Address</DialogTitle>
-                        <DialogDescription className="text-neutral-600 text-center pt-2">
-                            Are you sure you want to delete this address? This action cannot be undone.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter className="gap-2 sm:gap-2 flex-col sm:flex-row">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => {
-                                setDeleteDialogOpen(false)
-                                setAddressToDelete(null)
-                            }}
-                            className="w-full sm:w-auto border-2 border-neutral-400 text-neutral-800 hover:bg-neutral-100 hover:border-neutral-500 font-semibold"
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            type="button"
-                            onClick={() => addressToDelete && handleDeleteAddress(addressToDelete)}
-                            className="w-full sm:w-auto gap-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold shadow-lg"
-                        >
-                            <Trash2 className="h-4 w-4" />
-                            Delete Address
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+            <DeleteAddressDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                onConfirm={handleDeleteAddress}
+            />
         </div>
     )
 }

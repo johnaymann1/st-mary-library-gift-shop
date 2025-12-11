@@ -1,30 +1,22 @@
-import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import { AdminLayoutClient } from '@/components/AdminLayoutClient'
+import { AdminLayoutClient } from '@/components/modules/admin'
+import * as userService from '@/services/users'
 
 export default async function AdminLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
-    const supabase = await createClient()
-
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
+    const user = await userService.getCurrentUser()
 
     if (!user) {
         redirect('/login')
     }
 
-    // Check user role from public.users table
-    const { data: userData, error } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', user.id)
-        .single()
+    // Check user role using service
+    const role = await userService.getUserRole(user.id)
 
-    if (error || !userData || userData.role !== 'admin') {
+    if (role !== 'admin') {
         redirect('/')
     }
 

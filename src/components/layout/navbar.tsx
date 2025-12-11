@@ -3,12 +3,12 @@
 import Link from 'next/link'
 import { Gift, Home, LayoutDashboard } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import NavbarScroll from './navbar/NavbarScroll'
-import NavbarSearch from './navbar/NavbarSearch'
-import NavbarCart from './navbar/NavbarCart'
-import NavbarUser from './navbar/NavbarUser'
+import { NavbarScroll } from './navbar-scroll'
+import { NavbarSearch } from './navbar-search'
+import { NavbarCart } from './navbar-cart'
+import { NavbarUser } from './navbar-user'
 import { useEffect, useState, Suspense } from 'react'
-import { createClient } from '@/utils/supabase/client'
+import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import { siteConfig } from '@/config/site'
 
@@ -16,7 +16,7 @@ interface NavbarProps {
     storeName?: string
 }
 
-export default function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
+export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
     const [user, setUser] = useState<User | null>(null)
     const [isAdmin, setIsAdmin] = useState(false)
 

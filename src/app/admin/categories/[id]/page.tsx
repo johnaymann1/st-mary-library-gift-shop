@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'

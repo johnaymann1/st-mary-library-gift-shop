@@ -7,7 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { siteConfig } from '@/config/site'
-import CartSkeleton from '@/components/CartSkeleton'
+import { CartSkeleton } from '@/components/modules/cart'
 
 import { User } from '@supabase/supabase-js'
 

@@ -1,8 +1,8 @@
 'use client'
 
-import { AdminSidebar } from './AdminSidebar'
+import { AdminSidebar } from './admin-sidebar'
 import { useEffect, useState } from 'react'
-import { NavigationItem } from '@/types/navigation'
+import type { NavigationItem } from '@/types/navigation'
 
 interface AdminLayoutClientProps {
     navigation: NavigationItem[]
@@ -36,12 +36,11 @@ export function AdminLayoutClient({ navigation, children }: AdminLayoutClientPro
     return (
         <div className="min-h-screen bg-neutral-50">
             <AdminSidebar navigation={navigation} />
-            
+
             {/* Main Content - dynamic offset based on sidebar state */}
-            <main 
-                className={`pt-20 md:pt-24 min-h-screen transition-all duration-300 ${
-                    sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'
-                }`}
+            <main
+                className={`pt-20 md:pt-24 min-h-screen transition-all duration-300 ${sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'
+                    }`}
             >
                 <div className="px-4 sm:px-6 lg:px-8 py-6">
                     {children}

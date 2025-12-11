@@ -8,9 +8,9 @@ interface OrderStatusTimelineProps {
     paymentMethod?: string
 }
 
-export default function OrderStatusTimeline({ status, createdAt, updatedAt, deliveryType = 'delivery', paymentMethod = 'cash' }: OrderStatusTimelineProps) {
+export function OrderStatusTimeline({ status, createdAt, updatedAt, deliveryType = 'delivery', paymentMethod = 'cash' }: OrderStatusTimelineProps) {
     const isCancelled = status === 'cancelled'
-    
+
     // Build dynamic status steps based on delivery type and payment method
     const statusSteps = [
         // InstaPay orders start with pending_payment
@@ -47,7 +47,7 @@ export default function OrderStatusTimeline({ status, createdAt, updatedAt, deli
             description: deliveryType === 'delivery' ? 'Order delivered successfully' : 'Order collected successfully'
         }
     ]
-    
+
     const currentStepIndex = statusSteps.findIndex(step => step.key === status)
 
     if (isCancelled) {
@@ -95,25 +95,22 @@ export default function OrderStatusTimeline({ status, createdAt, updatedAt, deli
                             )}
 
                             {/* Icon */}
-                            <div className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
-                                isCompleted 
-                                    ? 'bg-green-500 ring-4 ring-green-100' 
+                            <div className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${isCompleted
+                                    ? 'bg-green-500 ring-4 ring-green-100'
                                     : isCurrent
-                                    ? 'bg-rose-600 ring-4 ring-rose-100 animate-pulse'
-                                    : 'bg-neutral-100'
-                            }`}>
-                                <Icon className={`h-6 w-6 ${
-                                    isCompleted || isCurrent ? 'text-white' : 'text-neutral-400'
-                                }`} />
+                                        ? 'bg-rose-600 ring-4 ring-rose-100 animate-pulse'
+                                        : 'bg-neutral-100'
+                                }`}>
+                                <Icon className={`h-6 w-6 ${isCompleted || isCurrent ? 'text-white' : 'text-neutral-400'
+                                    }`} />
                             </div>
 
                             {/* Content */}
                             <div className="flex-1 pt-1">
                                 <div className="flex items-start justify-between gap-4">
                                     <div>
-                                        <h4 className={`font-semibold ${
-                                            isCurrent ? 'text-rose-600' : 'text-neutral-900'
-                                        }`}>
+                                        <h4 className={`font-semibold ${isCurrent ? 'text-rose-600' : 'text-neutral-900'
+                                            }`}>
                                             {step.label}
                                         </h4>
                                         <p className="text-sm text-neutral-600 mt-1">

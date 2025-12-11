@@ -1,4 +1,4 @@
-import Navbar from '@/components/Navbar'
+import { Navbar } from '@/components/layout'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function ProductLoading() {

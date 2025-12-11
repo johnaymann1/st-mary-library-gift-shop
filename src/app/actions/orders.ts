@@ -1,81 +1,31 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
-import { Order } from '@/types'
+import type { Order } from '@/types'
+import * as orderService from '@/services/orders'
+import * as userService from '@/services/users'
 
-export async function getUserOrders() {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
+/**
+ * Gets all orders for the current authenticated user
+ */
+export async function getUserOrders(): Promise<Order[]> {
+    const user = await userService.getCurrentUser()
     if (!user) return []
 
-    const { data, error } = await supabase
-        .from('orders')
-        .select(`
-            *,
-            items:order_items (
-                *,
-                product:products (
-                    name_en,
-                    name_ar,
-                    image_url
-                )
-            )
-        `)
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-
-    if (error) {
-        console.error('Error fetching user orders:', error)
-        return []
-    }
-
-    return data as unknown as Order[]
+    return orderService.getOrdersByUserId(user.id)
 }
 
-export async function getOrderDetails(orderId: number) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
+/**
+ * Gets order details with authorization check
+ */
+export async function getOrderDetails(orderId: number): Promise<{ order?: Order; error?: string }> {
+    const user = await userService.getCurrentUser()
     if (!user) return { error: 'Unauthorized' }
 
-    // Get user role to check if admin
-    const { data: userData } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', user.id)
-        .single()
+    const isAdmin = await userService.isCurrentUserAdmin()
+    const order = await orderService.getOrderById(orderId)
 
-    const isAdmin = userData?.role === 'admin'
-
-    const query = supabase
-        .from('orders')
-        .select(`
-            *,
-            items:order_items (
-                id,
-                quantity,
-                price_at_purchase,
-                product:products (
-                    id,
-                    name_en,
-                    name_ar,
-                    image_url
-                )
-            ),
-            user:users (
-                full_name,
-                email,
-                phone
-            )
-        `)
-        .eq('id', orderId)
-        .single()
-
-    const { data: order, error } = await query
-
-    if (error || !order) {
+    if (!order) {
         return { error: 'Order not found' }
     }
 
@@ -84,152 +34,95 @@ export async function getOrderDetails(orderId: number) {
         return { error: 'Unauthorized' }
     }
 
-    return { order: order as unknown as Order }
+    return { order }
 }
 
-export async function getAllOrders(statusFilter?: string) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
+/**
+ * Gets all orders (admin only)
+ */
+export async function getAllOrders(statusFilter?: string): Promise<{ orders?: Order[]; error?: string }> {
+    const user = await userService.getCurrentUser()
     if (!user) return { error: 'Unauthorized' }
 
-    // Verify Admin
-    const { data: userData } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-
-    if (userData?.role !== 'admin') {
+    const isAdmin = await userService.isCurrentUserAdmin()
+    if (!isAdmin) {
         return { error: 'Unauthorized' }
     }
 
-    let query = supabase
-        .from('orders')
-        .select(`
-            *,
-            items:order_items (
-                *,
-                product:products (
-                    name_en,
-                    name_ar,
-                    image_url
-                )
-            ),
-            user:users (
-                full_name,
-                email,
-                phone
-            )
-        `)
-        .order('created_at', { ascending: false })
-
-    if (statusFilter && statusFilter !== 'all') {
-        query = query.eq('status', statusFilter)
-    }
-
-    const { data, error } = await query
-
-    if (error) {
-        console.error('Error fetching all orders:', error)
-        return { error: error.message }
-    }
-
-    return { orders: data as unknown as Order[] }
+    const orders = await orderService.getAllOrders({ status: statusFilter })
+    return { orders }
 }
 
-export async function updateOrderStatus(orderId: number, status: string) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
+/**
+ * Updates order status (admin only)
+ */
+export async function updateOrderStatus(orderId: number, status: string): Promise<{ success?: boolean; error?: string }> {
+    const user = await userService.getCurrentUser()
     if (!user) return { error: 'Unauthorized' }
 
-    // Verify Admin
-    const { data: userData } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-
-    if (userData?.role !== 'admin') {
+    const isAdmin = await userService.isCurrentUserAdmin()
+    if (!isAdmin) {
         return { error: 'Unauthorized' }
     }
 
-    const { error } = await supabase
-        .from('orders')
-        .update({ status })
-        .eq('id', orderId)
+    const result = await orderService.updateOrderStatus(orderId, status)
 
-    if (error) return { error: error.message }
+    if (result.success) {
+        revalidatePath('/admin/orders')
+        revalidatePath(`/orders/${orderId}`)
+    }
 
-    revalidatePath('/admin/orders')
-    revalidatePath(`/orders/${orderId}`)
-    return { success: true }
+    return result
 }
 
-export async function cancelOrder(orderId: number) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
+/**
+ * Cancels an order (user can only cancel their own pending orders)
+ */
+export async function cancelOrder(orderId: number): Promise<{ success?: boolean; error?: string }> {
+    const user = await userService.getCurrentUser()
     if (!user) return { error: 'Unauthorized' }
 
-    // Get the order to verify ownership and status
-    const { data: order } = await supabase
-        .from('orders')
-        .select('user_id, status')
-        .eq('id', orderId)
-        .single()
+    const ownership = await orderService.getOrderOwnership(orderId)
+    if (!ownership) return { error: 'Order not found' }
 
-    if (!order) return { error: 'Order not found' }
-    
     // Check if user owns the order
-    if (order.user_id !== user.id) return { error: 'Unauthorized' }
+    if (ownership.userId !== user.id) return { error: 'Unauthorized' }
 
     // Check if order can be cancelled (only pending_payment or processing)
     const cancellableStatuses = ['pending_payment', 'processing']
-    if (!cancellableStatuses.includes(order.status)) {
+    if (!cancellableStatuses.includes(ownership.status)) {
         return { error: 'This order cannot be cancelled' }
     }
 
-    const { error } = await supabase
-        .from('orders')
-        .update({ status: 'cancelled' })
-        .eq('id', orderId)
+    const result = await orderService.cancelOrder(orderId)
 
-    if (error) return { error: error.message }
+    if (result.success) {
+        revalidatePath('/orders')
+        revalidatePath(`/orders/${orderId}`)
+    }
 
-    revalidatePath('/orders')
-    revalidatePath(`/orders/${orderId}`)
-    return { success: true }
+    return result
 }
 
-export async function verifyPayment(orderId: number, approved: boolean) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
+/**
+ * Verifies payment (admin only)
+ */
+export async function verifyPayment(orderId: number, approved: boolean): Promise<{ success?: boolean; error?: string }> {
+    const user = await userService.getCurrentUser()
     if (!user) return { error: 'Unauthorized' }
 
-    // Verify Admin
-    const { data: userData } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-
-    if (userData?.role !== 'admin') {
+    const isAdmin = await userService.isCurrentUserAdmin()
+    if (!isAdmin) {
         return { error: 'Unauthorized' }
     }
 
     const status = approved ? 'processing' : 'cancelled'
+    const result = await orderService.updateOrderStatus(orderId, status)
 
-    const { error } = await supabase
-        .from('orders')
-        .update({ status })
-        .eq('id', orderId)
+    if (result.success) {
+        revalidatePath('/admin/orders')
+        revalidatePath(`/orders/${orderId}`)
+    }
 
-    if (error) return { error: error.message }
-
-    revalidatePath('/admin/orders')
-    revalidatePath(`/orders/${orderId}`)
-    return { success: true }
+    return result
 }

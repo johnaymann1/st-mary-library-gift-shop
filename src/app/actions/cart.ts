@@ -1,153 +1,80 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
-import { CartItem } from '@/types'
+import type { CartItem } from '@/types'
+import * as cartService from '@/services/cart'
+import * as userService from '@/services/users'
 
 /**
  * Retrieves the current user's shopping cart
- * @returns Array of cart items with product details, or empty array if not logged in
  */
-export async function getCart() {
-    const supabase = await createClient()
+export async function getCart(): Promise<CartItem[]> {
+    const user = await userService.getCurrentUser()
+    if (!user) return []
 
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-        return []
-    }
-
-    const { data, error } = await supabase
-        .from('cart')
-        .select(`
-            id,
-            product_id,
-            quantity,
-            product:products (
-                name_en,
-                name_ar,
-                price,
-                image_url,
-                in_stock
-            )
-        `)
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: true })
-
-    if (error) {
-        console.error('Error fetching cart:', error)
-        return []
-    }
-
-    return data as unknown as CartItem[]
+    return cartService.getCartByUserId(user.id)
 }
 
 /**
- * Adds a product to the shopping cart or updates quantity if it already exists
- * @param productId - The ID of the product to add
- * @param quantity - The quantity to add (default: 1)
- * @returns Success status or error message
+ * Adds a product to the shopping cart
  */
-export async function addToCart(productId: number, quantity: number) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+export async function addToCart(productId: number, quantity: number): Promise<{ success?: boolean; error?: string }> {
+    const user = await userService.getCurrentUser()
+    if (!user) return { error: 'User not logged in' }
 
-    if (!user) {
-        return { error: 'User not logged in' }
+    const result = await cartService.addToCart(user.id, productId, quantity)
+
+    if (result.success) {
+        revalidatePath('/cart')
     }
 
-    // Check if item already exists
-    const { data: existing } = await supabase
-        .from('cart')
-        .select('id, quantity')
-        .eq('user_id', user.id)
-        .eq('product_id', productId)
-        .single()
-
-    let error
-
-    if (existing) {
-        const { error: updateError } = await supabase
-            .from('cart')
-            .update({ quantity: existing.quantity + quantity })
-            .eq('id', existing.id)
-        error = updateError
-    } else {
-        const { error: insertError } = await supabase
-            .from('cart')
-            .insert({
-                user_id: user.id,
-                product_id: productId,
-                quantity: quantity
-            })
-        error = insertError
-    }
-
-    if (error) {
-        return { error: error.message }
-    }
-
-    revalidatePath('/cart')
-    return { success: true }
+    return result
 }
 
-export async function updateCartItem(productId: number, quantity: number) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
+/**
+ * Updates the quantity of a cart item
+ */
+export async function updateCartItem(productId: number, quantity: number): Promise<{ success?: boolean; error?: string }> {
+    const user = await userService.getCurrentUser()
     if (!user) return { error: 'Unauthorized' }
 
-    if (quantity <= 0) {
-        return removeCartItem(productId)
+    const result = await cartService.updateCartItem(user.id, productId, quantity)
+
+    if (result.success) {
+        revalidatePath('/cart')
     }
 
-    const { error } = await supabase
-        .from('cart')
-        .update({ quantity })
-        .eq('user_id', user.id)
-        .eq('product_id', productId)
-
-    if (error) return { error: error.message }
-
-    revalidatePath('/cart')
-    return { success: true }
+    return result
 }
 
-export async function removeCartItem(productId: number) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
+/**
+ * Removes a product from the cart
+ */
+export async function removeCartItem(productId: number): Promise<{ success?: boolean; error?: string }> {
+    const user = await userService.getCurrentUser()
     if (!user) return { error: 'Unauthorized' }
 
-    const { error } = await supabase
-        .from('cart')
-        .delete()
-        .eq('user_id', user.id)
-        .eq('product_id', productId)
+    const result = await cartService.removeFromCart(user.id, productId)
 
-    if (error) return { error: error.message }
-
-    revalidatePath('/cart')
-    return { success: true }
-}
-
-export async function mergeCart(localItems: { product_id: number; quantity: number }[]) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) return { error: 'Unauthorized' }
-
-    // Use the RPC function we assumed exists from the prompt context
-    const { error } = await supabase.rpc('merge_cart', {
-        p_user_id: user.id,
-        p_items: localItems
-    })
-
-    if (error) {
-        console.error('Merge cart error:', error)
-        return { error: error.message }
+    if (result.success) {
+        revalidatePath('/cart')
     }
 
-    revalidatePath('/cart')
-    return { success: true }
+    return result
+}
+
+/**
+ * Merges local cart items into the user's cart
+ */
+export async function mergeCart(localItems: { product_id: number; quantity: number }[]): Promise<{ success?: boolean; error?: string }> {
+    const user = await userService.getCurrentUser()
+    if (!user) return { error: 'Unauthorized' }
+
+    const result = await cartService.mergeCart(user.id, localItems)
+
+    if (result.success) {
+        revalidatePath('/cart')
+    }
+
+    return result
 }

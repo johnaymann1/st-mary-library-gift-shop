@@ -3,9 +3,13 @@
 import { Button } from '@/components/ui/button'
 import { User as UserIcon } from 'lucide-react'
 import Link from 'next/link'
-import { User } from '@supabase/supabase-js'
+import type { User } from '@supabase/supabase-js'
 
-export default function NavbarUser({ user }: { user: User | null }) {
+interface NavbarUserProps {
+    user: User | null
+}
+
+export function NavbarUser({ user }: NavbarUserProps) {
     if (user) {
         return (
             <Button

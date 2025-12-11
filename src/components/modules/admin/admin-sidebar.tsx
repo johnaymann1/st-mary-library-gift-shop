@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { Store, X, Menu, LayoutDashboard, Package, FolderOpen, ShoppingBag, Home, ChevronLeft, ChevronRight, Settings } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { NavigationItem } from '@/types/navigation'
+import type { NavigationItem } from '@/types/navigation'
 
 interface AdminSidebarProps {
     navigation: NavigationItem[]
@@ -97,11 +97,10 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${
-                                    isActive 
-                                        ? 'bg-rose-600 text-white' 
+                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive
+                                        ? 'bg-rose-600 text-white'
                                         : 'text-neutral-800 hover:bg-neutral-100 hover:text-neutral-900'
-                                } ${isCollapsed ? 'justify-center' : ''}`}
+                                    } ${isCollapsed ? 'justify-center' : ''}`}
                                 title={isCollapsed ? item.name : undefined}
                             >
                                 <Icon className="h-5 w-5 flex-shrink-0" />
@@ -132,7 +131,7 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
                 >
                     <Menu className="h-6 w-6" />
                 </Button>
-                
+
                 <Link href="/admin" className="flex items-center gap-2">
                     <div className="bg-gradient-to-br from-rose-500 to-pink-600 p-2 rounded-lg">
                         <Store className="h-5 w-5 text-white" />
@@ -151,11 +150,11 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
             {isMobileMenuOpen && (
                 <>
                     {/* Backdrop */}
-                    <div 
+                    <div
                         className="md:hidden fixed inset-0 bg-black/50 z-50 transition-opacity"
                         onClick={() => setIsMobileMenuOpen(false)}
                     />
-                    
+
                     {/* Drawer */}
                     <div className="md:hidden fixed top-0 left-0 bottom-0 w-72 bg-white z-50 shadow-2xl transform transition-transform">
                         {/* Drawer Header */}
@@ -187,11 +186,10 @@ export function AdminSidebar({ navigation }: AdminSidebarProps) {
                                     <Link
                                         key={item.name}
                                         href={item.href}
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${
-                                            isActive 
-                                                ? 'bg-rose-600 text-white' 
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive
+                                                ? 'bg-rose-600 text-white'
                                                 : 'text-neutral-800 hover:bg-neutral-100 hover:text-neutral-900'
-                                        }`}
+                                            }`}
                                     >
                                         <Icon className="h-5 w-5" />
                                         <span>{item.name}</span>

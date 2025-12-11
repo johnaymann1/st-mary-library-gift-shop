@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton'
 
-export default function CartSkeleton() {
+export function CartSkeleton() {
     return (
         <div className="min-h-screen bg-neutral-50 py-8 sm:py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

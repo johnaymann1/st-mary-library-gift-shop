@@ -1,13 +1,13 @@
-import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
 import CheckoutClient from './checkout-client'
 import { getStoreSettings } from '@/utils/settings'
+import * as userService from '@/services/users'
+import * as addressService from '@/services/addresses'
 
 export default async function CheckoutPage() {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const user = await userService.getCurrentUser()
 
     if (!user) {
         redirect('/login?next=/checkout')
@@ -17,19 +17,10 @@ export default async function CheckoutPage() {
     const settings = await getStoreSettings()
 
     // Fetch user profile with phone
-    const { data: userProfile } = await supabase
-        .from('users')
-        .select('phone')
-        .eq('id', user.id)
-        .single()
+    const userProfile = await userService.getUserById(user.id)
 
     // Fetch user addresses
-    const { data: addresses } = await supabase
-        .from('user_addresses')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('is_default', { ascending: false })
-        .order('created_at', { ascending: false })
+    const addresses = await addressService.getAddressesByUserId(user.id)
 
     return (
         <div className="min-h-screen bg-neutral-50">
@@ -39,9 +30,9 @@ export default async function CheckoutPage() {
                     Back to Cart
                 </Link>
                 <h1 className="text-3xl font-bold text-neutral-900 mb-8">Checkout</h1>
-                <CheckoutClient 
-                    userPhone={userProfile?.phone || ''} 
-                    savedAddresses={addresses || []} 
+                <CheckoutClient
+                    userPhone={userProfile?.phone || ''}
+                    savedAddresses={addresses || []}
                     deliveryFee={settings.delivery_fee}
                     currencyCode={settings.currency_code}
                     instapayEnabled={settings.instapay_enabled}

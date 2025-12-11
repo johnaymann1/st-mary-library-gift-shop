@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { siteConfig } from '@/config/site'
 
 export type StoreSettings = {
@@ -36,7 +36,7 @@ export type StoreSettings = {
 export async function getStoreSettings(): Promise<StoreSettings> {
   try {
     const supabase = await createClient()
-    
+
     const { data, error } = await supabase
       .from('store_settings')
       .select('*')
@@ -44,13 +44,11 @@ export async function getStoreSettings(): Promise<StoreSettings> {
       .single()
 
     if (error) {
-      console.error('Failed to fetch store settings:', error)
       return getFallbackSettings()
     }
 
     return data
-  } catch (error) {
-    console.error('Error fetching store settings:', error)
+  } catch {
     return getFallbackSettings()
   }
 }

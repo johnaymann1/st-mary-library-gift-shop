@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Gift, Mail, Phone, MapPin, Facebook, Instagram, Twitter, Linkedin, Truck } from 'lucide-react'
+import { Gift, Phone, MapPin, Facebook, Instagram, Twitter, Linkedin, Truck } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import type { StoreSettings } from '@/utils/settings'
 
@@ -9,7 +9,7 @@ interface FooterProps {
     settings: StoreSettings
 }
 
-export default function Footer({ settings }: FooterProps) {
+export function Footer({ settings }: FooterProps) {
     const currentYear = new Date().getFullYear()
 
     return (
@@ -34,9 +34,9 @@ export default function Footer({ settings }: FooterProps) {
                         <h3 className="text-white font-bold mb-4">Follow Us</h3>
                         <div className="flex gap-3">
                             {settings.facebook_url && (
-                                <a 
-                                    href={settings.facebook_url} 
-                                    target="_blank" 
+                                <a
+                                    href={settings.facebook_url}
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
                                     aria-label="Facebook"
@@ -45,9 +45,9 @@ export default function Footer({ settings }: FooterProps) {
                                 </a>
                             )}
                             {settings.instagram_url && (
-                                <a 
-                                    href={settings.instagram_url} 
-                                    target="_blank" 
+                                <a
+                                    href={settings.instagram_url}
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
                                     aria-label="Instagram"
@@ -56,9 +56,9 @@ export default function Footer({ settings }: FooterProps) {
                                 </a>
                             )}
                             {settings.twitter_url && (
-                                <a 
-                                    href={settings.twitter_url} 
-                                    target="_blank" 
+                                <a
+                                    href={settings.twitter_url}
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
                                     aria-label="Twitter"
@@ -67,9 +67,9 @@ export default function Footer({ settings }: FooterProps) {
                                 </a>
                             )}
                             {settings.linkedin_url && (
-                                <a 
-                                    href={settings.linkedin_url} 
-                                    target="_blank" 
+                                <a
+                                    href={settings.linkedin_url}
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     className="w-10 h-10 bg-neutral-800 hover:bg-rose-600 rounded-lg flex items-center justify-center transition-colors"
                                     aria-label="LinkedIn"

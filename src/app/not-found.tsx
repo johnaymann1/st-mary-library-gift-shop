@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Home, Search } from 'lucide-react'
-import Navbar from '@/components/Navbar'
+import { Navbar } from '@/components/layout'
 import { getStoreSettings } from '@/utils/settings'
 
 export const dynamic = 'force-dynamic'
@@ -26,7 +26,7 @@ export default async function NotFound() {
                         Page Not Found
                     </h2>
                     <p className="text-lg text-neutral-600 mb-8 max-w-md mx-auto">
-                        Oops! The page you're looking for seems to have wandered off our shelves. 
+                        Oops! The page you're looking for seems to have wandered off our shelves.
                         Let's get you back to browsing our collection.
                     </p>
 

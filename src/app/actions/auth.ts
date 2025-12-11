@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 import { formatPhoneNumber } from '@/utils/formatters'
@@ -8,14 +8,28 @@ import { resend } from '@/lib/resend'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server.browser'
 import WelcomeEmail from '@/components/emails/WelcomeEmail'
+import { registerSchema, loginSchema } from '@/utils/validation'
 
 export async function signup(formData: FormData) {
+    // Validate input
+    const rawData = {
+        email: formData.get('email'),
+        password: formData.get('password'),
+        full_name: formData.get('fullName'),
+        phone: formData.get('phone') || undefined
+    }
+
+    const result = registerSchema.safeParse(rawData)
+    if (!result.success) {
+        const errors = result.error.flatten().fieldErrors
+        const errorMessage = Object.values(errors).flat()[0] || 'Validation failed'
+        return { error: errorMessage }
+    }
+
+    const { email, password, full_name: fullName, phone: rawPhone } = result.data
+    const phone = rawPhone ? formatPhoneNumber(rawPhone) : undefined
+
     const supabase = await createClient()
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const fullName = formData.get('fullName') as string
-    const rawPhone = formData.get('phone') as string
-    const phone = formatPhoneNumber(rawPhone)
 
     const { error } = await supabase.auth.signUp({
         email,
@@ -40,9 +54,8 @@ export async function signup(formData: FormData) {
             subject: 'Welcome to St Mary Library! 🎉',
             html: renderToStaticMarkup(createElement(WelcomeEmail, { name: fullName })),
         })
-    } catch (emailError) {
-        // Log error but don't block signup
-        console.error('Failed to send welcome email:', emailError)
+    } catch {
+        // Email send failed - don't block signup
     }
 
     // If email confirmation is disabled, we could redirect to dashboard
@@ -51,9 +64,22 @@ export async function signup(formData: FormData) {
 }
 
 export async function login(formData: FormData) {
+    // Validate input
+    const rawData = {
+        email: formData.get('email'),
+        password: formData.get('password')
+    }
+
+    const result = loginSchema.safeParse(rawData)
+    if (!result.success) {
+        const errors = result.error.flatten().fieldErrors
+        const errorMessage = Object.values(errors).flat()[0] || 'Validation failed'
+        return { error: errorMessage }
+    }
+
+    const { email, password } = result.data
+
     const supabase = await createClient()
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
 
     const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -94,13 +120,24 @@ export async function logout() {
 }
 
 export async function updatePhone(formData: FormData) {
-    const supabase = await createClient()
-    const rawPhone = formData.get('phone') as string
+    // Validate input
+    const { phoneSchema } = await import('@/utils/validation')
+    const rawData = {
+        phone: formData.get('phone')
+    }
+
+    const result = phoneSchema.safeParse(rawData)
+    if (!result.success) {
+        const errors = result.error.flatten().fieldErrors
+        const errorMessage = Object.values(errors).flat()[0] || 'Invalid phone number'
+        return { error: errorMessage }
+    }
+
+    const rawPhone = result.data.phone
     const phone = formatPhoneNumber(rawPhone)
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
         return { error: 'Not authenticated' }
@@ -115,14 +152,15 @@ export async function updatePhone(formData: FormData) {
         return { error: authError.message }
     }
 
-    // 2. Update Public Users Table
-    const { error: dbError } = await supabase
-        .from('users')
-        .update({ phone: phone })
-        .eq('id', user.id)
+    // 2. Update Public Users Table via service
+    const authSvc = await import('@/services/auth')
+    const serviceResult = await authSvc.updateUserPhone({
+        userId: user.id,
+        phone
+    })
 
-    if (dbError) {
-        return { error: dbError.message }
+    if (serviceResult.error) {
+        return { error: serviceResult.error }
     }
 
     redirect('/')

@@ -20,7 +20,7 @@ interface CancelOrderButtonProps {
     status: string
 }
 
-export default function CancelOrderButton({ orderId, status }: CancelOrderButtonProps) {
+export function CancelOrderButton({ orderId, status }: CancelOrderButtonProps) {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [showConfirm, setShowConfirm] = useState(false)
@@ -34,7 +34,7 @@ export default function CancelOrderButton({ orderId, status }: CancelOrderButton
     async function handleCancel() {
         setLoading(true)
         const result = await cancelOrder(orderId)
-        
+
         if (result.error) {
             toast.error(result.error)
         } else {
@@ -47,8 +47,8 @@ export default function CancelOrderButton({ orderId, status }: CancelOrderButton
 
     return (
         <>
-            <Button 
-                variant="outline" 
+            <Button
+                variant="outline"
                 onClick={() => setShowConfirm(true)}
                 className="border-2 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 font-semibold h-11 px-6 rounded-xl focus:ring-4 focus:ring-red-500 focus:ring-offset-2"
                 aria-label={`Cancel order number ${orderId}`}

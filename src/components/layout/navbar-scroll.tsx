@@ -3,7 +3,11 @@
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 
-export default function NavbarScroll({ children }: { children: React.ReactNode }) {
+interface NavbarScrollProps {
+    children: React.ReactNode
+}
+
+export function NavbarScroll({ children }: NavbarScrollProps) {
     const [isScrolled, setIsScrolled] = useState(false)
 
     useEffect(() => {

@@ -1,87 +1,119 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
-import sharp from 'sharp'
-
-/**
- * Uploads and compresses an image to Supabase storage
- * @param file - The image file to upload
- * @param bucket - The storage bucket ('categories' or 'products')
- * @returns The public URL of the uploaded image
- * @throws Error if upload fails
- */
-async function uploadImage(file: File, bucket: 'categories' | 'products') {
-    const supabase = await createClient()
-
-    // Convert File to Buffer
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    // Compress image using sharp (max 1200x1200, 80% quality)
-    const compressedBuffer = await sharp(buffer)
-        .resize(1200, 1200, {
-            fit: 'inside',
-            withoutEnlargement: true
-        })
-        .jpeg({ quality: 80 })
-        .toBuffer()
-
-    // Sanitize filename: remove non-ascii, replace spaces with dashes, add timestamp
-    const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '-')}.jpg`
-
-    const { error } = await supabase.storage
-        .from(bucket)
-        .upload(fileName, compressedBuffer, {
-            contentType: 'image/jpeg',
-            upsert: false
-        })
-
-    if (error) {
-        throw new Error(`Image upload failed: ${error.message}`)
-    }
-
-    const { data: { publicUrl } } = supabase.storage
-        .from(bucket)
-        .getPublicUrl(fileName)
-
-    return publicUrl
-}
+import * as productService from '@/services/products'
+import * as categoryService from '@/services/categories'
+import * as orderService from '@/services/orders'
+import * as storageService from '@/services/storage'
+import * as settingsService from '@/services/settings'
+import { categorySchema, productSchema, validateImageFile } from '@/utils/validation'
 
 // --- Categories ---
 
 /**
  * Creates a new category with optional image
- * @param formData - Form data containing name_en, name_ar, and optional image file
- * @returns Success status or error message
  */
 export async function createCategory(formData: FormData) {
-    const supabase = await createClient()
+    // Validate input
+    const rawData = {
+        name_en: formData.get('name_en'),
+        name_ar: formData.get('name_ar'),
+        image: formData.get('image')
+    }
 
-    const nameEn = formData.get('name_en') as string
-    const nameAr = formData.get('name_ar') as string
+    const result = categorySchema.safeParse(rawData)
+    if (!result.success) {
+        const errors = result.error.flatten().fieldErrors
+        const errorMessage = Object.values(errors).flat()[0] || 'Validation failed'
+        return { error: errorMessage }
+    }
+
+    const { name_en: nameEn, name_ar: nameAr } = result.data
     const imageFile = formData.get('image') as File
 
-    let imageUrl = null
+    let imageUrl: string | null = null
     if (imageFile && imageFile.size > 0) {
-        try {
-            imageUrl = await uploadImage(imageFile, 'categories')
-        } catch (e) {
-            return { error: e instanceof Error ? e.message : 'Image upload failed' }
+        // Validate image file
+        const fileValidation = validateImageFile(imageFile)
+        if (!fileValidation.valid) {
+            return { error: fileValidation.error || 'Invalid image file' }
+        }
+
+        const uploadResult = await storageService.uploadImage(imageFile, 'categories')
+        if (uploadResult.error) {
+            return { error: uploadResult.error }
+        }
+        imageUrl = uploadResult.url ?? null
+    }
+
+    const createResult = await categoryService.createCategory({
+        name_en: nameEn,
+        name_ar: nameAr,
+        image_url: imageUrl,
+        is_active: true
+    })
+
+    if (createResult.error) {
+        return { error: createResult.error }
+    }
+
+    revalidatePath('/admin/categories')
+    revalidatePath('/')
+    revalidatePath('/category/[id]', 'page')
+    return { success: true }
+}
+
+/**
+ * Updates an existing category
+ */
+export async function updateCategory(formData: FormData) {
+    const id = parseInt(formData.get('id') as string)
+    if (isNaN(id) || id < 1) {
+        return { error: 'Invalid category ID' }
+    }
+
+    // Validate input
+    const rawData = {
+        name_en: formData.get('name_en'),
+        name_ar: formData.get('name_ar'),
+        image: formData.get('image')
+    }
+
+    const validationResult = categorySchema.safeParse(rawData)
+    if (!validationResult.success) {
+        const errors = validationResult.error.flatten().fieldErrors
+        const errorMessage = Object.values(errors).flat()[0] || 'Validation failed'
+        return { error: errorMessage }
+    }
+
+    const { name_en: nameEn, name_ar: nameAr } = validationResult.data
+    const imageFile = formData.get('image') as File
+
+    const updates: { name_en: string; name_ar: string; image_url?: string } = {
+        name_en: nameEn,
+        name_ar: nameAr,
+    }
+
+    if (imageFile && imageFile.size > 0) {
+        // Validate image file
+        const fileValidation = validateImageFile(imageFile)
+        if (!fileValidation.valid) {
+            return { error: fileValidation.error || 'Invalid image file' }
+        }
+
+        const uploadResult = await storageService.uploadImage(imageFile, 'categories')
+        if (uploadResult.error) {
+            return { error: uploadResult.error }
+        }
+        if (uploadResult.url) {
+            updates.image_url = uploadResult.url
         }
     }
 
-    const { error } = await supabase
-        .from('categories')
-        .insert({
-            name_en: nameEn,
-            name_ar: nameAr,
-            image_url: imageUrl,
-            is_active: true
-        })
+    const updateResult = await categoryService.updateCategory(id, updates)
 
-    if (error) {
-        return { error: error.message }
+    if (updateResult.error) {
+        return { error: updateResult.error }
     }
 
     revalidatePath('/admin/categories')
@@ -92,29 +124,12 @@ export async function createCategory(formData: FormData) {
 
 /**
  * Deletes a category by ID (only if no products are associated)
- * @param id - The category ID to delete
- * @returns Success status or error message if products exist
  */
 export async function deleteCategory(id: number) {
-    const supabase = await createClient()
+    const result = await categoryService.deleteCategory(id)
 
-    // Check if products exist
-    const { count } = await supabase
-        .from('products')
-        .select('*', { count: 'exact', head: true })
-        .eq('category_id', id)
-
-    if (count && count > 0) {
-        return { error: 'Cannot delete category with existing products.' }
-    }
-
-    const { error } = await supabase
-        .from('categories')
-        .delete()
-        .eq('id', id)
-
-    if (error) {
-        return { error: error.message }
+    if (result.error) {
+        return { error: result.error }
     }
 
     revalidatePath('/admin/categories')
@@ -125,43 +140,61 @@ export async function deleteCategory(id: number) {
 
 // --- Products ---
 
+/**
+ * Creates a new product
+ */
 export async function createProduct(formData: FormData) {
-    const supabase = await createClient()
-
-    const nameEn = formData.get('name_en') as string
-    const nameAr = formData.get('name_ar') as string
-    const descEn = formData.get('desc_en') as string
-    const descAr = formData.get('desc_ar') as string
-    const price = parseFloat(formData.get('price') as string)
-    const inStock = formData.get('in_stock') === 'on' // New toggle logic
-    const categoryId = parseInt(formData.get('category_id') as string)
-    const imageFile = formData.get('image') as File
-
-    let imageUrl = null
-    if (imageFile && imageFile.size > 0) {
-        try {
-            imageUrl = await uploadImage(imageFile, 'products')
-        } catch (e) {
-            return { error: e instanceof Error ? e.message : 'Image upload failed' }
-        }
+    // Validate input
+    const rawData = {
+        name_en: formData.get('name_en'),
+        name_ar: formData.get('name_ar'),
+        desc_en: formData.get('desc_en') || '',
+        desc_ar: formData.get('desc_ar') || '',
+        price: parseFloat(formData.get('price') as string),
+        in_stock: formData.get('in_stock') === 'on',
+        category_id: parseInt(formData.get('category_id') as string),
+        image: formData.get('image')
     }
 
-    const { error } = await supabase
-        .from('products')
-        .insert({
-            name_en: nameEn,
-            name_ar: nameAr,
-            desc_en: descEn,
-            desc_ar: descAr,
-            price: price,
-            in_stock: inStock, // Changed from stock_quantity
-            category_id: categoryId,
-            image_url: imageUrl,
-            is_active: true
-        })
+    const validationResult = productSchema.safeParse(rawData)
+    if (!validationResult.success) {
+        const errors = validationResult.error.flatten().fieldErrors
+        const errorMessage = Object.values(errors).flat()[0] || 'Validation failed'
+        return { error: errorMessage }
+    }
 
-    if (error) {
-        return { error: error.message }
+    const { name_en: nameEn, name_ar: nameAr, desc_en: descEn, desc_ar: descAr, price, in_stock: inStock, category_id: categoryId } = validationResult.data
+    const imageFile = formData.get('image') as File
+
+    let imageUrl: string | null = null
+    if (imageFile && imageFile.size > 0) {
+        // Validate image file
+        const fileValidation = validateImageFile(imageFile)
+        if (!fileValidation.valid) {
+            return { error: fileValidation.error || 'Invalid image file' }
+        }
+
+        const uploadResult = await storageService.uploadImage(imageFile, 'products')
+        if (uploadResult.error) {
+            return { error: uploadResult.error }
+        }
+        imageUrl = uploadResult.url ?? null
+    }
+
+    const createProductResult = await productService.createProduct({
+        name_en: nameEn,
+        name_ar: nameAr,
+        desc_en: descEn,
+        desc_ar: descAr,
+        price,
+        in_stock: inStock,
+        category_id: categoryId,
+        image_url: imageUrl,
+        is_active: true
+    })
+
+    if (createProductResult.error) {
+        return { error: createProductResult.error }
     }
 
     revalidatePath('/admin/products')
@@ -171,82 +204,67 @@ export async function createProduct(formData: FormData) {
     return { success: true }
 }
 
-export async function updateCategory(formData: FormData) {
-    const supabase = await createClient()
-
-    const id = parseInt(formData.get('id') as string)
-    const nameEn = formData.get('name_en') as string
-    const nameAr = formData.get('name_ar') as string
-    const imageFile = formData.get('image') as File
-
-    const updates: Record<string, string> = {
-        name_en: nameEn,
-        name_ar: nameAr,
-    }
-
-    if (imageFile && imageFile.size > 0) {
-        try {
-            const imageUrl = await uploadImage(imageFile, 'categories')
-            updates.image_url = imageUrl
-        } catch (e) {
-            return { error: e instanceof Error ? e.message : 'Image upload failed' }
-        }
-    }
-
-    const { error } = await supabase
-        .from('categories')
-        .update(updates)
-        .eq('id', id)
-
-    if (error) {
-        return { error: error.message }
-    }
-
-    revalidatePath('/admin/categories')
-    revalidatePath('/')
-    revalidatePath('/category/[id]', 'page')
-    return { success: true }
-}
-
+/**
+ * Updates an existing product
+ */
 export async function updateProduct(formData: FormData) {
-    const supabase = await createClient()
-
     const id = parseInt(formData.get('id') as string)
-    const nameEn = formData.get('name_en') as string
-    const nameAr = formData.get('name_ar') as string
-    const descEn = formData.get('desc_en') as string
-    const descAr = formData.get('desc_ar') as string
-    const price = parseFloat(formData.get('price') as string)
-    const inStock = formData.get('in_stock') === 'on'
-    const categoryId = parseInt(formData.get('category_id') as string)
+    if (isNaN(id) || id < 1) {
+        return { error: 'Invalid product ID' }
+    }
+
+    // Validate input
+    const rawData = {
+        name_en: formData.get('name_en'),
+        name_ar: formData.get('name_ar'),
+        desc_en: formData.get('desc_en') || '',
+        desc_ar: formData.get('desc_ar') || '',
+        price: parseFloat(formData.get('price') as string),
+        in_stock: formData.get('in_stock') === 'on',
+        category_id: parseInt(formData.get('category_id') as string),
+        image: formData.get('image')
+    }
+
+    const validationResult = productSchema.safeParse(rawData)
+    if (!validationResult.success) {
+        const errors = validationResult.error.flatten().fieldErrors
+        const errorMessage = Object.values(errors).flat()[0] || 'Validation failed'
+        return { error: errorMessage }
+    }
+
+    const { name_en: nameEn, name_ar: nameAr, desc_en: descEn, desc_ar: descAr, price, in_stock: inStock, category_id: categoryId } = validationResult.data
     const imageFile = formData.get('image') as File
 
-    const updates: Record<string, string | number | boolean> = {
+    const updates: productService.UpdateProductData = {
         name_en: nameEn,
         name_ar: nameAr,
         desc_en: descEn,
         desc_ar: descAr,
-        price: price,
+        price,
         in_stock: inStock,
         category_id: categoryId,
     }
 
     if (imageFile && imageFile.size > 0) {
-        try {
-            const imageUrl = await uploadImage(imageFile, 'products')
-            updates.image_url = imageUrl
-        } catch (e) {
-            return { error: e instanceof Error ? e.message : 'Image upload failed' }
+        // Validate image file
+        const fileValidation = validateImageFile(imageFile)
+        if (!fileValidation.valid) {
+            return { error: fileValidation.error || 'Invalid image file' }
+        }
+
+        const uploadResult = await storageService.uploadImage(imageFile, 'products')
+        if (uploadResult.error) {
+            return { error: uploadResult.error }
+        }
+        if (uploadResult.url) {
+            updates.image_url = uploadResult.url
         }
     }
 
-    const { error } = await supabase
-        .from('products')
-        .update(updates)
-        .eq('id', id)
+    const updateProductResult = await productService.updateProduct(id, updates)
 
-    if (error) {
-        return { error: error.message }
+    if (updateProductResult.error) {
+        return { error: updateProductResult.error }
     }
 
     revalidatePath('/admin/products')
@@ -256,16 +274,14 @@ export async function updateProduct(formData: FormData) {
     return { success: true }
 }
 
+/**
+ * Deletes a product by ID
+ */
 export async function deleteProduct(id: number) {
-    const supabase = await createClient()
+    const result = await productService.deleteProduct(id)
 
-    const { error } = await supabase
-        .from('products')
-        .delete()
-        .eq('id', id)
-
-    if (error) {
-        return { error: error.message }
+    if (result.error) {
+        return { error: result.error }
     }
 
     revalidatePath('/admin/products')
@@ -277,105 +293,75 @@ export async function deleteProduct(id: number) {
 
 // --- Orders ---
 
-export async function getAllOrders() {
-    const supabase = await createClient()
-
-    const { data, error } = await supabase
-        .from('orders')
-        .select(`
-            *,
-            user:users(email, full_name),
-            items:order_items(
-                id,
-                quantity,
-                price_at_purchase,
-                product:products(id, name_en, name_ar, image_url)
-            )
-        `)
-        .order('created_at', { ascending: false })
-
-    if (error) {
-        return { error: error.message, orders: [] }
+/**
+ * Gets all orders (admin)
+ */
+export async function getAllOrders(): Promise<{ orders?: ReturnType<typeof orderService.getAllOrders> extends Promise<infer T> ? T : never; error?: string }> {
+    const orders = await orderService.getAllOrders()
+    if (!orders) {
+        return { error: 'Failed to fetch orders' }
     }
-
-    return { orders: data || [] }
-}
-
-export async function updateOrderStatus(orderId: number, status: string) {
-    const supabase = await createClient()
-
-    const { error } = await supabase
-        .from('orders')
-        .update({ status })
-        .eq('id', orderId)
-
-    if (error) {
-        return { error: error.message }
-    }
-
-    revalidatePath('/admin/orders')
-    return { success: true }
-}
-
-export async function approvePaymentProof(orderId: number) {
-    const supabase = await createClient()
-
-    const { error } = await supabase
-        .from('orders')
-        .update({ status: 'processing' })
-        .eq('id', orderId)
-
-    if (error) {
-        return { error: error.message }
-    }
-
-    revalidatePath('/admin/orders')
-    return { success: true }
-}
-
-export async function rejectPaymentProof(orderId: number, reason?: string) {
-    const supabase = await createClient()
-
-    const { error } = await supabase
-        .from('orders')
-        .update({ 
-            status: 'cancelled',
-            payment_proof_url: null
-        })
-        .eq('id', orderId)
-
-    if (error) {
-        return { error: error.message }
-    }
-
-    revalidatePath('/admin/orders')
-    return { success: true }
-}
-
-export async function cancelOrderByAdmin(orderId: number, reason?: string) {
-    const supabase = await createClient()
-
-    const { error } = await supabase
-        .from('orders')
-        .update({ status: 'cancelled' })
-        .eq('id', orderId)
-
-    if (error) {
-        return { error: error.message }
-    }
-
-    revalidatePath('/admin/orders')
-    return { success: true }
+    return { orders }
 }
 
 /**
+ * Updates order status
+ */
+export async function updateOrderStatus(orderId: number, status: string) {
+    const result = await orderService.updateOrderStatus(orderId, status)
+
+    if (result.success) {
+        revalidatePath('/admin/orders')
+    }
+
+    return result
+}
+
+/**
+ * Approves payment proof
+ */
+export async function approvePaymentProof(orderId: number) {
+    const result = await orderService.approvePaymentProof(orderId)
+
+    if (result.success) {
+        revalidatePath('/admin/orders')
+    }
+
+    return result
+}
+
+/**
+ * Rejects payment proof
+ */
+export async function rejectPaymentProof(orderId: number, reason?: string) {
+    const result = await orderService.rejectPaymentProof(orderId)
+
+    if (result.success) {
+        revalidatePath('/admin/orders')
+    }
+
+    return result
+}
+
+/**
+ * Cancels an order by admin
+ */
+export async function cancelOrderByAdmin(orderId: number, reason?: string) {
+    const result = await orderService.cancelOrder(orderId)
+
+    if (result.success) {
+        revalidatePath('/admin/orders')
+    }
+
+    return result
+}
+
+// --- Store Settings ---
+
+/**
  * Updates store settings in the database
- * @param formData - Form data containing the settings to update
- * @returns Success or error object
  */
 export async function updateStoreSettings(formData: FormData) {
-    const supabase = await createClient()
-
     const storeName = formData.get('store_name') as string
     const description = formData.get('description') as string
     const phone = formData.get('phone') as string
@@ -402,67 +388,35 @@ export async function updateStoreSettings(formData: FormData) {
     // Handle hero image upload if provided
     let heroImageUrl: string | undefined
     if (heroImage && heroImage.size > 0) {
-        // Validate file size (5MB max)
-        if (heroImage.size > 5 * 1024 * 1024) {
-            return { error: 'Hero image must be less than 5MB' }
+        const uploadResult = await storageService.uploadHeroImage(heroImage)
+        if (uploadResult.error) {
+            return { error: uploadResult.error }
         }
-
-        // Validate file type
-        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-        if (!validTypes.includes(heroImage.type)) {
-            return { error: 'Hero image must be JPG, PNG, or WebP format' }
-        }
-
-        // Upload to Supabase Storage
-        const fileExt = heroImage.name.split('.').pop()
-        const fileName = `hero-${Date.now()}.${fileExt}`
-        const filePath = `settings/${fileName}`
-
-        const { error: uploadError } = await supabase.storage
-            .from('products')
-            .upload(filePath, heroImage, {
-                cacheControl: '3600',
-                upsert: false
-            })
-
-        if (uploadError) {
-            return { error: `Failed to upload hero image: ${uploadError.message}` }
-        }
-
-        // Get public URL
-        const { data: urlData } = supabase.storage
-            .from('products')
-            .getPublicUrl(filePath)
-
-        heroImageUrl = urlData.publicUrl
+        heroImageUrl = uploadResult.url
     }
 
-    const { error } = await supabase
-        .from('store_settings')
-        .update({
-            store_name: storeName,
-            description: description,
-            phone: phone,
-            phone_2: phone2 || null,
-            phone_3: phone3 || null,
-            address: address,
-            working_hours: workingHours || null,
-            delivery_fee: deliveryFee,
-            delivery_time_days: deliveryTimeDays || null,
-            free_delivery_threshold: freeDeliveryThreshold ? parseFloat(freeDeliveryThreshold) : null,
-            instapay_enabled: instapayEnabled,
-            instapay_phone: instapayPhone || null,
-            ...(heroImageUrl && { hero_image_url: heroImageUrl }),
-            facebook_url: facebookUrl || null,
-            instagram_url: instagramUrl || null,
-            twitter_url: twitterUrl || null,
-            linkedin_url: linkedinUrl || null,
-            updated_at: new Date().toISOString(),
-        })
-        .eq('id', 1)
+    const result = await settingsService.updateSettings({
+        store_name: storeName,
+        description: description,
+        phone: phone,
+        phone_2: phone2 || null,
+        phone_3: phone3 || null,
+        address: address,
+        working_hours: workingHours || null,
+        delivery_fee: deliveryFee,
+        delivery_time_days: deliveryTimeDays || null,
+        free_delivery_threshold: freeDeliveryThreshold ? parseFloat(freeDeliveryThreshold) : null,
+        instapay_enabled: instapayEnabled,
+        instapay_phone: instapayPhone || null,
+        ...(heroImageUrl && { hero_image_url: heroImageUrl }),
+        facebook_url: facebookUrl || null,
+        instagram_url: instagramUrl || null,
+        twitter_url: twitterUrl || null,
+        linkedin_url: linkedinUrl || null,
+    })
 
-    if (error) {
-        return { error: error.message }
+    if (result.error) {
+        return { error: result.error }
     }
 
     // Revalidate all pages that use settings
@@ -470,6 +424,6 @@ export async function updateStoreSettings(formData: FormData) {
     revalidatePath('/admin/settings')
     revalidatePath('/checkout')
     revalidatePath('/not-found')
-    
+
     return { success: true }
 }

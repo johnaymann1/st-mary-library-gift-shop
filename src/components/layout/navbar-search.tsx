@@ -5,7 +5,7 @@ import { Search } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
-export default function NavbarSearch() {
+export function NavbarSearch() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')

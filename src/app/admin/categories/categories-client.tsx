@@ -1,6 +1,6 @@
 'use client'
 
-import { createClient } from '@/utils/supabase/client'
+import { getCategoriesAction } from './actions'
 import CreateCategoryForm from './create-form'
 import DeleteCategoryButton from './delete-button'
 import { Search } from 'lucide-react'
@@ -10,32 +10,24 @@ import { useEffect, useState, useCallback } from 'react'
 
 import { Category } from '@/types'
 
-export default function CategoriesClientPage() {
-    const [allCategories, setAllCategories] = useState<Category[]>([])
-    const [filteredCategories, setFilteredCategories] = useState<Category[]>([])
+interface CategoriesClientPageProps {
+    initialCategories: Category[]
+}
+
+export default function CategoriesClientPage({ initialCategories }: CategoriesClientPageProps) {
+    const [allCategories, setAllCategories] = useState<Category[]>(initialCategories)
+    const [filteredCategories, setFilteredCategories] = useState<Category[]>(initialCategories)
     const [searchQuery, setSearchQuery] = useState('')
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
 
     const fetchData = useCallback(async () => {
-        const supabase = createClient()
-
-        const { data: categoriesData } = await supabase
-            .from('categories')
-            .select('*')
-            .order('created_at', { ascending: false })
-
-        if (categoriesData) {
-            setAllCategories(categoriesData)
-        }
-
+        setLoading(true)
+        const categories = await getCategoriesAction()
+        setAllCategories(categories)
         setLoading(false)
     }, [])
-
-    useEffect(() => {
-        fetchData()
-    }, [fetchData])
 
     // Apply search filter
     useEffect(() => {
@@ -227,7 +219,7 @@ export default function CategoriesClientPage() {
                             >
                                 Previous
                             </button>
-                            
+
                             {/* Page numbers */}
                             <div className="hidden sm:flex items-center gap-1">
                                 {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -242,11 +234,10 @@ export default function CategoriesClientPage() {
                                             )}
                                             <button
                                                 onClick={() => goToPage(page)}
-                                                className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
-                                                    currentPage === page
-                                                        ? 'bg-rose-600 text-white shadow-md'
-                                                        : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-                                                }`}
+                                                className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${currentPage === page
+                                                    ? 'bg-rose-600 text-white shadow-md'
+                                                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                                    }`}
                                             >
                                                 {page}
                                             </button>

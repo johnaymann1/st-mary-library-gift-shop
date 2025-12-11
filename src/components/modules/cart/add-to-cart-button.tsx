@@ -3,10 +3,14 @@
 import { useCart } from '@/context/CartContext'
 import { Button } from '@/components/ui/button'
 import { ShoppingBag, Check } from 'lucide-react'
-import { Product } from '@/types'
+import type { Product } from '@/types'
 import { useState } from 'react'
 
-export default function AddToCartButton({ product }: { product: Product }) {
+interface AddToCartButtonProps {
+    product: Product
+}
+
+export function AddToCartButton({ product }: AddToCartButtonProps) {
     const { addToCart } = useCart()
     const [loading, setLoading] = useState(false)
     const [justAdded, setJustAdded] = useState(false)

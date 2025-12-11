@@ -1,43 +1,42 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { addressSchema } from '@/utils/validation'
+import * as addressService from '@/services/addresses'
+import * as authService from '@/services/auth'
+import * as userService from '@/services/users'
 
 export async function saveAddress(formData: FormData) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    // Validate input
+    const rawData = {
+        label: formData.get('label'),
+        address: formData.get('address'),
+        is_default: formData.get('is_default') === 'true'
+    }
 
+    const result = addressSchema.safeParse(rawData)
+    if (!result.success) {
+        const errors = result.error.flatten().fieldErrors
+        const errorMessage = Object.values(errors).flat()[0] || 'Validation failed'
+        return { error: errorMessage }
+    }
+
+    const { label, address, is_default: isDefault } = result.data
+
+    const user = await userService.getCurrentUser()
     if (!user) {
         return { error: 'Unauthorized' }
     }
 
-    const label = formData.get('label') as string
-    const address = formData.get('address') as string
-    const isDefault = formData.get('is_default') === 'true'
+    const serviceResult = await addressService.createAddress({
+        userId: user.id,
+        label,
+        address,
+        isDefault
+    })
 
-    if (!label || !address) {
-        return { error: 'Label and address are required' }
-    }
-
-    // If setting as default, unset other default addresses
-    if (isDefault) {
-        await supabase
-            .from('user_addresses')
-            .update({ is_default: false })
-            .eq('user_id', user.id)
-    }
-
-    const { error } = await supabase
-        .from('user_addresses')
-        .insert({
-            user_id: user.id,
-            label,
-            address,
-            is_default: isDefault
-        })
-
-    if (error) {
-        return { error: error.message }
+    if (serviceResult.error) {
+        return { error: serviceResult.error }
     }
 
     revalidatePath('/checkout')
@@ -45,42 +44,35 @@ export async function saveAddress(formData: FormData) {
 }
 
 export async function updateAddress(addressId: number, formData: FormData) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    // Validate input
+    const rawData = {
+        label: formData.get('label'),
+        address: formData.get('address'),
+        is_default: formData.get('is_default') === 'true'
+    }
 
+    const result = addressSchema.safeParse(rawData)
+    if (!result.success) {
+        const errors = result.error.flatten().fieldErrors
+        const errorMessage = Object.values(errors).flat()[0] || 'Validation failed'
+        return { error: errorMessage }
+    }
+
+    const { label, address, is_default: isDefault } = result.data
+
+    const user = await userService.getCurrentUser()
     if (!user) {
         return { error: 'Unauthorized' }
     }
 
-    const label = formData.get('label') as string
-    const address = formData.get('address') as string
-    const isDefault = formData.get('is_default') === 'true'
+    const serviceResult = await addressService.updateAddress(user.id, addressId, {
+        label,
+        address,
+        isDefault
+    })
 
-    if (!label || !address) {
-        return { error: 'Label and address are required' }
-    }
-
-    // If setting as default, unset other default addresses
-    if (isDefault) {
-        await supabase
-            .from('user_addresses')
-            .update({ is_default: false })
-            .eq('user_id', user.id)
-            .neq('id', addressId)
-    }
-
-    const { error } = await supabase
-        .from('user_addresses')
-        .update({
-            label,
-            address,
-            is_default: isDefault
-        })
-        .eq('id', addressId)
-        .eq('user_id', user.id)
-
-    if (error) {
-        return { error: error.message }
+    if (serviceResult.error) {
+        return { error: serviceResult.error }
     }
 
     revalidatePath('/checkout')
@@ -88,21 +80,15 @@ export async function updateAddress(addressId: number, formData: FormData) {
 }
 
 export async function deleteAddress(addressId: number) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
+    const user = await userService.getCurrentUser()
     if (!user) {
         return { error: 'Unauthorized' }
     }
 
-    const { error } = await supabase
-        .from('user_addresses')
-        .delete()
-        .eq('id', addressId)
-        .eq('user_id', user.id)
+    const serviceResult = await addressService.deleteAddress(user.id, addressId)
 
-    if (error) {
-        return { error: error.message }
+    if (serviceResult.error) {
+        return { error: serviceResult.error }
     }
 
     revalidatePath('/checkout')
@@ -110,24 +96,27 @@ export async function deleteAddress(addressId: number) {
 }
 
 export async function updateUserPhone(phone: string) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    // Validate input
+    const { phoneSchema } = await import('@/utils/validation')
+    const phoneResult = phoneSchema.safeParse({ phone })
+    if (!phoneResult.success) {
+        const errors = phoneResult.error.flatten().fieldErrors
+        const errorMessage = Object.values(errors).flat()[0] || 'Invalid phone number'
+        return { error: errorMessage }
+    }
 
+    const user = await userService.getCurrentUser()
     if (!user) {
         return { error: 'Unauthorized' }
     }
 
-    if (!phone) {
-        return { error: 'Phone number is required' }
-    }
+    const serviceResult = await authService.updateUserPhone({
+        userId: user.id,
+        phone: phoneResult.data.phone
+    })
 
-    const { error } = await supabase
-        .from('users')
-        .update({ phone })
-        .eq('id', user.id)
-
-    if (error) {
-        return { error: error.message }
+    if (serviceResult.error) {
+        return { error: serviceResult.error }
     }
 
     revalidatePath('/checkout')

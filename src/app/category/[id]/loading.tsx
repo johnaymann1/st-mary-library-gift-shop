@@ -1,4 +1,4 @@
-import Navbar from '@/components/Navbar'
+import { Navbar } from '@/components/layout'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function CategoryLoading() {
@@ -45,7 +45,7 @@ function ProductCardSkeleton() {
     <div className="bg-white rounded-2xl overflow-hidden shadow-md flex flex-col">
       {/* Image Skeleton - Square aspect ratio */}
       <Skeleton className="aspect-square w-full" />
-      
+
       {/* Product Info Skeleton */}
       <div className="flex-1 p-5 space-y-3 flex flex-col">
         <div className="flex-1 space-y-2">

@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { createClient } from '@/utils/supabase/client'
+import { createClient } from '@/lib/supabase/client'
 import { getCart, addToCart as serverAddToCart, updateCartItem as serverUpdateCartItem, removeCartItem as serverRemoveCartItem, mergeCart } from '@/app/actions/cart'
 import { toast } from 'sonner'
 import { User } from '@supabase/supabase-js'
@@ -60,8 +60,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                             localStorage.removeItem('cart')
                             toast.success('Cart merged successfully')
                         }
-                    } catch (e) {
-                        console.error('Error parsing local cart for merge:', e)
+                    } catch {
+                        // Failed to parse local cart
                     }
                 }
 
@@ -74,8 +74,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 if (localCartJson) {
                     try {
                         setCart(JSON.parse(localCartJson))
-                    } catch (e) {
-                        console.error('Error parsing local cart:', e)
+                    } catch {
                         localStorage.removeItem('cart')
                     }
                 }

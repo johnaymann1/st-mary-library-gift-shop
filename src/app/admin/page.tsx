@@ -1,47 +1,22 @@
-import { createClient } from '@/utils/supabase/server'
+import * as productService from '@/services/products'
+import * as categoryService from '@/services/categories'
 import { Package, ShoppingBag, TrendingUp, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { siteConfig } from '@/config/site'
 
 export default async function AdminDashboard() {
-    const supabase = await createClient()
-
-    // Fetch statistics
-    const { count: totalProducts } = await supabase
-        .from('products')
-        .select('*', { count: 'exact', head: true })
-
-    const { count: activeProducts } = await supabase
-        .from('products')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true)
-
-    const { count: outOfStock } = await supabase
-        .from('products')
-        .select('*', { count: 'exact', head: true })
-        .eq('in_stock', false)
-
-    const { count: totalCategories } = await supabase
-        .from('categories')
-        .select('*', { count: 'exact', head: true })
-
-    // Fetch recent products for quick access
-    const { data: recentProducts } = await supabase
-        .from('products')
-        .select(`
-            *,
-            categories (
-                name_en
-            )
-        `)
-        .order('created_at', { ascending: false })
-        .limit(5)
+    // Fetch statistics using service
+    const [productStats, totalCategories, recentProducts] = await Promise.all([
+        productService.getProductStats(),
+        categoryService.getCategoryCount(),
+        productService.getRecentProducts(5)
+    ])
 
     const stats = [
         {
             name: 'Total Products',
-            value: totalProducts || 0,
+            value: productStats.totalProducts,
             icon: Package,
             color: 'bg-blue-500',
             textColor: 'text-blue-600',
@@ -49,7 +24,7 @@ export default async function AdminDashboard() {
         },
         {
             name: 'Active Products',
-            value: activeProducts || 0,
+            value: productStats.activeProducts,
             icon: TrendingUp,
             color: 'bg-green-500',
             textColor: 'text-green-600',
@@ -57,7 +32,7 @@ export default async function AdminDashboard() {
         },
         {
             name: 'Out of Stock',
-            value: outOfStock || 0,
+            value: productStats.outOfStock,
             icon: AlertCircle,
             color: 'bg-red-500',
             textColor: 'text-red-600',
@@ -65,7 +40,7 @@ export default async function AdminDashboard() {
         },
         {
             name: 'Categories',
-            value: totalCategories || 0,
+            value: totalCategories,
             icon: ShoppingBag,
             color: 'bg-purple-500',
             textColor: 'text-purple-600',

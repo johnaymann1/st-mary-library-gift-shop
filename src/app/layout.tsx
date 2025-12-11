@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/context/CartContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import { Navbar, Footer } from "@/components/layout";
 import SnowOverlay from "@/components/ui/snow-overlay";
 import { siteConfig } from "@/config/site";
 import { getStoreSettings } from "@/utils/settings";
@@ -21,7 +20,7 @@ const geistMono = Geist_Mono({
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getStoreSettings()
-  
+
   return {
     title: {
       template: `%s | ${settings.store_name}`,

@@ -1,5 +1,5 @@
 
-import { createClient } from '@/utils/supabase/server'
+import * as categoryService from '@/services/categories'
 import { getStoreSettings } from '@/utils/settings'
 import Link from 'next/link'
 
@@ -8,17 +8,11 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
 
 export default async function Home() {
-  const supabase = await createClient()
-
   // Fetch store settings for hero image
   const settings = await getStoreSettings()
 
-  // Fetch Categories
-  const { data: categories } = await supabase
-    .from('categories')
-    .select('*')
-    .eq('is_active', true)
-    .order('name_en')
+  // Fetch Categories using service
+  const categories = await categoryService.getCategories(true)
 
   return (
     <div className="min-h-screen bg-white">

@@ -6,12 +6,14 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ShoppingBag } from 'lucide-react'
 import { siteConfig } from '@/config/site'
-
 import { useCart } from '@/context/CartContext'
+import type { Product } from '@/types'
 
-import { Product } from '@/types'
+interface ProductCardProps {
+    product: Product
+}
 
-export default function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product }: ProductCardProps) {
     const { addToCart } = useCart()
 
     const handleAddToCart = async (e: React.MouseEvent) => {
@@ -21,8 +23,8 @@ export default function ProductCard({ product }: { product: Product }) {
 
     return (
         <div className="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-700 ease-out transform hover:-translate-y-2 flex flex-col">
-            <Link 
-                href={`/product/${product.id}`} 
+            <Link
+                href={`/product/${product.id}`}
                 className={`relative ${!product.in_stock ? 'pointer-events-none' : ''}`}
             >
                 {/* Image Container with Aspect Ratio */}

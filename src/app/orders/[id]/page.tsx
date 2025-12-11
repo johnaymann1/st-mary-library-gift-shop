@@ -6,8 +6,7 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ChevronLeft, MapPin, Phone, CreditCard, Package, Truck } from 'lucide-react'
-import CancelOrderButton from '@/components/CancelOrderButton'
-import OrderStatusTimeline from '@/components/OrderStatusTimeline'
+import { CancelOrderButton, OrderStatusTimeline } from '@/components/modules/orders'
 import { siteConfig } from '@/config/site'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -23,20 +22,20 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
         async function initialize() {
             const { id } = await params
             const parsedId = parseInt(id)
-            
+
             if (isNaN(parsedId)) {
                 router.push('/orders')
                 return
             }
-            
+
             setOrderId(parsedId)
             const result = await getOrderDetails(parsedId)
-            
+
             if (result.error || !result.order) {
                 router.push('/orders')
                 return
             }
-            
+
             setOrder(result.order)
             setLoading(false)
         }
@@ -46,14 +45,14 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
     // Auto-refresh order every 10 seconds
     useEffect(() => {
         if (!orderId) return
-        
+
         const interval = setInterval(async () => {
             const result = await getOrderDetails(orderId)
             if (result.order) {
                 setOrder(result.order)
             }
         }, 10000)
-        
+
         return () => clearInterval(interval)
     }, [orderId])
 
@@ -110,9 +109,9 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                                 <div className="flex items-center gap-4 flex-wrap">
                                     <h1 className="text-4xl font-bold text-neutral-900">Order #{order.id}</h1>
                                     <Badge variant="secondary" className={`${getStatusColor(order.status)} text-sm px-4 py-1.5 border-0`}>
-                                            {getStatusLabel(order.status)}
-                                        </Badge>
-                                    </div>
+                                        {getStatusLabel(order.status)}
+                                    </Badge>
+                                </div>
                                 <p className="text-neutral-600">
                                     {new Date(order.created_at).toLocaleDateString('en-US', {
                                         year: 'numeric',
@@ -190,8 +189,8 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                     {/* Right Column: Details */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* Order Status Timeline */}
-                        <OrderStatusTimeline 
-                            status={order.status} 
+                        <OrderStatusTimeline
+                            status={order.status}
                             createdAt={order.created_at}
                             updatedAt={order.updated_at}
                             deliveryType={order.delivery_type}
@@ -244,8 +243,8 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                                 <div>
                                     <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Method</p>
                                     <p className="text-neutral-900 font-semibold text-base">
-                                        {order.payment_method === 'instapay' 
-                                            ? 'InstaPay' 
+                                        {order.payment_method === 'instapay'
+                                            ? 'InstaPay'
                                             : (order.delivery_type === 'delivery' ? 'Cash on Delivery' : 'Cash Payment')}
                                     </p>
                                 </div>

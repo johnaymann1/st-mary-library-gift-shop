@@ -1,6 +1,6 @@
 'use client'
 
-import { createClient } from '@/utils/supabase/client'
+import { getProductsAction } from './actions'
 import CreateProductForm from './create-form'
 import DeleteProductButton from './delete-button'
 import { Search } from 'lucide-react'
@@ -11,50 +11,27 @@ import { siteConfig } from '@/config/site'
 
 import { Product, Category } from '@/types'
 
-export default function ProductsClientPage() {
-    const [allProducts, setAllProducts] = useState<Product[]>([])
-    const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
-    const [categories, setCategories] = useState<Pick<Category, 'id' | 'name_en'>[]>([])
+interface ProductsClientPageProps {
+    initialProducts: Product[]
+    initialCategories: Category[]
+}
+
+export default function ProductsClientPage({ initialProducts, initialCategories }: ProductsClientPageProps) {
+    const [allProducts, setAllProducts] = useState<Product[]>(initialProducts)
+    const [filteredProducts, setFilteredProducts] = useState<Product[]>(initialProducts)
+    const [categories] = useState<Pick<Category, 'id' | 'name_en'>[]>(initialCategories)
     const [searchQuery, setSearchQuery] = useState('')
     const [statusFilter, setStatusFilter] = useState('all')
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
 
     const fetchData = useCallback(async () => {
-        const supabase = createClient()
-
-        // Fetch products
-        const { data: productsData } = await supabase
-            .from('products')
-            .select(`
-                *,
-                categories (
-                    name_en
-                )
-            `)
-            .order('created_at', { ascending: false })
-
-        if (productsData) {
-            setAllProducts(productsData)
-        }
-
-        // Fetch categories
-        const { data: categoriesData } = await supabase
-            .from('categories')
-            .select('id, name_en')
-            .order('name_en')
-
-        if (categoriesData) {
-            setCategories(categoriesData)
-        }
-
+        setLoading(true)
+        const products = await getProductsAction()
+        setAllProducts(products)
         setLoading(false)
     }, [])
-
-    useEffect(() => {
-        fetchData()
-    }, [fetchData])
 
     // Apply filters whenever search or status changes
     useEffect(() => {
@@ -315,7 +292,7 @@ export default function ProductsClientPage() {
                             >
                                 Previous
                             </button>
-                            
+
                             {/* Page numbers */}
                             <div className="hidden sm:flex items-center gap-1">
                                 {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -330,11 +307,10 @@ export default function ProductsClientPage() {
                                             )}
                                             <button
                                                 onClick={() => goToPage(page)}
-                                                className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
-                                                    currentPage === page
-                                                        ? 'bg-rose-600 text-white shadow-md'
-                                                        : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-                                                }`}
+                                                className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${currentPage === page
+                                                    ? 'bg-rose-600 text-white shadow-md'
+                                                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                                    }`}
                                             >
                                                 {page}
                                             </button>

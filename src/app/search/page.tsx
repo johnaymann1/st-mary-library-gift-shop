@@ -1,71 +1,39 @@
-import ProductCard from '@/components/ProductCard'
-import { createClient } from '@/utils/supabase/server'
+import { ProductCard } from '@/components/modules/products'
+import * as categoryService from '@/services/categories'
+import * as productService from '@/services/products'
 import { Badge } from '@/components/ui/badge'
 import { Search, SlidersHorizontal } from 'lucide-react'
 
 const ITEMS_PER_PAGE = 12
 
-export default async function SearchPage({ 
-    searchParams 
-}: { 
-    searchParams: Promise<{ 
+export default async function SearchPage({
+    searchParams
+}: {
+    searchParams: Promise<{
         q: string
         category?: string
         sort?: string
         page?: string
-    }> 
+    }>
 }) {
-    const supabase = await createClient()
     const params = await searchParams
     const query = params.q || ''
-    const categoryId = params.category
-    const sortBy = params.sort || 'newest'
+    const categoryId = params.category ? parseInt(params.category) : undefined
+    const sortBy = (params.sort || 'newest') as 'newest' | 'price-asc' | 'price-desc' | 'name'
     const currentPage = parseInt(params.page || '1')
     const offset = (currentPage - 1) * ITEMS_PER_PAGE
 
-    // Fetch categories for filter
-    const { data: categories } = await supabase
-        .from('categories')
-        .select('id, name_en, name_ar')
-        .eq('is_active', true)
-        .order('name_en')
+    // Fetch categories for filter using service
+    const categories = await categoryService.getCategories(true)
 
-    // Build query
-    let productsQuery = supabase
-        .from('products')
-        .select('*', { count: 'exact' })
-        .eq('is_active', true)
-
-    // Apply search filter
-    if (query) {
-        productsQuery = productsQuery.or(`name_en.ilike.%${query}%,name_ar.ilike.%${query}%,desc_en.ilike.%${query}%,desc_ar.ilike.%${query}%`)
-    }
-
-    // Apply category filter
-    if (categoryId) {
-        productsQuery = productsQuery.eq('category_id', parseInt(categoryId))
-    }
-
-    // Apply sorting
-    switch (sortBy) {
-        case 'price-asc':
-            productsQuery = productsQuery.order('price', { ascending: true })
-            break
-        case 'price-desc':
-            productsQuery = productsQuery.order('price', { ascending: false })
-            break
-        case 'name':
-            productsQuery = productsQuery.order('name_en', { ascending: true })
-            break
-        case 'newest':
-        default:
-            productsQuery = productsQuery.order('created_at', { ascending: false })
-    }
-
-    // Apply pagination
-    productsQuery = productsQuery.range(offset, offset + ITEMS_PER_PAGE - 1)
-
-    const { data: products, count } = await productsQuery
+    // Search products using service
+    const { products, count } = await productService.searchProductsWithCount({
+        query: query || undefined,
+        categoryId,
+        sortBy,
+        offset,
+        limit: ITEMS_PER_PAGE
+    })
 
     const totalPages = count ? Math.ceil(count / ITEMS_PER_PAGE) : 0
 
@@ -103,13 +71,12 @@ export default async function SearchPage({
                                 Category
                             </label>
                             <div className="flex flex-wrap gap-2">
-                                <a 
+                                <a
                                     href={`/search?q=${query}&sort=${sortBy}&page=1`}
-                                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                                        !categoryId 
-                                            ? 'bg-rose-600 text-white' 
-                                            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-                                    }`}
+                                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${!categoryId
+                                        ? 'bg-rose-600 text-white'
+                                        : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                        }`}
                                 >
                                     All
                                 </a>
@@ -117,11 +84,10 @@ export default async function SearchPage({
                                     <a
                                         key={cat.id}
                                         href={`/search?q=${query}&category=${cat.id}&sort=${sortBy}&page=1`}
-                                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                                            categoryId === cat.id.toString()
-                                                ? 'bg-rose-600 text-white'
-                                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-                                        }`}
+                                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${categoryId === cat.id
+                                            ? 'bg-rose-600 text-white'
+                                            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                            }`}
                                     >
                                         {cat.name_en}
                                     </a>
@@ -183,11 +149,10 @@ export default async function SearchPage({
                                                 <a
                                                     key={page}
                                                     href={`/search?q=${query}${categoryId ? `&category=${categoryId}` : ''}&sort=${sortBy}&page=${page}`}
-                                                    className={`px-4 py-2 rounded-lg transition-colors ${
-                                                        page === currentPage
-                                                            ? 'bg-rose-600 text-white'
-                                                            : 'bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50'
-                                                    }`}
+                                                    className={`px-4 py-2 rounded-lg transition-colors ${page === currentPage
+                                                        ? 'bg-rose-600 text-white'
+                                                        : 'bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50'
+                                                        }`}
                                                 >
                                                     {page}
                                                 </a>
@@ -224,11 +189,11 @@ export default async function SearchPage({
                             No products found
                         </h3>
                         <p className="text-neutral-600 mb-4">
-                            {query 
+                            {query
                                 ? `We couldn't find any products matching "${query}"`
                                 : 'Try searching for something'}
                         </p>
-                        
+
                         {/* Category Suggestions */}
                         {categories && categories.length > 0 && (
                             <div className="mb-6">
@@ -246,7 +211,7 @@ export default async function SearchPage({
                                 </div>
                             </div>
                         )}
-                        
+
                         <a href="/" className="inline-flex items-center justify-center px-6 py-3 bg-rose-600 text-white rounded-xl hover:bg-rose-700 transition-colors">
                             Browse All Products
                         </a>
