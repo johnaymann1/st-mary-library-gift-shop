@@ -3,6 +3,7 @@
 import { ProductCard } from '@/components/modules/products'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Search, ChevronDown, ChevronUp, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -82,6 +83,13 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
     return (
         <div className="min-h-screen bg-neutral-50">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                {/* Breadcrumb */}
+                <Breadcrumb
+                    items={[
+                        { label: category.name_en }
+                    ]}
+                />
+
                 {/* Category Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-neutral-900 mb-2">{category.name_en}</h1>

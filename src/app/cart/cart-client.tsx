@@ -2,17 +2,19 @@
 
 import { useCart } from '@/context/CartContext'
 import { Button } from '@/components/ui/button'
+import { EmptyState } from '@/components/ui/empty-state'
 import { Trash2, Plus, Minus, ArrowRight, ShoppingBag } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { siteConfig } from '@/config/site'
 import { CartSkeleton } from '@/components/modules/cart'
+import { toast } from 'sonner'
 
 import { User } from '@supabase/supabase-js'
 
 export default function CartClient({ user }: { user: User | null }) {
-    const { cart, removeFromCart, updateQuantity, isLoading } = useCart()
+    const { cart, removeFromCart, updateQuantity, isLoading, addToCart } = useCart()
     const router = useRouter()
 
     const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0)
@@ -25,24 +27,40 @@ export default function CartClient({ user }: { user: User | null }) {
         }
     }
 
+    const handleRemoveWithUndo = (productId: number, item: typeof cart[0]) => {
+        const removedItem = { ...item }
+        removeFromCart(productId)
+        
+        toast.success('Item removed from cart', {
+            action: {
+                label: 'Undo',
+                onClick: async () => {
+                    // Re-add the item by calling addToCart with product ID and quantity
+                    try {
+                        await addToCart(removedItem.product as any, removedItem.quantity)
+                        toast.success('Item restored to cart')
+                    } catch (error) {
+                        toast.error('Could not restore item')
+                    }
+                }
+            },
+            duration: 5000
+        })
+    }
+
     if (isLoading) {
         return <CartSkeleton />
     }
 
     if (cart.length === 0) {
         return (
-            <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-neutral-200">
-                <div className="mb-4">
-                    <div className="mx-auto h-16 w-16 bg-neutral-100 rounded-full flex items-center justify-center">
-                        <ShoppingBag className="h-8 w-8 text-neutral-400" />
-                    </div>
-                </div>
-                <h2 className="text-xl font-semibold text-neutral-900 mb-2">Your cart is empty</h2>
-                <p className="text-neutral-500 mb-8">Looks like you haven&apos;t added anything yet.</p>
-                <Button asChild>
-                    <Link href="/">Start Shopping</Link>
-                </Button>
-            </div>
+            <EmptyState
+                icon="cart"
+                title="Your cart is empty"
+                description="Looks like you haven't added anything yet. Start exploring our collection!"
+                actionLabel="Start Shopping"
+                actionHref="/"
+            />
         )
     }
 
@@ -110,7 +128,7 @@ export default function CartClient({ user }: { user: User | null }) {
 
                                         {/* Remove Button */}
                                         <button
-                                            onClick={() => removeFromCart(item.product_id)}
+                                            onClick={() => handleRemoveWithUndo(item.product_id, item)}
                                             className="text-xs sm:text-sm font-medium text-rose-600 hover:text-rose-700 flex items-center gap-1 p-2 hover:bg-rose-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
                                             aria-label={`Remove ${item.product.name_en} from cart`}
                                         >

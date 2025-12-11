@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { AddToCartButton } from '@/components/modules/cart'
 import { siteConfig } from '@/config/site'
 import { ProductDetailsClient } from '@/components/modules/products/product-details-client'
+import { Breadcrumb } from '@/components/ui/breadcrumb'
 import * as productService from '@/services/products'
 import type { Metadata } from 'next'
 
@@ -42,21 +43,18 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     return (
         <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                {/* Back Navigation */}
-                <div className="flex items-center gap-4 mb-6">
-                    <ProductDetailsClient categoryId={product.category_id} />
-                    {product.categories && (
-                        <nav className="flex items-center gap-2 text-sm text-neutral-600">
-                            <Link href="/" className="hover:text-rose-600 transition-colors">Home</Link>
-                            <span>/</span>
-                            <Link href={`/category/${product.category_id}`} className="hover:text-rose-600 transition-colors">
-                                {product.categories.name_en}
-                            </Link>
-                            <span>/</span>
-                            <span className="text-neutral-900 font-medium">{product.name_en}</span>
-                        </nav>
-                    )}
-                </div>
+                {/* Breadcrumb Navigation */}
+                <Breadcrumb
+                    items={[
+                        {
+                            label: product.categories?.name_en || 'Category',
+                            href: `/category/${product.category_id}`
+                        },
+                        {
+                            label: product.name_en
+                        }
+                    ]}
+                />
 
                 <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-white">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
