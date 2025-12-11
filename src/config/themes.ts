@@ -157,16 +157,16 @@ export function getActiveTheme(selectedThemeId?: string): Theme {
 export function generateThemeCSS(theme: Theme): string {
   return `
     :root {
-      --primary: ${theme.colors.primary};
-      --primary-hover: ${theme.colors.primaryHover};
-      --primary-light: ${theme.colors.primaryLight};
-      --secondary: ${theme.colors.secondary};
-      --accent: ${theme.colors.accent};
-      --ring: ${theme.colors.primary};
-      --gradient-hero: ${theme.gradients.hero};
-      --gradient-button: ${theme.gradients.button};
-      --gradient-card: ${theme.gradients.card};
-      --gradient-navbar: ${theme.gradients.navbar};
+      --primary: ${theme.colors.primary} !important;
+      --primary-hover: ${theme.colors.primaryHover} !important;
+      --primary-light: ${theme.colors.primaryLight} !important;
+      --secondary: ${theme.colors.secondary} !important;
+      --accent: ${theme.colors.accent} !important;
+      --ring: ${theme.colors.primary} !important;
+      --gradient-hero: ${theme.gradients.hero} !important;
+      --gradient-button: ${theme.gradients.button} !important;
+      --gradient-card: ${theme.gradients.card} !important;
+      --gradient-navbar: ${theme.gradients.navbar} !important;
     }
   `
 }

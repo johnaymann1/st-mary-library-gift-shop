@@ -82,21 +82,37 @@ export default async function RootLayout({
 }>) {
   const settings = await getStoreSettings();
   
+  // Log settings to verify database fetch
+  console.log('=== THEME DEBUG ===');
+  console.log('Settings from DB:', { 
+    store_name: settings.store_name, 
+    active_theme: settings.active_theme 
+  });
+  
   // Get the active theme based on admin selection
-  const activeTheme = themes[settings.active_theme] || themes.default;
+  const themeKey = settings.active_theme || 'default';
+  const activeTheme = themes[themeKey] || themes.default;
   const themeCSS = generateThemeCSS(activeTheme);
   
-  // Log for debugging
-  console.log('Active theme:', settings.active_theme, '- Theme name:', activeTheme.name);
+  console.log('Theme Key:', themeKey);
+  console.log('Active Theme Name:', activeTheme.name);
+  console.log('Theme Primary Color:', activeTheme.colors.primary);
+  console.log('Generated CSS length:', themeCSS.length);
+  console.log('=================');
 
   return (
-    <html lang="en">
+    <html lang="en" data-theme={themeKey}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
         {/* Inject theme CSS variables */}
-        <style dangerouslySetInnerHTML={{ __html: themeCSS }} />
+        <style id="theme-vars" dangerouslySetInnerHTML={{ __html: themeCSS }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `console.log('🎨 Theme loaded: ${themeKey}', '${activeTheme.name}', 'Primary: ${activeTheme.colors.primary}');`,
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
