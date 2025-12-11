@@ -22,22 +22,22 @@ export default async function Home() {
 
 
       <main>
-        {/* Hero Section - Christmas Theme */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-red-50 via-white to-green-50">
+        {/* Hero Section */}
+        <div className="relative overflow-hidden" style={{ background: 'var(--gradient-hero)' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Left: Content */}
               <div className="text-center sm:text-left space-y-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: 'var(--primary-light)', color: 'var(--primary)' }}>
                   <Sparkles className="h-4 w-4" />
-                  🎄 Festive Gift Collection
+                  🎁 Premium Gift Collection
                 </div>
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900 leading-tight">
-                  Deliver Joy This
-                  <span className="block text-red-600">Christmas 🎅</span>
+                  Discover the Perfect
+                  <span className="block" style={{ color: 'var(--primary)' }}>Gift for Everyone</span>
                 </h1>
                 <p className="text-xl text-neutral-600 max-w-xl leading-relaxed">
-                  Find the perfect gifts for everyone on your list. From Secret Santa to family surprises, make this holiday season magical.
+                  Browse our curated collection of premium gifts. From thoughtful presents to everyday treasures, find something special for every occasion.
                 </p>
                 <div>
                   <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl" asChild>
@@ -51,7 +51,7 @@ export default async function Home() {
 
               {/* Right: Image */}
               <div className="relative lg:h-[500px] h-[400px]">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-green-600 rounded-3xl transform rotate-3 opacity-20"></div>
+                <div className="absolute inset-0 rounded-3xl transform rotate-3 opacity-20" style={{ background: 'var(--gradient-button)' }}></div>
                 <div className="relative h-full rounded-3xl overflow-hidden shadow-2xl">
                   <Image
                     src={settings.hero_image_url || '/hero-image.jpg'}
@@ -90,7 +90,7 @@ export default async function Home() {
                       }}
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-rose-100 to-pink-100 text-neutral-400">
+                    <div className="w-full h-full flex items-center justify-center text-neutral-400" style={{ backgroundColor: 'var(--accent)' }}>
                       <span className="text-sm font-medium">No Image</span>
                     </div>
                   )}
