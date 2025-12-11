@@ -66,13 +66,11 @@ export default function OrdersPageClient({ initialOrders }: OrdersPageClientProp
 
                 {orders.length === 0 ? (
                     <EmptyState
-                        variant="orders"
+                        icon="orders"
                         title="No orders yet"
                         description="Treat yourself today! Start exploring our collection."
-                        primaryAction={{
-                            label: "Start Shopping",
-                            href: "/"
-                        }}
+                        actionLabel="Start Shopping"
+                        actionHref="/"
                     />
                 ) : (
                     <div className="space-y-6">

@@ -139,17 +139,13 @@ export default async function SearchPage({
                     </>
                 ) : (
                     <EmptyState
-                        variant="search"
+                        icon="search"
                         title={query ? `No results for "${query}"` : "No products found"}
                         description="Check your spelling or browse our categories to find what you're looking for."
-                        primaryAction={{
-                            label: "Browse All Products",
-                            href: "/"
-                        }}
-                        secondaryAction={categories && categories.length > 0 ? {
-                            label: `Browse ${categories[0].name_en}`,
-                            href: `/category/${categories[0].id}`
-                        } : undefined}
+                        actionLabel="Browse All Products"
+                        actionHref="/"
+                        secondaryActionLabel={categories && categories.length > 0 ? `Browse ${categories[0].name_en}` : undefined}
+                        secondaryActionHref={categories && categories.length > 0 ? `/category/${categories[0].id}` : undefined}
                     />
                 )}
             </main>
