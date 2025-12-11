@@ -4,12 +4,12 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         primary: 
-          "text-white shadow-sm hover:opacity-90 active:scale-[0.98]",
+          "bg-rose-600 text-white shadow-sm hover:bg-rose-700 active:scale-[0.98]",
         secondary: 
           "bg-neutral-100 text-neutral-900 shadow-sm hover:bg-neutral-200 active:scale-[0.98]",
         ghost: 
@@ -19,7 +19,7 @@ const buttonVariants = cva(
         outline:
           "border border-neutral-200 bg-white shadow-sm hover:bg-neutral-50 active:scale-[0.98]",
         link: 
-          "underline-offset-4 hover:underline",
+          "text-rose-600 underline-offset-4 hover:underline",
       },
       size: {
         sm: "h-9 px-3 text-xs",
@@ -42,20 +42,11 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, style, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
-    
-    // Apply theme gradient/color for primary and link variants
-    const themeStyle = variant === 'primary' 
-      ? { background: 'var(--gradient-button)', ...style }
-      : variant === 'link'
-      ? { color: 'var(--primary)', ...style }
-      : style;
-    
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
-        style={themeStyle}
         ref={ref}
         {...props}
       />

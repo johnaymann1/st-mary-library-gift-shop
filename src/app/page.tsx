@@ -28,13 +28,13 @@ export default async function Home() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Left: Content */}
               <div className="text-center sm:text-left space-y-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: 'var(--primary-light)', color: 'var(--primary)' }}>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-100 text-neutral-700 rounded-full text-sm font-medium">
                   <Sparkles className="h-4 w-4" />
                   🎁 Premium Gift Collection
                 </div>
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900 leading-tight">
                   Discover the Perfect
-                  <span className="block" style={{ color: 'var(--primary)' }}>Gift for Everyone</span>
+                  <span className="block text-neutral-900">Gift for Everyone</span>
                 </h1>
                 <p className="text-xl text-neutral-600 max-w-xl leading-relaxed">
                   Browse our curated collection of premium gifts. From thoughtful presents to everyday treasures, find something special for every occasion.
@@ -51,7 +51,7 @@ export default async function Home() {
 
               {/* Right: Image */}
               <div className="relative lg:h-[500px] h-[400px]">
-                <div className="absolute inset-0 rounded-3xl transform rotate-3 opacity-20" style={{ background: 'var(--gradient-button)' }}></div>
+                <div className="absolute inset-0 bg-neutral-200/30 rounded-3xl transform rotate-3"></div>
                 <div className="relative h-full rounded-3xl overflow-hidden shadow-2xl">
                   <Image
                     src={settings.hero_image_url || '/hero-image.jpg'}
@@ -90,7 +90,7 @@ export default async function Home() {
                       }}
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-neutral-400" style={{ backgroundColor: 'var(--accent)' }}>
+                    <div className="w-full h-full flex items-center justify-center bg-neutral-100 text-neutral-400">
                       <span className="text-sm font-medium">No Image</span>
                     </div>
                   )}
