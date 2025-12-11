@@ -187,7 +187,7 @@ export default function ProfileEditClient({ user }: ProfileEditClientProps) {
                                 type="button"
                                 variant="outline"
                                 onClick={() => router.push('/account')}
-                                className="flex-1"
+                                className="flex-1 text-neutral-900"
                             >
                                 Cancel
                             </Button>

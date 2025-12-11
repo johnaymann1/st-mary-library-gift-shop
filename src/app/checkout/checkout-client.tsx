@@ -98,7 +98,10 @@ export default function CheckoutClient({
 
     async function handleSubmit(formData: FormData) {
         if (submitting) return
+        
+        // Show immediate feedback
         setSubmitting(true)
+        toast.loading('Processing your order...', { id: 'place-order' })
 
         formData.set('delivery_type', deliveryType)
         formData.set('payment_method', paymentMethod)
@@ -113,6 +116,9 @@ export default function CheckoutClient({
         }
 
         const result = await placeOrder(formData)
+
+        // Dismiss loading toast
+        toast.dismiss('place-order')
 
         if (result?.error) {
             toast.error(result.error)

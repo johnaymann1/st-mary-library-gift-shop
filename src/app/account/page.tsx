@@ -66,7 +66,7 @@ export default async function AccountPage() {
 
                             <div className="mb-6">
                                 <Link href="/account/edit">
-                                    <Button variant="outline" className="w-full gap-2 border-2 border-neutral-300 hover:border-rose-300 hover:bg-rose-50" size="lg">
+                                    <Button variant="outline" className="w-full gap-2 border-2 border-neutral-300 hover:border-rose-300 hover:bg-rose-50 text-neutral-900" size="lg">
                                         <Edit className="h-5 w-5" />
                                         Edit Profile
                                     </Button>
