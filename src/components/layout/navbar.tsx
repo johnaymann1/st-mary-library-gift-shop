@@ -26,6 +26,17 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
     const [searchQuery, setSearchQuery] = useState('')
     const router = useRouter()
 
+    // Debounced search effect
+    useEffect(() => {
+        if (!searchQuery.trim()) return
+
+        const timeoutId = setTimeout(() => {
+            router.push(`/search?q=${encodeURIComponent(searchQuery)}`)
+        }, 500) // 500ms delay after user stops typing
+
+        return () => clearTimeout(timeoutId)
+    }, [searchQuery, router])
+
     useEffect(() => {
         const supabase = createClient()
 
