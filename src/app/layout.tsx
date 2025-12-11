@@ -7,6 +7,7 @@ import { Navbar, Footer } from "@/components/layout";
 import SnowOverlay from "@/components/ui/snow-overlay";
 import { siteConfig } from "@/config/site";
 import { getStoreSettings } from "@/utils/settings";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -90,6 +91,7 @@ export default async function RootLayout({
           </div>
           <Footer settings={settings} />
           <Toaster />
+          <SpeedInsights />
         </CartProvider>
       </body>
     </html>
