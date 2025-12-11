@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { NavbarScroll } from './navbar-scroll'
 import { NavbarCart } from './navbar-cart'
 import { NavbarUser } from './navbar-user'
+import { NavbarLiveSearch } from './navbar-live-search'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -194,17 +195,10 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                         </div>
                     </Link>
 
-                    {/* Desktop: Search Bar */}
-                    <form onSubmit={handleSearch} className="relative hidden md:flex flex-1 max-w-md mx-8" role="search">
-                        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
-                        <Input
-                            type="search"
-                            placeholder="Search for gifts..."
-                            className="pl-10 bg-neutral-50 border-neutral-200 focus:bg-white transition-all rounded-full focus:ring-2 focus:ring-rose-500"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </form>
+                    {/* Desktop: Live Search Bar */}
+                    <div className="hidden md:block flex-1">
+                        <NavbarLiveSearch />
+                    </div>
 
                     {/* Right Actions */}
                     <div className="flex items-center gap-1 md:gap-2">
