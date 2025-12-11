@@ -10,6 +10,10 @@ import { getStoreSettings } from "@/utils/settings";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { themes, generateThemeCSS } from "@/config/themes";
 
+// Force dynamic rendering to ensure theme changes are reflected
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

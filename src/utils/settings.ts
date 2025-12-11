@@ -31,8 +31,7 @@ export type StoreSettings = {
  * Fetches store settings from the database.
  * Falls back to static config if database fetch fails.
  * 
- * Note: This function is called on every request but Supabase client
- * handles connection pooling. For production, consider adding Redis caching.
+ * Note: Cache is disabled to ensure theme changes are reflected immediately.
  */
 export async function getStoreSettings(): Promise<StoreSettings> {
   try {
