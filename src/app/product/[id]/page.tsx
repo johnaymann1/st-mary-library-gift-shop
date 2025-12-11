@@ -83,20 +83,22 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                                 <span className="inline-flex items-center text-rose-600 font-medium text-sm px-3 py-1 bg-rose-50 rounded-full">
                                     {product.categories?.name_en || 'Uncategorized'}
                                 </span>
-                                <h1 className="text-3xl font-bold text-gray-900 mt-1">{product.name_en}</h1>
-                                {product.name_ar && <p className="text-xl text-gray-600 mt-1 font-medium" dir="rtl">{product.name_ar}</p>}
+                                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mt-1">{product.name_en}</h1>
+                                {product.name_ar && <p className="text-lg md:text-xl text-gray-600 mt-1 font-medium" dir="rtl">{product.name_ar}</p>}
                             </div>
 
-                            <div className="text-2xl font-bold text-gray-900 mb-6">
+                            {/* Price - hide on mobile (shows in sticky bar) */}
+                            <div className="hidden md:block text-2xl font-bold text-gray-900 mb-6">
                                 {product.price.toLocaleString()} {siteConfig.currency.code}
                             </div>
 
-                            <div className="prose prose-base text-gray-500 mb-8">
+                            <div className="prose prose-sm md:prose-base text-gray-500 mb-8">
                                 <p>{product.desc_en}</p>
-                                {product.desc_ar && <p className="mt-2 text-right text-base" dir="rtl">{product.desc_ar}</p>}
+                                {product.desc_ar && <p className="mt-2 text-right text-sm md:text-base" dir="rtl">{product.desc_ar}</p>}
                             </div>
 
-                            <div className="mt-auto">
+                            {/* Desktop Add to Cart - hidden on mobile */}
+                            <div className="mt-auto hidden md:block">
                                 {!product.in_stock && (
                                     <div className="mb-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
                                         Out of Stock
@@ -108,6 +110,33 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                         </div>
                     </div>
                 </div>
+
+                {/* Mobile Sticky Bottom Bar - only on mobile */}
+                <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-100 shadow-2xl z-50">
+                    <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+                        {/* Price */}
+                        <div className="flex flex-col">
+                            <span className="text-xs text-gray-500">Price</span>
+                            <span className="text-xl font-bold text-gray-900">
+                                {product.price.toLocaleString()} {siteConfig.currency.code}
+                            </span>
+                        </div>
+
+                        {/* Add to Cart Button */}
+                        <div className="flex-1 max-w-[200px]">
+                            {!product.in_stock ? (
+                                <div className="px-4 py-3 rounded-full text-sm font-medium bg-red-100 text-red-800 text-center">
+                                    Out of Stock
+                                </div>
+                            ) : (
+                                <AddToCartButton product={product} />
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Spacer for mobile sticky bar */}
+                <div className="md:hidden h-20" />
             </main>
         </div>
     )
