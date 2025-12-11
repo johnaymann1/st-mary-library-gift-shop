@@ -31,19 +31,39 @@ export default function CartClient({ user }: { user: User | null }) {
     }
 
     const handleRemoveWithUndo = (productId: number, item: typeof cart[0]) => {
+        // Store the removed item details before removing
         const removedItem = { ...item }
+        
+        // Remove from cart immediately (optimistic update)
         removeFromCart(productId)
         
         toast.success('Item removed from cart', {
             action: {
                 label: 'Undo',
                 onClick: async () => {
-                    // Re-add the item by calling addToCart with product ID and quantity
                     try {
-                        await addToCart(removedItem.product as any, removedItem.quantity)
+                        // Reconstruct the product object with all required fields
+                        const productToRestore = {
+                            id: removedItem.product_id,
+                            name_en: removedItem.product.name_en,
+                            name_ar: removedItem.product.name_ar,
+                            price: removedItem.product.price,
+                            image_url: removedItem.product.image_url,
+                            in_stock: removedItem.product.in_stock,
+                            // Add default/placeholder values for required Product fields
+                            desc_en: null,
+                            desc_ar: null,
+                            category_id: 0, // Will be ignored by addToCart
+                            is_active: true,
+                            created_at: new Date().toISOString()
+                        }
+                        
+                        // Re-add to cart with original quantity
+                        await addToCart(productToRestore as any, removedItem.quantity)
                         toast.success('Item restored to cart')
                     } catch (error) {
                         toast.error('Could not restore item')
+                        console.error('Undo restore error:', error)
                     }
                 }
             },
