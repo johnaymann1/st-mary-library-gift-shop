@@ -47,6 +47,7 @@ export default function CompleteProfilePage() {
                             autoComplete="tel"
                             required
                             placeholder="Phone Number (e.g. +20...)"
+                            className="text-[16px]"
                         />
                     </div>
 

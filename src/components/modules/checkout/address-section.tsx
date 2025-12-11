@@ -190,7 +190,7 @@ export function AddressSection({
                                 defaultValue={editingAddress?.label || ''}
                                 placeholder="e.g., Home, Work"
                                 required
-                                className="h-11 focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
+                                className="h-11 text-[16px] focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
                                 aria-required="true"
                             />
                         </div>
@@ -203,7 +203,7 @@ export function AddressSection({
                                 placeholder="Street, Building, Apartment..."
                                 required
                                 rows={3}
-                                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900"
+                                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900 text-[16px]"
                                 aria-required="true"
                             />
                         </div>
@@ -240,7 +240,7 @@ export function AddressSection({
                         placeholder="Street, Building, Apartment..."
                         required
                         rows={3}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900 text-[16px]"
                         aria-required="true"
                     />
                 </div>
@@ -257,7 +257,7 @@ export function AddressSection({
                         type="tel"
                         required
                         placeholder="01xxxxxxxxx"
-                        className="h-11 focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
+                        className="h-11 text-[16px] focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
                         disabled={!editingPhone && !!userPhone}
                         aria-required="true"
                     />
