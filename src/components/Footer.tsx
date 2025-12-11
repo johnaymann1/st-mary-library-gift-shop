@@ -90,18 +90,38 @@ export default function Footer({ settings }: FooterProps) {
                                     <span>{settings.phone}</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href={`mailto:${settings.support_email}`} className="text-neutral-400 hover:text-rose-400 transition-colors text-sm flex items-center gap-2">
-                                    <Mail className="h-4 w-4 text-rose-500" />
-                                    <span>{settings.support_email}</span>
-                                </a>
-                            </li>
+                            {settings.phone_2 && (
+                                <li>
+                                    <a href={`tel:${settings.phone_2}`} className="text-neutral-400 hover:text-rose-400 transition-colors text-sm flex items-center gap-2">
+                                        <Phone className="h-4 w-4 text-rose-500" />
+                                        <span>{settings.phone_2}</span>
+                                    </a>
+                                </li>
+                            )}
+                            {settings.phone_3 && (
+                                <li>
+                                    <a href={`tel:${settings.phone_3}`} className="text-neutral-400 hover:text-rose-400 transition-colors text-sm flex items-center gap-2">
+                                        <Phone className="h-4 w-4 text-rose-500" />
+                                        <span>{settings.phone_3}</span>
+                                    </a>
+                                </li>
+                            )}
                             <li>
                                 <div className="text-neutral-400 text-sm flex items-start gap-2">
                                     <MapPin className="h-4 w-4 text-rose-500 mt-0.5" />
                                     <span>{settings.address}</span>
                                 </div>
                             </li>
+                            {settings.working_hours && (
+                                <li>
+                                    <div className="text-neutral-400 text-sm flex items-start gap-2">
+                                        <svg className="h-4 w-4 text-rose-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>{settings.working_hours}</span>
+                                    </div>
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>
