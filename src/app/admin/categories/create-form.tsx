@@ -120,13 +120,13 @@ export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => vo
                 <Button
                     type="submit"
                     disabled={loading}
-                    className="w-full gap-2 min-w-[140px]"
+                    className="w-full gap-2 min-w-[140px] disabled:opacity-70 disabled:cursor-not-wait"
                     size="lg"
                 >
                     {loading ? (
                         <>
                             <Loader2 className="h-4 w-4 animate-spin" />
-                            Creating...
+                            Creating Category...
                         </>
                     ) : (
                         <>
