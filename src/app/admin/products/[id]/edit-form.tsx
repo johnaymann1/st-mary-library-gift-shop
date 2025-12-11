@@ -187,12 +187,12 @@ export default function EditProductForm({ product, categories }: { product: Prod
                     <Button
                         type="submit"
                         disabled={loading}
-                        className="gap-2 min-w-[140px]"
+                        className="gap-2 min-w-[140px] disabled:opacity-70 disabled:cursor-not-wait"
                     >
                         {loading ? (
                             <>
                                 <Loader2 className="h-4 w-4 animate-spin" />
-                                Saving...
+                                Saving Product...
                             </>
                         ) : (
                             <>
