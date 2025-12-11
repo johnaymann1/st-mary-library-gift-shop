@@ -24,6 +24,11 @@ export async function createClient() {
           }
         },
       },
+      global: {
+        headers: {
+          'cache-control': 'no-cache, no-store, must-revalidate',
+        },
+      },
     }
   )
 }

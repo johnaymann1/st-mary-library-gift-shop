@@ -85,6 +85,9 @@ export default async function RootLayout({
   // Get the active theme based on admin selection
   const activeTheme = themes[settings.active_theme] || themes.default;
   const themeCSS = generateThemeCSS(activeTheme);
+  
+  // Log for debugging
+  console.log('Active theme:', settings.active_theme, '- Theme name:', activeTheme.name);
 
   return (
     <html lang="en">

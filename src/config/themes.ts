@@ -157,11 +157,12 @@ export function getActiveTheme(selectedThemeId?: string): Theme {
 export function generateThemeCSS(theme: Theme): string {
   return `
     :root {
-      --color-primary: ${theme.colors.primary};
-      --color-primary-hover: ${theme.colors.primaryHover};
-      --color-primary-light: ${theme.colors.primaryLight};
-      --color-secondary: ${theme.colors.secondary};
-      --color-accent: ${theme.colors.accent};
+      --primary: ${theme.colors.primary};
+      --primary-hover: ${theme.colors.primaryHover};
+      --primary-light: ${theme.colors.primaryLight};
+      --secondary: ${theme.colors.secondary};
+      --accent: ${theme.colors.accent};
+      --ring: ${theme.colors.primary};
       --gradient-hero: ${theme.gradients.hero};
       --gradient-button: ${theme.gradients.button};
       --gradient-card: ${theme.gradients.card};
