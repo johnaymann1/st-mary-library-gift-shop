@@ -102,10 +102,10 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                                 <span className="sr-only">Menu</span>
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side="left" className="w-[280px] sm:w-[320px]">
+                        <SheetContent side="left" className="w-[280px] sm:w-[320px] bg-gradient-to-br from-rose-50 via-white to-pink-50">
                             <div className="flex flex-col h-full">
                                 {/* Menu Header */}
-                                <div className="flex items-center gap-2 pb-6 border-b border-neutral-200">
+                                <div className="flex items-center gap-2 pb-6 border-b border-rose-100">
                                     <div className="bg-rose-600 text-white p-2 rounded-xl">
                                         <Gift className="h-5 w-5" />
                                     </div>
@@ -146,7 +146,7 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                                 </nav>
 
                                 {/* Menu Footer - Auth */}
-                                <div className="pt-6 border-t border-neutral-200">
+                                <div className="pt-6 border-t border-rose-100">
                                     {user ? (
                                         <SheetClose asChild>
                                             <Link href="/account">
@@ -215,14 +215,14 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                                     <span className="sr-only">Search</span>
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="top" className="h-auto">
+                            <SheetContent side="top" className="h-auto bg-gradient-to-br from-rose-50 via-white to-pink-50">
                                 <form onSubmit={handleSearch} className="pt-6">
                                     <div className="relative">
                                         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
                                         <Input
                                             type="search"
                                             placeholder="Search for gifts..."
-                                            className="pl-11 pr-4 h-12 text-[16px] bg-neutral-50 border-neutral-200 focus:bg-white rounded-xl"
+                                            className="pl-11 pr-4 h-12 text-[16px] bg-white border-rose-100 focus:bg-white rounded-xl focus:ring-2 focus:ring-rose-500"
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
                                             autoFocus
