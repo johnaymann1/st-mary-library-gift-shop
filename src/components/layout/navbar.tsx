@@ -162,16 +162,16 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                                             </Link>
                                         </SheetClose>
                                     ) : (
-                                        <div className="space-y-6">
+                                        <div className="flex flex-col gap-4">
                                             <SheetClose asChild>
-                                                <Link href="/login">
+                                                <Link href="/login" className="block">
                                                     <Button variant="outline" className="w-full min-h-[44px] text-[16px] border-rose-300 text-neutral-900 hover:bg-rose-50">
                                                         Log in
                                                     </Button>
                                                 </Link>
                                             </SheetClose>
                                             <SheetClose asChild>
-                                                <Link href="/register">
+                                                <Link href="/register" className="block">
                                                     <Button className="w-full min-h-[44px] text-[16px] bg-rose-600 hover:bg-rose-700 text-white">
                                                         Sign up
                                                     </Button>
