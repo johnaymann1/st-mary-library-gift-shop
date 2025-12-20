@@ -7,6 +7,10 @@ export const metadata = {
     description: 'Manage store settings',
 }
 
+// Force dynamic rendering to ensure theme changes are reflected
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function SettingsPage() {
     const settings = await getStoreSettings()
 
