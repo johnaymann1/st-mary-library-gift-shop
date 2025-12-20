@@ -120,7 +120,7 @@ export default async function RootLayout({
         {themeKey === 'christmas' && <SnowOverlay />}
         <CartProvider>
           <Navbar storeName={settings.store_name} />
-          <div className="pt-20">
+          <div className="pt-20 bg-white min-h-screen">
             {children}
           </div>
           <Footer settings={settings} />
