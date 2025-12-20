@@ -24,6 +24,7 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: '10mb',
+      allowedOrigins: ['st-mary-library-gift-shop.vercel.app', 'localhost:3000'],
     },
   },
   reactCompiler: true,

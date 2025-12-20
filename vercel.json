@@ -1,0 +1,13 @@
+{
+  "buildCommand": "next build",
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  },
+  "github": {
+    "silent": false
+  }
+}

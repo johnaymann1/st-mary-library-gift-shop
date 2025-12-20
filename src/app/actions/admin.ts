@@ -8,6 +8,11 @@ import * as storageService from '@/services/storage'
 import * as settingsService from '@/services/settings'
 import { categorySchema, productSchema, validateImageFile } from '@/utils/validation'
 
+/**
+ * Admin Server Actions
+ * All functions in this file are server-side only and require admin authentication
+ */
+
 // --- Categories ---
 
 /**
@@ -426,6 +431,8 @@ export async function updateStoreSettings(formData: FormData) {
     revalidatePath('/admin/settings')
     revalidatePath('/checkout')
     revalidatePath('/not-found')
+    revalidatePath('/admin')
+    revalidatePath('/account')
 
     return { success: true }
 }
