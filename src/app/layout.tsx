@@ -115,7 +115,7 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
       >
         {themeKey === 'christmas' && <SnowOverlay />}
         <CartProvider>

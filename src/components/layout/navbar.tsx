@@ -162,7 +162,7 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                                             </Link>
                                         </SheetClose>
                                     ) : (
-                                        <div className="space-y-2">
+                                        <div className="space-y-3">
                                             <SheetClose asChild>
                                                 <Link href="/login">
                                                     <Button variant="outline" className="w-full min-h-[44px] text-[16px] border-rose-300 text-neutral-900 hover:bg-rose-50">
