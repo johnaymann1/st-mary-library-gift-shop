@@ -156,7 +156,7 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                                     {user ? (
                                         <SheetClose asChild>
                                             <Link href="/account">
-                                                <Button className="w-full gap-2 min-h-[44px] text-[16px]">
+                                                <Button className="w-full gap-2 min-h-[44px] text-[16px] bg-rose-600 hover:bg-rose-700 text-white">
                                                     My Account
                                                 </Button>
                                             </Link>
@@ -165,14 +165,14 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                                         <div className="space-y-2">
                                             <SheetClose asChild>
                                                 <Link href="/login">
-                                                    <Button variant="outline" className="w-full min-h-[44px] text-[16px]">
+                                                    <Button variant="outline" className="w-full min-h-[44px] text-[16px] border-rose-300 text-neutral-900 hover:bg-rose-50">
                                                         Log in
                                                     </Button>
                                                 </Link>
                                             </SheetClose>
                                             <SheetClose asChild>
                                                 <Link href="/register">
-                                                    <Button className="w-full min-h-[44px] text-[16px]">
+                                                    <Button className="w-full min-h-[44px] text-[16px] bg-rose-600 hover:bg-rose-700 text-white">
                                                         Sign up
                                                     </Button>
                                                 </Link>
