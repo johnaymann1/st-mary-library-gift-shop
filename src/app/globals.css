@@ -2,7 +2,7 @@
 
 :root {
   /* Base colors - will be overridden by theme system */
-  --background: #fafafa;
+  --background: #ffffff;
   --foreground: #1a1a1a;
   
   /* Default theme colors (will be overridden by selected theme) */

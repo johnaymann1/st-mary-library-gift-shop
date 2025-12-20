@@ -24,8 +24,6 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-
-
       <main>
         {/* Hero Section */}
         <div className="relative overflow-hidden" style={{ background: 'var(--gradient-hero)' }}>
