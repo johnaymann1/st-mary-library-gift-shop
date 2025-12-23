@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 import * as productService from '@/services/products'
 import * as categoryService from '@/services/categories'
 import * as orderService from '@/services/orders'
@@ -426,11 +426,6 @@ export async function updateStoreSettings(formData: FormData) {
         return { error: result.error }
     }
 
-    // Revalidate cache tags for better performance
-    revalidateTag('store-settings')
-    revalidateTag('products')
-    revalidateTag('categories')
-    
     // Revalidate all pages that use settings including root layout for theme changes
     revalidatePath('/', 'layout')
     revalidatePath('/admin/settings')
