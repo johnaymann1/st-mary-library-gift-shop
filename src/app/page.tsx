@@ -16,8 +16,8 @@ export default async function Home() {
   // Fetch store settings for hero image
   const settings = await getStoreSettings()
   
-  // Get active theme for hero text
-  const theme = await getActiveTheme()
+  // Get active theme for hero text using the selected theme from settings
+  const theme = await getActiveTheme(settings.active_theme)
 
   // Fetch Categories using service
   const categories = await categoryService.getCategories(true)
