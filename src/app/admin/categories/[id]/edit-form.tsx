@@ -40,12 +40,16 @@ export default function EditCategoryForm({ category }: { category: Category }) {
         }
     }
 
-    async function handleSubmit(formData: FormData) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
         setLoading(true)
 
         try {
+            const formElement = e.currentTarget
+            const formData = new FormData(formElement)
+
             // Ensure the image file is in the FormData if preview exists
-            const fileInput = document.querySelector('input[name=\"image\"]') as HTMLInputElement
+            const fileInput = formElement.querySelector('input[name="image"]') as HTMLInputElement
             if (fileInput?.files?.[0]) {
                 formData.set('image', fileInput.files[0])
             }
