@@ -171,6 +171,15 @@ export async function createProduct(formData: FormData) {
     const { name_en: nameEn, name_ar: nameAr, desc_en: descEn, desc_ar: descAr, price, in_stock: inStock, category_id: categoryId } = validationResult.data
     const imageFile = formData.get('image') as File
 
+    // Get sale fields
+    const salePrice = formData.get('sale_price') ? parseFloat(formData.get('sale_price') as string) : null
+    const saleEndDate = formData.get('sale_end_date') ? formData.get('sale_end_date') as string : null
+
+    // Validate sale price is less than regular price
+    if (salePrice && salePrice >= price) {
+        return { error: 'Sale price must be less than regular price' }
+    }
+
     let imageUrl: string | null = null
     if (imageFile && imageFile.size > 0) {
         // Validate image file
@@ -192,6 +201,8 @@ export async function createProduct(formData: FormData) {
         desc_en: descEn,
         desc_ar: descAr,
         price,
+        sale_price: salePrice,
+        sale_end_date: saleEndDate,
         in_stock: inStock,
         category_id: categoryId,
         image_url: imageUrl,
@@ -240,12 +251,23 @@ export async function updateProduct(formData: FormData) {
     const { name_en: nameEn, name_ar: nameAr, desc_en: descEn, desc_ar: descAr, price, in_stock: inStock, category_id: categoryId } = validationResult.data
     const imageFile = formData.get('image') as File
 
+    // Get sale fields
+    const salePrice = formData.get('sale_price') ? parseFloat(formData.get('sale_price') as string) : null
+    const saleEndDate = formData.get('sale_end_date') ? formData.get('sale_end_date') as string : null
+
+    // Validate sale price is less than regular price
+    if (salePrice && salePrice >= price) {
+        return { error: 'Sale price must be less than regular price' }
+    }
+
     const updates: productService.UpdateProductData = {
         name_en: nameEn,
         name_ar: nameAr,
         desc_en: descEn,
         desc_ar: descAr,
         price,
+        sale_price: salePrice,
+        sale_end_date: saleEndDate,
         in_stock: inStock,
         category_id: categoryId,
     }

@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { siteConfig } from '@/config/site'
 import { CartSkeleton } from '@/components/modules/cart'
+import { ProductPrice, isSaleActive } from '@/components/ui/product-price'
 import { toast } from 'sonner'
 
 import { User } from '@supabase/supabase-js'
@@ -19,7 +20,10 @@ export default function CartClient({ user }: { user: User | null }) {
 
     const subtotal = cart.reduce((acc, item) => {
         if (!item.product || item.product.price == null) return acc
-        return acc + (item.product.price * item.quantity)
+        const activePrice = isSaleActive(item.product.sale_price, item.product.sale_end_date) && item.product.sale_price
+            ? item.product.sale_price
+            : item.product.price
+        return acc + (activePrice * item.quantity)
     }, 0)
 
     const handleCheckout = () => {
@@ -114,18 +118,31 @@ export default function CartClient({ user }: { user: User | null }) {
                                 {/* Details */}
                                 <div className="flex-1 flex flex-col justify-between">
                                     <div>
-                                        <div className="flex justify-between items-start">
+                                        <div className="flex justify-between items-start gap-4">
                                             <h3 className="text-base sm:text-lg font-semibold text-neutral-900 line-clamp-2">
                                                 <Link href={`/product/${item.product_id}`} className="hover:text-rose-600 transition-colors">
                                                     {item.product.name_en}
                                                 </Link>
                                             </h3>
-                                            <p className="text-base sm:text-lg font-bold text-neutral-900 whitespace-nowrap ml-2">
-                                                {(item.product.price * item.quantity).toLocaleString()} <span className="text-xs font-normal text-neutral-500">{siteConfig.currency.code}</span>
-                                            </p>
+                                            <div className="whitespace-nowrap">
+                                                <ProductPrice 
+                                                    price={item.product.price * item.quantity}
+                                                    salePrice={item.product.sale_price ? item.product.sale_price * item.quantity : null}
+                                                    saleEndDate={item.product.sale_end_date}
+                                                    size="sm"
+                                                />
+                                            </div>
                                         </div>
                                         <p className="text-sm text-neutral-600 mt-1 line-clamp-1" dir="rtl">{item.product.name_ar}</p>
-                                        <p className="text-xs sm:text-sm text-neutral-700 mt-1 font-medium">Unit Price: {item.product.price} {siteConfig.currency.code}</p>
+                                        <div className="mt-1">
+                                            <ProductPrice 
+                                                price={item.product.price}
+                                                salePrice={item.product.sale_price}
+                                                saleEndDate={item.product.sale_end_date}
+                                                size="sm"
+                                            />
+                                            <span className="text-xs text-neutral-500 ml-1">per unit</span>
+                                        </div>
                                     </div>
 
                                     <div className="flex items-center justify-between mt-4">

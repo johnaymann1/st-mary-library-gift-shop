@@ -14,6 +14,8 @@ export interface Product {
     desc_en: string | null
     desc_ar: string | null
     price: number
+    sale_price?: number | null
+    sale_end_date?: string | null
     in_stock: boolean
     image_url: string | null
     category_id: number
@@ -32,6 +34,8 @@ export interface CartItem {
         name_en: string
         name_ar: string
         price: number
+        sale_price?: number | null
+        sale_end_date?: string | null
         image_url: string | null
         in_stock: boolean
     }

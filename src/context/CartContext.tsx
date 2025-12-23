@@ -15,6 +15,8 @@ export type CartItem = {
         name_en: string
         name_ar: string
         price: number
+        sale_price?: number | null
+        sale_end_date?: string | null
         image_url: string | null
         in_stock: boolean
     }
@@ -100,6 +102,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 name_en: product.name_en,
                 name_ar: product.name_ar,
                 price: product.price,
+                sale_price: product.sale_price,
+                sale_end_date: product.sale_end_date,
                 image_url: product.image_url,
                 in_stock: product.in_stock
             }

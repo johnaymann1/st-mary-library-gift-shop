@@ -5,6 +5,7 @@ import { AddToCartButton } from '@/components/modules/cart'
 import { siteConfig } from '@/config/site'
 import { ProductDetailsClient } from '@/components/modules/products/product-details-client'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { ProductPrice } from '@/components/ui/product-price'
 import * as productService from '@/services/products'
 import type { Metadata } from 'next'
 
@@ -86,8 +87,14 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                             </div>
 
                             {/* Price - hide on mobile (shows in sticky bar) */}
-                            <div className="hidden md:block text-2xl font-bold text-gray-900 mb-6">
-                                {product.price.toLocaleString()} {siteConfig.currency.code}
+                            <div className="hidden md:block mb-6">
+                                <ProductPrice 
+                                    price={product.price}
+                                    salePrice={product.sale_price}
+                                    saleEndDate={product.sale_end_date}
+                                    size="lg"
+                                    showSavings={true}
+                                />
                             </div>
 
                             <div className="prose prose-sm md:prose-base text-gray-500 mb-8">
@@ -115,9 +122,12 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                         {/* Price */}
                         <div className="flex flex-col">
                             <span className="text-xs text-gray-500">Price</span>
-                            <span className="text-xl font-bold text-gray-900">
-                                {product.price.toLocaleString()} {siteConfig.currency.code}
-                            </span>
+                            <ProductPrice 
+                                price={product.price}
+                                salePrice={product.sale_price}
+                                saleEndDate={product.sale_end_date}
+                                size="sm"
+                            />
                         </div>
 
                         {/* Add to Cart Button */}

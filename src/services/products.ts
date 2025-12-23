@@ -20,6 +20,8 @@ export interface CreateProductData {
     desc_en?: string | null
     desc_ar?: string | null
     price: number
+    sale_price?: number | null
+    sale_end_date?: string | null
     in_stock: boolean
     category_id: number
     image_url?: string | null

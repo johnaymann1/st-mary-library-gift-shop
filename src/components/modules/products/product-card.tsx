@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ShoppingBag } from 'lucide-react'
-import { siteConfig } from '@/config/site'
+import { ProductPrice } from '@/components/ui/product-price'
 import { useCart } from '@/context/CartContext'
 import type { Product } from '@/types'
 
@@ -66,11 +66,14 @@ export function ProductCard({ product }: ProductCardProps) {
                     <p className="text-xs md:text-base text-neutral-500 line-clamp-1" dir="rtl">{product.name_ar}</p>
                 </div>
 
-                {/* Price */}
+                {/* Price with Sale Support */}
                 <div className="pt-2 border-t border-neutral-100">
-                    <p className="text-lg md:text-2xl font-bold text-neutral-900">{product.price.toLocaleString()}
-                        <span className="text-xs md:text-sm font-normal text-neutral-500 ml-1">{siteConfig.currency.code}</span>
-                    </p>
+                    <ProductPrice 
+                        price={product.price}
+                        salePrice={product.sale_price}
+                        saleEndDate={product.sale_end_date}
+                        size="sm"
+                    />
                 </div>
 
                 {/* Add to Cart Button */}
