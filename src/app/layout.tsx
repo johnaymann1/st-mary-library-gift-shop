@@ -31,6 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const settings = await getStoreSettings()
 
   return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://partheno-gift-shop.vercel.app'),
     title: {
       template: `%s | ${settings.store_name}`,
       default: `${settings.store_name} - Books, Stationery & Premium Gifts`

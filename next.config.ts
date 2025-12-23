@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: '10mb',
-      allowedOrigins: ['st-mary-library-gift-shop.vercel.app', 'localhost:3000'],
+      allowedOrigins: ['st-mary-library-gift-shop.vercel.app', 'localhost:3000', 'partheno-gift-shop.vercel.app'],
     },
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
     // Improve FCP and TTFB with optimized caching
@@ -39,8 +39,6 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   compress: true,
   poweredByHeader: false,
-  // Generate optimized output for better performance
-  output: 'standalone',
 };
 
 export default nextConfig;

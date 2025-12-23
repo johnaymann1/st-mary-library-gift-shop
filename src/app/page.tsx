@@ -61,8 +61,9 @@ export default async function Home() {
                     fill
                     className="object-cover"
                     priority
-                    quality={85}
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    quality={75}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
+                    loading="eager"
                   />
                 </div>
               </div>
@@ -89,8 +90,8 @@ export default async function Home() {
                       fill
                       className="object-cover group-hover:scale-105"
                       loading={index < 3 ? "eager" : "lazy"}
-                      quality={80}
-                      sizes="(max-width: 768px) 50vw, 33vw"
+                      quality={70}
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 300px"
                       style={{
                         transition: 'transform 2000ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
                       }}
