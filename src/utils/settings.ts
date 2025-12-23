@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { siteConfig } from '@/config/site'
-import { unstable_cache } from 'next/cache'
 
 export type StoreSettings = {
   id: number
@@ -29,10 +28,10 @@ export type StoreSettings = {
 }
 
 /**
- * Fetches store settings from the database with aggressive caching.
+ * Fetches store settings from the database.
  * Falls back to static config if database fetch fails.
  */
-async function fetchStoreSettings(): Promise<StoreSettings> {
+export async function getStoreSettings(): Promise<StoreSettings> {
   try {
     const supabase = await createClient()
 
@@ -51,19 +50,6 @@ async function fetchStoreSettings(): Promise<StoreSettings> {
     return getFallbackSettings()
   }
 }
-
-/**
- * Cached wrapper for store settings (5 min cache)
- * Dramatically improves TTFB by reducing database calls
- */
-export const getStoreSettings = unstable_cache(
-  fetchStoreSettings,
-  ['store-settings'],
-  {
-    revalidate: 300, // 5 minutes
-    tags: ['store-settings']
-  }
-)
 
 /**
  * Returns fallback settings from static config
