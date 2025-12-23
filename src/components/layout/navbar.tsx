@@ -5,6 +5,7 @@ import { Gift, Home, LayoutDashboard, Menu, Search as SearchIcon, X } from 'luci
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet'
 import { Input } from '@/components/ui/input'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { NavbarScroll } from './navbar-scroll'
 import { NavbarCart } from './navbar-cart'
 import { NavbarUser } from './navbar-user'
@@ -108,51 +109,51 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                             <Button 
                                 variant="ghost" 
                                 size="icon" 
-                                className="md:hidden min-w-[44px] min-h-[44px] hover:bg-rose-50"
+                                className="md:hidden min-w-[44px] min-h-[44px] hover:bg-rose-50 dark:hover:bg-rose-900/20"
                             >
-                                <Menu className="h-6 w-6 text-neutral-700" />
+                                <Menu className="h-6 w-6 text-neutral-700 dark:text-neutral-200" />
                                 <span className="sr-only">Menu</span>
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side="left" className="w-[280px] sm:w-[320px] bg-gradient-to-br from-rose-50 via-white to-pink-50">
+                        <SheetContent side="left" className="w-[280px] sm:w-[320px] bg-gradient-to-br from-rose-50 via-white to-pink-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900">
                             <div className="flex flex-col h-full">
                                 {/* Menu Header */}
-                                <div className="flex items-center gap-2 pb-6 border-b border-rose-100">
+                                <div className="flex items-center gap-2 pb-6 border-b border-rose-100 dark:border-neutral-800">
                                     <div className="bg-rose-600 text-white p-2 rounded-xl">
                                         <Gift className="h-5 w-5" />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-lg font-bold text-neutral-900">{storeName}</span>
-                                        <span className="text-xs text-rose-600 font-medium uppercase">{siteConfig.tagline}</span>
+                                        <span className="text-lg font-bold text-neutral-900 dark:text-white">{storeName}</span>
+                                        <span className="text-xs text-rose-600 dark:text-rose-400 font-medium uppercase">{siteConfig.tagline}</span>
                                     </div>
                                 </div>
 
                                 {/* Menu Links */}
                                 <nav className="flex-1 py-6 space-y-1">
                                     <SheetClose asChild>
-                                        <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-rose-50 transition-colors min-h-[44px]">
-                                            <Home className="h-5 w-5 text-neutral-700" />
-                                            <span className="text-[16px] font-medium text-neutral-900">Home</span>
+                                        <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors min-h-[44px]">
+                                            <Home className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
+                                            <span className="text-[16px] font-medium text-neutral-900 dark:text-white">Home</span>
                                         </Link>
                                     </SheetClose>
                                     <SheetClose asChild>
-                                        <Link href="/cart" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-rose-50 transition-colors min-h-[44px]">
-                                            <Gift className="h-5 w-5 text-neutral-700" />
-                                            <span className="text-[16px] font-medium text-neutral-900">Cart</span>
+                                        <Link href="/cart" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors min-h-[44px]">
+                                            <Gift className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
+                                            <span className="text-[16px] font-medium text-neutral-900 dark:text-white">Cart</span>
                                         </Link>
                                     </SheetClose>
                                     {user && isAdmin && (
                                         <SheetClose asChild>
-                                            <Link href="/admin" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-rose-50 transition-colors min-h-[44px]">
-                                                <LayoutDashboard className="h-5 w-5 text-neutral-700" />
-                                                <span className="text-[16px] font-medium text-neutral-900">Admin Panel</span>
+                                            <Link href="/admin" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors min-h-[44px]">
+                                                <LayoutDashboard className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
+                                                <span className="text-[16px] font-medium text-neutral-900 dark:text-white">Admin Panel</span>
                                             </Link>
                                         </SheetClose>
                                     )}
                                 </nav>
 
                                 {/* Menu Footer - Auth */}
-                                <div className="pt-6 border-t border-rose-100">
+                                <div className="pt-6 border-t border-rose-100 dark:border-neutral-800">
                                     {user ? (
                                         <SheetClose asChild>
                                             <Link href="/account">
@@ -165,7 +166,7 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                                         <div className="flex flex-col gap-4">
                                             <SheetClose asChild>
                                                 <Link href="/login" className="block">
-                                                    <Button variant="outline" className="w-full min-h-[44px] text-[16px] border-rose-300 text-neutral-900 hover:bg-rose-50">
+                                                    <Button variant="outline" className="w-full min-h-[44px] text-[16px] border-rose-300 dark:border-neutral-700 text-neutral-900 dark:text-white hover:bg-rose-50 dark:hover:bg-rose-900/20">
                                                         Log in
                                                     </Button>
                                                 </Link>
@@ -190,8 +191,8 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                             <Gift className="h-5 w-5 md:h-6 md:w-6" />
                         </div>
                         <div className="hidden sm:flex flex-col">
-                            <span className="text-lg md:text-xl font-bold text-neutral-900 leading-none">{storeName}</span>
-                            <span className="text-xs text-rose-600 font-medium tracking-widest uppercase">{siteConfig.tagline}</span>
+                            <span className="text-lg md:text-xl font-bold text-neutral-900 dark:text-white leading-none">{storeName}</span>
+                            <span className="text-xs text-rose-600 dark:text-rose-400 font-medium tracking-widest uppercase">{siteConfig.tagline}</span>
                         </div>
                     </Link>
 
@@ -208,20 +209,20 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                                 <Button 
                                     variant="ghost" 
                                     size="icon" 
-                                    className="md:hidden min-w-[44px] min-h-[44px] hover:bg-rose-50"
+                                    className="md:hidden min-w-[44px] min-h-[44px] hover:bg-rose-50 dark:hover:bg-rose-900/20"
                                 >
-                                    <SearchIcon className="h-5 w-5 text-neutral-700" />
+                                    <SearchIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />
                                     <span className="sr-only">Search</span>
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="top" className="h-auto bg-gradient-to-br from-rose-50 via-white to-pink-50">
+                            <SheetContent side="top" className="h-auto bg-gradient-to-br from-rose-50 via-white to-pink-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900">
                                 <form onSubmit={handleSearch} className="pt-6">
                                     <div className="relative">
                                         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
                                         <Input
                                             type="search"
                                             placeholder="Search for gifts..."
-                                            className="pl-11 pr-4 h-12 text-[16px] bg-white border-rose-100 focus:bg-white rounded-xl focus:ring-2 focus:ring-rose-500"
+                                            className="pl-11 pr-4 h-12 text-[16px] bg-white dark:bg-neutral-900 border-rose-100 dark:border-neutral-700 focus:bg-white dark:focus:bg-neutral-900 rounded-xl focus:ring-2 focus:ring-rose-500"
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
                                             autoFocus
@@ -234,15 +235,18 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                             </SheetContent>
                         </Sheet>
 
+                        {/* Theme Toggle */}
+                        <ThemeToggle />
+
                         {/* Desktop: Home & Admin Icons */}
                         <Link href="/" className="hidden md:block">
-                            <Button variant="ghost" size="icon" className="min-w-[44px] min-h-[44px] text-neutral-700 hover:text-rose-600 hover:bg-rose-50 transition-colors">
+                            <Button variant="ghost" size="icon" className="min-w-[44px] min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors">
                                 <Home className="h-5 w-5" />
                             </Button>
                         </Link>
                         {user && isAdmin && (
                             <Link href="/admin" className="hidden md:block">
-                                <Button variant="ghost" size="icon" className="min-w-[44px] min-h-[44px] text-neutral-700 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Admin Dashboard">
+                                <Button variant="ghost" size="icon" className="min-w-[44px] min-h-[44px] text-neutral-700 dark:text-neutral-200 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors" title="Admin Dashboard">
                                     <LayoutDashboard className="h-5 w-5" />
                                 </Button>
                             </Link>

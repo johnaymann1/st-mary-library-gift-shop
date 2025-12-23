@@ -22,13 +22,13 @@ export function ProductCard({ product }: ProductCardProps) {
     }
 
     return (
-        <div className="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-700 ease-out transform hover:-translate-y-2 flex flex-col">
+        <div className="group relative bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-700 ease-out transform hover:-translate-y-2 flex flex-col border border-transparent dark:border-neutral-800">
             <Link
                 href={`/product/${product.id}`}
                 className={`relative ${!product.in_stock ? 'pointer-events-none' : ''}`}
             >
                 {/* Image Container with Aspect Ratio */}
-                <div className="relative aspect-square bg-neutral-100 overflow-hidden">
+                <div className="relative aspect-square bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
                     {product.image_url ? (
                         <Image
                             src={product.image_url}
@@ -38,7 +38,7 @@ export function ProductCard({ product }: ProductCardProps) {
                             priority={false}
                         />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-rose-50 to-pink-50 text-neutral-400" role="img" aria-label="No product image available">
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-rose-50 to-pink-50 dark:from-neutral-800 dark:to-neutral-900 text-neutral-400 dark:text-neutral-500" role="img" aria-label="No product image available">
                             <span className="text-sm" aria-hidden="true">No Image</span>
                         </div>
                     )}
@@ -59,15 +59,15 @@ export function ProductCard({ product }: ProductCardProps) {
             <div className="flex-1 p-3 md:p-5 space-y-2 md:space-y-3 flex flex-col">
                 <div className="flex-1">
                     <Link href={`/product/${product.id}`}>
-                        <h3 className="text-sm md:text-base font-semibold text-neutral-900 group-hover:text-rose-600 transition-colors duration-400 ease-out line-clamp-2 mb-1">
+                        <h3 className="text-sm md:text-base font-semibold text-neutral-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors duration-400 ease-out line-clamp-2 mb-1">
                             {product.name_en}
                         </h3>
                     </Link>
-                    <p className="text-xs md:text-base text-neutral-500 line-clamp-1" dir="rtl">{product.name_ar}</p>
+                    <p className="text-xs md:text-base text-neutral-500 dark:text-neutral-400 line-clamp-1 transition-colors" dir="rtl">{product.name_ar}</p>
                 </div>
 
                 {/* Price with Sale Support */}
-                <div className="pt-2 border-t border-neutral-100">
+                <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800 transition-colors">
                     <ProductPrice 
                         price={product.price}
                         salePrice={product.sale_price}

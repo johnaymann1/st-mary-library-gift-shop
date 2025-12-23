@@ -21,7 +21,9 @@ export function NavbarScroll({ children }: NavbarScrollProps) {
     return (
         <nav className={cn(
             "fixed top-0 w-full z-50 transition-all duration-300 border-b",
-            isScrolled ? "bg-white/80 backdrop-blur-md border-neutral-200 shadow-sm" : "bg-white border-transparent"
+            isScrolled 
+                ? "bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md border-neutral-200 dark:border-neutral-800 shadow-sm" 
+                : "bg-white dark:bg-neutral-950 border-transparent"
         )}>
             {children}
         </nav>

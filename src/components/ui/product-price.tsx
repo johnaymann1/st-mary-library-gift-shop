@@ -47,10 +47,10 @@ export function ProductPrice({
             <div className="flex items-center gap-2 flex-wrap">
                 {hasActiveSale && salePrice ? (
                     <>
-                        <span className={cn("font-bold text-rose-600", textSizes[size].current)}>
+                        <span className={cn("font-bold text-rose-600 dark:text-rose-400 transition-colors", textSizes[size].current)}>
                             {siteConfig.currency.symbol}{salePrice.toFixed(2)}
                         </span>
-                        <span className={cn("font-medium text-neutral-400 line-through", textSizes[size].original)}>
+                        <span className={cn("font-medium text-neutral-400 dark:text-neutral-500 line-through transition-colors", textSizes[size].original)}>
                             {siteConfig.currency.symbol}{price.toFixed(2)}
                         </span>
                         {savings && (
@@ -61,7 +61,7 @@ export function ProductPrice({
                         )}
                     </>
                 ) : (
-                    <span className={cn("font-bold text-neutral-900", textSizes[size].current)}>
+                    <span className={cn("font-bold text-neutral-900 dark:text-white transition-colors", textSizes[size].current)}>
                         {siteConfig.currency.symbol}{price.toFixed(2)}
                     </span>
                 )}
@@ -69,7 +69,7 @@ export function ProductPrice({
             
             {showSavings && hasActiveSale && savings && (
                 <div className={cn(
-                    "inline-flex items-center gap-1 text-green-700 font-medium",
+                    "inline-flex items-center gap-1 text-green-700 dark:text-green-400 font-medium transition-colors",
                     textSizes[size].savings
                 )}>
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

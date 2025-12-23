@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/context/CartContext";
 import { Navbar, Footer } from "@/components/layout";
 import SnowOverlay from "@/components/ui/snow-overlay";
+import { ThemeProvider } from "@/components/theme-provider";
 import { siteConfig } from "@/config/site";
 import { getStoreSettings } from "@/utils/settings";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -88,7 +89,7 @@ export default async function RootLayout({
   const themeCSS = generateThemeCSS(activeTheme);
 
   return (
-    <html lang="en" data-theme={themeKey}>
+    <html lang="en" data-theme={themeKey} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -97,18 +98,25 @@ export default async function RootLayout({
         <style id="theme-vars" dangerouslySetInnerHTML={{ __html: themeCSS }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-neutral-950 transition-colors`}
       >
-        {themeKey === 'christmas' && <SnowOverlay />}
-        <CartProvider>
-          <Navbar storeName={settings.store_name} />
-          <div className="pt-20 bg-white min-h-screen">
-            {children}
-          </div>
-          <Footer settings={settings} />
-          <Toaster />
-          <SpeedInsights />
-        </CartProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          {themeKey === 'christmas' && <SnowOverlay />}
+          <CartProvider>
+            <Navbar storeName={settings.store_name} />
+            <div className="pt-20 bg-white dark:bg-neutral-950 min-h-screen transition-colors">
+              {children}
+            </div>
+            <Footer settings={settings} />
+            <Toaster />
+            <SpeedInsights />
+          </CartProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

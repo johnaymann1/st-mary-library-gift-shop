@@ -22,23 +22,23 @@ export default async function Home() {
   const categories = await categoryService.getCategories(true)
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-neutral-950 transition-colors">
       <main>
         {/* Hero Section */}
-        <div className="relative overflow-hidden" style={{ background: 'var(--gradient-hero)' }}>
+        <div className="relative overflow-hidden bg-gradient-to-br from-neutral-50 via-white to-rose-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Left: Content */}
               <div className="text-center sm:text-left space-y-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-100 text-neutral-700 rounded-full text-sm font-medium">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-full text-sm font-medium transition-colors">
                   <Sparkles className="h-4 w-4" />
                   {theme.hero.badge}
                 </div>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-900 leading-[1.1]">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white leading-[1.1] transition-colors">
                   {theme.hero.title}
-                  <span className="block text-neutral-900 mt-2">{theme.hero.subtitle}</span>
+                  <span className="block text-neutral-900 dark:text-white mt-2">{theme.hero.subtitle}</span>
                 </h1>
-                <p className="text-lg sm:text-xl text-neutral-700 max-w-xl leading-relaxed">
+                <p className="text-lg sm:text-xl text-neutral-700 dark:text-neutral-300 max-w-xl leading-relaxed transition-colors">
                   Browse our curated collection of premium gifts. From thoughtful presents to everyday treasures, find something special for every occasion.
                 </p>
                 <div>
@@ -74,15 +74,15 @@ export default async function Home() {
         {/* Categories Section */}
         <div id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-neutral-900 mb-4">Shop by Category</h2>
-            <p className="text-lg text-neutral-700 max-w-2xl mx-auto">
+            <h2 className="text-4xl font-bold text-neutral-900 dark:text-white mb-4 transition-colors">Shop by Category</h2>
+            <p className="text-lg text-neutral-700 dark:text-neutral-300 max-w-2xl mx-auto transition-colors">
               Explore our carefully organized collections to find the perfect gift
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8 max-w-5xl mx-auto">
             {categories?.map((category, index) => (
               <Link key={category.id} href={`/category/${category.id}`} className="group">
-                <div className="relative rounded-3xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 aspect-[4/5] will-change-auto">
+                <div className="relative rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 shadow-lg hover:shadow-xl transition-shadow duration-300 aspect-[4/5] will-change-auto">
                   {category.image_url ? (
                     <Image
                       src={category.image_url}
@@ -94,7 +94,7 @@ export default async function Home() {
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 300px"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-neutral-100 text-neutral-400">
+                    <div className="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500">
                       <span className="text-sm font-medium">No Image</span>
                     </div>
                   )}
@@ -109,7 +109,7 @@ export default async function Home() {
           </div>
           {(!categories || categories.length === 0) && (
             <div className="text-center py-12">
-              <p className="text-neutral-500 text-lg">No categories available yet.</p>
+              <p className="text-neutral-500 dark:text-neutral-400 text-lg transition-colors">No categories available yet.</p>
             </div>
           )}
         </div>
