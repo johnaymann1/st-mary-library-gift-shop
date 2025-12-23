@@ -77,7 +77,7 @@ export default function EditCategoryForm({ category }: { category: Category }) {
             </Button>
             <h2 className="text-2xl font-bold mb-6 text-neutral-900">Edit Category</h2>
 
-            <form action={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <input type="hidden" name="id" value={category.id} />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

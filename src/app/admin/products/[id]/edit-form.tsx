@@ -91,7 +91,7 @@ export default function EditProductForm({ product, categories }: { product: Prod
             </div>
             <h2 className="text-2xl font-bold mb-6 text-neutral-900">Edit Product</h2>
 
-            <form action={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <input type="hidden" name="id" value={product.id} />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

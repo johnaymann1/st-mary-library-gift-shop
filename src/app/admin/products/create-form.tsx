@@ -18,10 +18,14 @@ export default function CreateProductForm({ categories, onSuccess }: { categorie
     const [imageError, setImageError] = useState<string>('')
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    async function handleSubmit(formData: FormData) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
         setLoading(true)
 
         try {
+            const formElement = e.currentTarget
+            const formData = new FormData(formElement)
+
             // Ensure the image file is in the FormData if preview exists
             if (fileInputRef.current?.files?.[0]) {
                 formData.set('image', fileInputRef.current.files[0])
@@ -33,8 +37,7 @@ export default function CreateProductForm({ categories, onSuccess }: { categorie
                 toast.error(result.error)
             } else {
                 toast.success('Product created successfully!')
-                const form = document.getElementById('create-product-form') as HTMLFormElement
-                form?.reset()
+                formElement.reset()
                 setImagePreview(null)
                 setImageName('')
                 if (fileInputRef.current) {
@@ -77,7 +80,7 @@ export default function CreateProductForm({ categories, onSuccess }: { categorie
         <div className="bg-white p-8 rounded-2xl shadow-md border border-neutral-200 mb-8">
             <h2 className="text-2xl font-bold mb-6 text-neutral-900">Add New Product</h2>
 
-            <form id="create-product-form" action={handleSubmit} className="space-y-6">
+            <form id="create-product-form" onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label className="block text-sm font-semibold text-neutral-700 mb-2">Name (English)</label>

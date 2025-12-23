@@ -14,12 +14,16 @@ export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => vo
     const [imageError, setImageError] = useState<string>('')
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    async function handleSubmit(formData: FormData) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
         setLoading(true)
 
         try {
+            const formElement = e.currentTarget
+            const formData = new FormData(formElement)
+
             // Ensure the image file is in the FormData if preview exists
-            const fileInput = document.querySelector('input[name="image"]') as HTMLInputElement
+            const fileInput = formElement.querySelector('input[name="image"]') as HTMLInputElement
             if (fileInput?.files?.[0]) {
                 formData.set('image', fileInput.files[0])
             }
@@ -30,8 +34,7 @@ export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => vo
                 toast.error(result.error)
             } else {
                 toast.success('Category created successfully!')
-                const form = document.getElementById('create-category-form') as HTMLFormElement
-                form?.reset()
+                formElement.reset()
                 setImagePreview(null)
                 setImageName('')
                 onSuccess?.()
@@ -71,7 +74,7 @@ export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => vo
         <div className="bg-white p-8 rounded-2xl shadow-md border border-neutral-200 mb-8">
             <h2 className="text-2xl font-bold mb-6 text-neutral-900">Add New Category</h2>
 
-            <form id="create-category-form" action={handleSubmit} className="space-y-6">
+            <form id="create-category-form" onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label className="block text-sm font-semibold text-neutral-700 mb-2">Name (English)</label>
