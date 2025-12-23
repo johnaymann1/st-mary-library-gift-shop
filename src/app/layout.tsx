@@ -10,9 +10,8 @@ import { getStoreSettings } from "@/utils/settings";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { themes, generateThemeCSS } from "@/config/themes";
 
-// Force dynamic rendering to ensure theme changes are reflected
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Optimize page loading
+export const revalidate = 3600 // Revalidate every hour
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -82,37 +81,20 @@ export default async function RootLayout({
 }>) {
   const settings = await getStoreSettings();
   
-  // Log settings to verify database fetch
-  console.log('=== THEME DEBUG ===');
-  console.log('Settings from DB:', { 
-    store_name: settings.store_name, 
-    active_theme: settings.active_theme 
-  });
-  
   // Get the active theme based on admin selection
   const themeKey = settings.active_theme || 'default';
   const activeTheme = themes[themeKey] || themes.default;
   const themeCSS = generateThemeCSS(activeTheme);
-  
-  console.log('Theme Key:', themeKey);
-  console.log('Active Theme Name:', activeTheme.name);
-  console.log('Theme Primary Color:', activeTheme.colors.primary);
-  console.log('Generated CSS length:', themeCSS.length);
-  console.log('=================');
 
   return (
     <html lang="en" data-theme={themeKey}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" media="print" onLoad="this.media='all'" />
+        <noscript><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" /></noscript>
         {/* Inject theme CSS variables */}
         <style id="theme-vars" dangerouslySetInnerHTML={{ __html: themeCSS }} />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `console.log('🎨 Theme loaded: ${themeKey}', '${activeTheme.name}', 'Primary: ${activeTheme.colors.primary}');`,
-          }}
-        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}

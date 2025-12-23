@@ -8,9 +8,8 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
 
-// Force dynamic rendering to ensure theme updates are reflected immediately
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Enable ISR with 1 hour revalidation for better performance
+export const revalidate = 3600
 
 export default async function Home() {
   // Fetch store settings for hero image
@@ -62,7 +61,8 @@ export default async function Home() {
                     fill
                     className="object-cover"
                     priority
-                    quality={100}
+                    quality={85}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
               </div>
@@ -79,7 +79,7 @@ export default async function Home() {
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8 max-w-5xl mx-auto">
-            {categories?.map((category) => (
+            {categories?.map((category, index) => (
               <Link key={category.id} href={`/category/${category.id}`} className="group">
                 <div className="relative rounded-3xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-1000 ease-in-out aspect-[4/5] transform hover:-translate-y-2">
                   {category.image_url ? (
@@ -88,6 +88,9 @@ export default async function Home() {
                       alt={category.name_en}
                       fill
                       className="object-cover group-hover:scale-105"
+                      loading={index < 3 ? "eager" : "lazy"}
+                      quality={80}
+                      sizes="(max-width: 768px) 50vw, 33vw"
                       style={{
                         transition: 'transform 2000ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
                       }}
