@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '10mb',
       allowedOrigins: ['st-mary-library-gift-shop.vercel.app', 'localhost:3000', 'partheno-gift-shop.vercel.app'],
     },
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', '@radix-ui/react-dialog', '@radix-ui/react-select'],
     // Improve FCP and TTFB with optimized caching
     staleTimes: {
       dynamic: 300,

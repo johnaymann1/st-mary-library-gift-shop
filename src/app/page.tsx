@@ -38,7 +38,7 @@ export default async function Home() {
                   {theme.hero.title}
                   <span className="block text-neutral-900 mt-2">{theme.hero.subtitle}</span>
                 </h1>
-                <p className="text-lg sm:text-xl text-neutral-600 max-w-xl leading-relaxed">
+                <p className="text-lg sm:text-xl text-neutral-700 max-w-xl leading-relaxed">
                   Browse our curated collection of premium gifts. From thoughtful presents to everyday treasures, find something special for every occasion.
                 </p>
                 <div>
@@ -75,26 +75,23 @@ export default async function Home() {
         <div id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-neutral-900 mb-4">Shop by Category</h2>
-            <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+            <p className="text-lg text-neutral-700 max-w-2xl mx-auto">
               Explore our carefully organized collections to find the perfect gift
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8 max-w-5xl mx-auto">
             {categories?.map((category, index) => (
               <Link key={category.id} href={`/category/${category.id}`} className="group">
-                <div className="relative rounded-3xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-1000 ease-in-out aspect-[4/5] transform hover:-translate-y-2">
+                <div className="relative rounded-3xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 aspect-[4/5] will-change-auto">
                   {category.image_url ? (
                     <Image
                       src={category.image_url}
                       alt={category.name_en}
                       fill
-                      className="object-cover group-hover:scale-105"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out will-change-transform"
                       loading={index < 3 ? "eager" : "lazy"}
                       quality={70}
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 300px"
-                      style={{
-                        transition: 'transform 2000ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-                      }}
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-neutral-100 text-neutral-400">

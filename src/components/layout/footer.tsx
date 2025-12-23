@@ -24,7 +24,7 @@ export function Footer({ settings }: FooterProps) {
                             </div>
                             <span className="text-lg font-bold">{settings.store_name}</span>
                         </Link>
-                        <p className="text-neutral-400 text-sm">
+                        <p className="text-neutral-400 text-sm leading-relaxed">
                             {settings.description}
                         </p>
                     </div>
