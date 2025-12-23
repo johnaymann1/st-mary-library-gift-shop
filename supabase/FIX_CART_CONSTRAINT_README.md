@@ -1,7 +1,9 @@
 # Fix Cart Foreign Key Constraint
 
 ## Problem
+
 You're getting this error when trying to update or delete products:
+
 ```
 update or delete on table "products" violates foreign key constraint "cart_product_id_fkey" on table "cart"
 ```
@@ -9,11 +11,13 @@ update or delete on table "products" violates foreign key constraint "cart_produ
 This happens because products that are in users' carts cannot be deleted or updated due to the foreign key constraint.
 
 ## Solution
+
 Run the SQL migration in `fix_cart_foreign_key.sql` to update the foreign key constraint to use CASCADE behavior.
 
 ## How to Run
 
 ### Option 1: Supabase Dashboard (Recommended)
+
 1. Go to your Supabase project dashboard
 2. Navigate to **SQL Editor**
 3. Copy the contents of `supabase/fix_cart_foreign_key.sql`
@@ -21,6 +25,7 @@ Run the SQL migration in `fix_cart_foreign_key.sql` to update the foreign key co
 5. You should see a success message
 
 ### Option 2: Supabase CLI
+
 ```bash
 npx supabase db execute -f supabase/fix_cart_foreign_key.sql
 ```
@@ -35,6 +40,7 @@ The migration updates the foreign key constraint on the `cart` table to use **CA
 ## After Running
 
 Once the migration is complete, you'll be able to:
+
 - ✅ Delete products even if they're in shopping carts
 - ✅ Update products without foreign key errors
 - ✅ Cart items will automatically be cleaned up when products are deleted
@@ -45,23 +51,24 @@ After running the migration, verify it worked:
 
 ```sql
 -- Check the constraint
-SELECT 
-    tc.constraint_name, 
-    tc.table_name, 
+SELECT
+    tc.constraint_name,
+    tc.table_name,
     kcu.column_name,
     rc.delete_rule,
     rc.update_rule
-FROM information_schema.table_constraints AS tc 
+FROM information_schema.table_constraints AS tc
 JOIN information_schema.key_column_usage AS kcu
   ON tc.constraint_name = kcu.constraint_name
 JOIN information_schema.referential_constraints AS rc
   ON tc.constraint_name = rc.constraint_name
-WHERE tc.constraint_type = 'FOREIGN KEY' 
+WHERE tc.constraint_type = 'FOREIGN KEY'
   AND tc.table_name='cart'
   AND kcu.column_name='product_id';
 ```
 
 You should see:
+
 - `delete_rule`: CASCADE
 - `update_rule`: CASCADE
 

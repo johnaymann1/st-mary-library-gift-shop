@@ -67,9 +67,9 @@ export const themes: Record<string, Theme> = {
     name: 'Christmas Theme',
     description: 'Festive red and green theme for the Christmas season',
     hero: {
-      title: 'Celebrate the Season',
-      subtitle: 'with Christmas Magic 🎄',
-      badge: '🎅 Festive Gift Collection',
+      title: 'Spread Joy This Christmas',
+      subtitle: 'with Heartfelt Gifts 🎄',
+      badge: '🎅 Holiday Gift Collection',
     },
     colors: {
       primary: 'rgb(220, 38, 38)', // red-600
