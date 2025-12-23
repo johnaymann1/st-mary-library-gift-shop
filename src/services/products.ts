@@ -5,6 +5,7 @@
  */
 import { createClient } from '@/lib/supabase/server'
 import type { Product } from '@/types'
+import { unstable_cache } from 'next/cache'
 
 export interface ProductFilters {
     categoryId?: number
@@ -159,7 +160,7 @@ export interface ProductStats {
 /**
  * Gets product statistics for dashboard
  */
-export async function getProductStats(): Promise<ProductStats> {
+async function fetchProductStats(): Promise<ProductStats> {
     const supabase = await createClient()
 
     const [total, active, outOfStock] = await Promise.all([
@@ -175,10 +176,16 @@ export async function getProductStats(): Promise<ProductStats> {
     }
 }
 
+export const getProductStats = unstable_cache(
+    fetchProductStats,
+    ['product-stats'],
+    { revalidate: 300, tags: ['products'] }
+)
+
 /**
  * Gets recent products with category info
  */
-export async function getRecentProducts(limit: number = 5): Promise<Product[]> {
+async function fetchRecentProducts(limit: number = 5): Promise<Product[]> {
     const supabase = await createClient()
 
     const { data, error } = await supabase
@@ -193,6 +200,12 @@ export async function getRecentProducts(limit: number = 5): Promise<Product[]> {
 
     return data as Product[]
 }
+
+export const getRecentProducts = unstable_cache(
+    fetchRecentProducts,
+    ['recent-products'],
+    { revalidate: 300, tags: ['products'] }
+)
 
 /**
  * Searches products by name (EN or AR)

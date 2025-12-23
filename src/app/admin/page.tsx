@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { siteConfig } from '@/config/site'
 
+// Cache admin dashboard for 5 minutes to drastically improve TTFB
+export const revalidate = 300
+
 export default async function AdminDashboard() {
     // Fetch statistics using service
     const [productStats, totalCategories, recentProducts] = await Promise.all([

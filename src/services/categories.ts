@@ -4,6 +4,7 @@
  */
 import { createClient } from '@/lib/supabase/server'
 import type { Category } from '@/types'
+import { unstable_cache } from 'next/cache'
 
 export interface CreateCategoryData {
     name_en: string
@@ -146,7 +147,7 @@ export async function hasProducts(categoryId: number): Promise<boolean> {
 /**
  * Gets total count of categories
  */
-export async function getCategoryCount(): Promise<number> {
+async function fetchCategoryCount(): Promise<number> {
     const supabase = await createClient()
 
     const { count, error } = await supabase
@@ -159,4 +160,10 @@ export async function getCategoryCount(): Promise<number> {
 
     return count || 0
 }
+
+export const getCategoryCount = unstable_cache(
+    fetchCategoryCount,
+    ['category-count'],
+    { revalidate: 300, tags: ['categories'] }
+)
 

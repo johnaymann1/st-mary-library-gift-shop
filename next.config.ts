@@ -30,10 +30,17 @@ const nextConfig: NextConfig = {
       allowedOrigins: ['st-mary-library-gift-shop.vercel.app', 'localhost:3000'],
     },
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    // Improve FCP and TTFB with optimized caching
+    staleTimes: {
+      dynamic: 300,
+      static: 300,
+    },
   },
   reactCompiler: true,
   compress: true,
   poweredByHeader: false,
+  // Generate optimized output for better performance
+  output: 'standalone',
 };
 
 export default nextConfig;
