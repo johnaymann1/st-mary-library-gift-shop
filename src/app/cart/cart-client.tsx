@@ -95,12 +95,12 @@ export default function CartClient({ user }: { user: User | null }) {
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-8">
-                <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-                    <ul className="divide-y divide-neutral-200">
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 overflow-hidden transition-colors">
+                    <ul className="divide-y divide-neutral-200 dark:divide-neutral-800">
                         {cart.filter(item => item.product).map((item) => (
                             <li key={item.product_id} className="p-4 sm:p-6 flex gap-4 sm:gap-6">
                                 {/* Image */}
-                                <div className="relative h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-200">
+                                <div className="relative h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 transition-colors">
                                     {item.product.image_url ? (
                                         <Image
                                             src={item.product.image_url}
@@ -109,7 +109,7 @@ export default function CartClient({ user }: { user: User | null }) {
                                             className="object-cover"
                                         />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-neutral-100 text-neutral-400 text-xs" role="img" aria-label="No product image">
+                                        <div className="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 text-xs transition-colors" role="img" aria-label="No product image">
                                             No Img
                                         </div>
                                     )}
@@ -119,8 +119,8 @@ export default function CartClient({ user }: { user: User | null }) {
                                 <div className="flex-1 flex flex-col justify-between">
                                     <div>
                                         <div className="flex justify-between items-start gap-4">
-                                            <h3 className="text-base sm:text-lg font-semibold text-neutral-900 line-clamp-2">
-                                                <Link href={`/product/${item.product_id}`} className="hover:text-rose-600 transition-colors">
+                                            <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white line-clamp-2 transition-colors">
+                                                <Link href={`/product/${item.product_id}`} className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
                                                     {item.product.name_en}
                                                 </Link>
                                             </h3>
@@ -133,7 +133,7 @@ export default function CartClient({ user }: { user: User | null }) {
                                                 />
                                             </div>
                                         </div>
-                                        <p className="text-sm text-neutral-600 mt-1 line-clamp-1" dir="rtl">{item.product.name_ar}</p>
+                                        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-1 transition-colors" dir="rtl">{item.product.name_ar}</p>
                                         <div className="mt-1">
                                             <ProductPrice 
                                                 price={item.product.price}
@@ -141,25 +141,25 @@ export default function CartClient({ user }: { user: User | null }) {
                                                 saleEndDate={item.product.sale_end_date}
                                                 size="sm"
                                             />
-                                            <span className="text-xs text-neutral-500 ml-1">per unit</span>
+                                            <span className="text-xs text-neutral-500 dark:text-neutral-400 ml-1 transition-colors">per unit</span>
                                         </div>
                                     </div>
 
                                     <div className="flex items-center justify-between mt-4">
                                         {/* Quantity Controls */}
-                                        <div className="flex items-center gap-2 sm:gap-3 bg-neutral-50 rounded-lg p-1 border border-neutral-200" role="group" aria-label="Quantity controls">
+                                        <div className="flex items-center gap-2 sm:gap-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg p-1 border border-neutral-200 dark:border-neutral-700 transition-colors" role="group" aria-label="Quantity controls">
                                             <button
                                                 onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
-                                                className="p-1 hover:bg-white rounded-md transition-colors text-neutral-600 disabled:opacity-30 disabled:cursor-not-allowed h-11 w-11 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
+                                                className="p-1 hover:bg-white dark:hover:bg-neutral-700 rounded-md transition-colors text-neutral-600 dark:text-neutral-300 disabled:opacity-30 disabled:cursor-not-allowed h-11 w-11 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900"
                                                 disabled={item.quantity <= 1}
                                                 aria-label="Decrease quantity"
                                             >
                                                 <Minus className="h-4 w-4" />
                                             </button>
-                                            <span className="text-sm font-medium w-8 text-center text-neutral-900" aria-label="Quantity" aria-live="polite">{item.quantity}</span>
+                                            <span className="text-sm font-medium w-8 text-center text-neutral-900 dark:text-white transition-colors" aria-label="Quantity" aria-live="polite">{item.quantity}</span>
                                             <button
                                                 onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
-                                                className="p-1 hover:bg-white rounded-md transition-colors text-neutral-600 h-11 w-11 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
+                                                className="p-1 hover:bg-white dark:hover:bg-neutral-700 rounded-md transition-colors text-neutral-600 dark:text-neutral-300 h-11 w-11 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900"
                                                 aria-label="Increase quantity"
                                             >
                                                 <Plus className="h-4 w-4" />
@@ -169,7 +169,7 @@ export default function CartClient({ user }: { user: User | null }) {
                                         {/* Remove Button */}
                                         <button
                                             onClick={() => handleRemoveWithUndo(item.product_id, item)}
-                                            className="text-xs sm:text-sm font-medium text-rose-600 hover:text-rose-700 flex items-center gap-1 p-2 hover:bg-rose-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
+                                            className="text-xs sm:text-sm font-medium text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 flex items-center gap-1 p-2 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900"
                                             aria-label={`Remove ${item.product.name_en} from cart`}
                                         >
                                             <Trash2 className="h-4 w-4" />
@@ -185,19 +185,19 @@ export default function CartClient({ user }: { user: User | null }) {
 
             {/* Order Summary */}
             <div className="lg:col-span-4 mt-6 lg:mt-0">
-                <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-5 sm:p-6 sticky top-24">
-                    <h2 className="text-lg font-bold text-neutral-900 mb-6">Order Summary</h2>
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-5 sm:p-6 sticky top-24 transition-colors">
+                    <h2 className="text-lg font-bold text-neutral-900 dark:text-white mb-6 transition-colors">Order Summary</h2>
 
                     <div className="space-y-4 mb-6">
-                        <div className="flex justify-between text-neutral-700 font-medium">
+                        <div className="flex justify-between text-neutral-700 dark:text-neutral-300 font-medium transition-colors">
                             <span>Subtotal</span>
                             <span>{subtotal.toLocaleString()} {siteConfig.currency.code}</span>
                         </div>
-                        <div className="flex justify-between text-neutral-700 font-medium">
+                        <div className="flex justify-between text-neutral-700 dark:text-neutral-300 font-medium transition-colors">
                             <span>Shipping</span>
-                            <span className="text-neutral-600">Calculated at checkout</span>
+                            <span className="text-neutral-600 dark:text-neutral-400 transition-colors">Calculated at checkout</span>
                         </div>
-                        <div className="border-t border-neutral-200 pt-4 flex justify-between font-bold text-lg text-neutral-900">
+                        <div className="border-t border-neutral-200 dark:border-neutral-800 pt-4 flex justify-between font-bold text-lg text-neutral-900 dark:text-white transition-colors">
                             <span>Total</span>
                             <span>{subtotal.toLocaleString()} {siteConfig.currency.code}</span>
                         </div>
@@ -215,7 +215,7 @@ export default function CartClient({ user }: { user: User | null }) {
                     </Button>
 
                     {!user && (
-                        <p className="text-xs text-neutral-600 text-center mt-4">
+                        <p className="text-xs text-neutral-600 dark:text-neutral-400 text-center mt-4 transition-colors">
                             You'll be asked to sign in to complete your purchase.
                         </p>
                     )}

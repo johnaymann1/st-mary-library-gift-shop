@@ -26,8 +26,8 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-white to-pink-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-7 sm:space-y-8 bg-white p-8 sm:p-8 rounded-2xl shadow-lg border border-neutral-200">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-white to-pink-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors">
+            <div className="max-w-md w-full space-y-7 sm:space-y-8 bg-white dark:bg-neutral-900 p-8 sm:p-8 rounded-2xl shadow-lg border border-neutral-200 dark:border-neutral-800 transition-colors">
                 {/* Back Button */}
                 <div className="-mt-2">
                     <BackButton href="/" label="Back to Home" />
@@ -38,18 +38,18 @@ export default function LoginPage() {
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl mb-4">
                         <Gift className="h-8 w-8 text-white" />
                     </div>
-                    <h2 className="text-3xl font-bold text-neutral-900 mb-2">
+                    <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2 transition-colors">
                         Welcome Back
                     </h2>
-                    <p className="text-neutral-600">Sign in to St. Mary Library</p>
+                    <p className="text-neutral-600 dark:text-neutral-300 transition-colors">Sign in to St. Mary Library</p>
                 </div>
 
                 {/* Error Message */}
                 {error && (
-                    <div className="bg-rose-50 border border-rose-200 rounded-xl p-4">
+                    <div className="bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-xl p-4 transition-colors">
                         <div className="flex items-start gap-3">
-                            <AlertCircle className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5" />
-                            <p className="text-sm text-rose-800 font-medium">{error}</p>
+                            <AlertCircle className="h-5 w-5 text-rose-600 dark:text-rose-400 flex-shrink-0 mt-0.5 transition-colors" />
+                            <p className="text-sm text-rose-800 dark:text-rose-300 font-medium transition-colors">{error}</p>
                         </div>
                     </div>
                 )}
@@ -67,7 +67,7 @@ export default function LoginPage() {
                         type="submit"
                         variant="outline"
                         disabled={googleLoading || loading}
-                        className="w-full h-12 border-2 hover:border-rose-300 hover:bg-rose-50 text-neutral-900"
+                        className="w-full h-12 border-2 hover:border-rose-300 dark:hover:border-rose-700 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-neutral-900 dark:text-white dark:border-neutral-700 transition-colors"
                     >
                         {googleLoading ? (
                             <Loader2 className="h-5 w-5 animate-spin mr-2" />
@@ -85,10 +85,10 @@ export default function LoginPage() {
 
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-neutral-200" />
+                        <div className="w-full border-t border-neutral-200 dark:border-neutral-800 transition-colors" />
                     </div>
                     <div className="relative flex justify-center text-sm">
-                        <span className="px-4 bg-white text-neutral-500 font-medium">Or continue with email</span>
+                        <span className="px-4 bg-white dark:bg-neutral-900 text-neutral-500 dark:text-neutral-400 font-medium transition-colors">Or continue with email</span>
                     </div>
                 </div>
 
@@ -96,7 +96,7 @@ export default function LoginPage() {
                 <form className="space-y-5 sm:space-y-6" action={handleLogin}>
                     <div className="space-y-6">
                         <div className="space-y-2">
-                            <label htmlFor="email-address" className="block text-sm font-semibold text-neutral-700">
+                            <label htmlFor="email-address" className="block text-sm font-semibold text-neutral-700 dark:text-neutral-200 transition-colors">
                                 Email Address
                             </label>
                             <div className="relative">
@@ -117,7 +117,7 @@ export default function LoginPage() {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label htmlFor="password" className="block text-sm font-semibold text-neutral-700">
+                            <label htmlFor="password" className="block text-sm font-semibold text-neutral-700 dark:text-neutral-200 transition-colors">
                                 Password
                             </label>
                             <div className="relative">
@@ -138,7 +138,7 @@ export default function LoginPage() {
                     </div>
 
                     <div className="flex items-center justify-end mb-4">
-                        <Link href="/forgot-password" className="text-sm font-medium text-rose-600 hover:text-rose-700 transition-colors">
+                        <Link href="/forgot-password" className="text-sm font-medium text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors">
                             Forgot password?
                         </Link>
                     </div>
@@ -158,10 +158,10 @@ export default function LoginPage() {
                     </div>
                 </form>
 
-                <div className="text-center pt-4 border-t border-neutral-200">
-                    <p className="text-sm text-neutral-600">
+                <div className="text-center pt-4 border-t border-neutral-200 dark:border-neutral-800 transition-colors">
+                    <p className="text-sm text-neutral-600 dark:text-neutral-300 transition-colors">
                         Don&apos;t have an account?{' '}
-                        <Link href="/register" className="font-semibold text-rose-600 hover:text-rose-700 transition-colors">
+                        <Link href="/register" className="font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors">
                             Create account
                         </Link>
                     </p>

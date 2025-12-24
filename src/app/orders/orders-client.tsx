@@ -51,17 +51,17 @@ export default function OrdersPageClient({ initialOrders }: OrdersPageClientProp
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-neutral-50">
+        <div className="min-h-screen bg-gradient-to-b from-white to-neutral-50 dark:from-neutral-950 dark:to-neutral-900 transition-colors">
             <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <Button variant="ghost" asChild className="mb-6 -ml-4 text-neutral-600 hover:text-rose-600 hover:bg-rose-50">
+                <Button variant="ghost" asChild className="mb-6 -ml-4 text-neutral-600 dark:text-neutral-300 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors">
                     <Link href="/" className="flex items-center gap-2">
                         <ArrowLeft className="h-5 w-5" />
                         Back to Home
                     </Link>
                 </Button>
                 <div className="mb-12">
-                    <h1 className="text-4xl font-bold text-neutral-900 mb-3">My Orders</h1>
-                    <p className="text-neutral-600 text-lg">Track and manage your orders</p>
+                    <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-3 transition-colors">My Orders</h1>
+                    <p className="text-neutral-600 dark:text-neutral-300 text-lg transition-colors">Track and manage your orders</p>
                 </div>
 
                 {orders.length === 0 ? (
@@ -76,7 +76,7 @@ export default function OrdersPageClient({ initialOrders }: OrdersPageClientProp
                     <div className="space-y-6">
                         {orders.map((order) => (
                             <Link key={order.id} href={`/orders/${order.id}`} className="block group">
-                                <div className="bg-white rounded-3xl shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 border border-neutral-100">
+                                <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 border border-neutral-100 dark:border-neutral-800">
                                     <div className="p-8">
                                         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                                             {/* Left: Order Info */}
@@ -84,12 +84,12 @@ export default function OrdersPageClient({ initialOrders }: OrdersPageClientProp
                                                 <div className="flex items-start justify-between">
                                                     <div className="space-y-2">
                                                         <div className="flex items-center gap-3 flex-wrap">
-                                                            <span className="text-xl font-bold text-neutral-900">Order #{order.id}</span>
-                                                            <Badge variant="secondary" className={`${getStatusColor(order.status)} border-0 px-4 py-1.5 font-semibold shadow-sm`}>
+                                                            <span className="text-xl font-bold text-neutral-900 dark:text-white transition-colors">Order #{order.id}</span>
+                                                            <Badge variant="secondary" className={`${getStatusColor(order.status)} border-0 px-4 py-1.5 font-semibold shadow-sm transition-colors`}>
                                                                 {getStatusLabel(order.status)}
                                                             </Badge>
                                                         </div>
-                                                        <p className="text-sm font-medium text-neutral-600">
+                                                        <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 transition-colors">
                                                             {new Date(order.created_at).toLocaleDateString('en-US', {
                                                                 year: 'numeric',
                                                                 month: 'short',
@@ -99,9 +99,9 @@ export default function OrdersPageClient({ initialOrders }: OrdersPageClientProp
                                                     </div>
                                                 </div>
 
-                                                <div className="flex items-center gap-6 text-sm text-neutral-600">
+                                                <div className="flex items-center gap-6 text-sm text-neutral-600 dark:text-neutral-300 transition-colors">
                                                     <div className="flex items-center gap-2">
-                                                        <Package className="h-4 w-4 text-neutral-400" />
+                                                        <Package className="h-4 w-4 text-neutral-400 dark:text-neutral-500 transition-colors" />
                                                         <span>{order.items?.length} {order.items?.length === 1 ? 'item' : 'items'}</span>
                                                     </div>
                                                 </div>
@@ -110,13 +110,13 @@ export default function OrdersPageClient({ initialOrders }: OrdersPageClientProp
                                             {/* Right: Amount & Action */}
                                             <div className="flex items-center gap-6">
                                                 <div className="text-right">
-                                                    <p className="text-sm text-neutral-600 mb-1 font-medium">Total Amount</p>
-                                                    <p className="text-3xl font-bold text-neutral-900">
+                                                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1 font-medium transition-colors">Total Amount</p>
+                                                    <p className="text-3xl font-bold text-neutral-900 dark:text-white transition-colors">
                                                         {order.total_amount.toLocaleString()}
-                                                        <span className="text-lg font-medium text-neutral-500 ml-1">{siteConfig.currency.code}</span>
+                                                        <span className="text-lg font-medium text-neutral-500 dark:text-neutral-400 ml-1 transition-colors">{siteConfig.currency.code}</span>
                                                     </p>
                                                 </div>
-                                                <ChevronRight className="h-7 w-7 text-neutral-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
+                                                <ChevronRight className="h-7 w-7 text-neutral-400 dark:text-neutral-500 group-hover:text-rose-600 dark:group-hover:text-rose-400 group-hover:translate-x-1 transition-all" />
                                             </div>
                                         </div>
                                     </div>

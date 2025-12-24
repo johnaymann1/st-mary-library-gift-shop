@@ -81,7 +81,7 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
     const hasActiveFilters = searchQuery || sortBy !== 'newest' || priceRange !== 'all' || stockFilter !== 'all'
 
     return (
-        <div className="min-h-screen bg-neutral-50">
+        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 transition-colors">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 {/* Breadcrumb */}
                 <Breadcrumb
@@ -92,12 +92,12 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
 
                 {/* Category Header */}
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-neutral-900 mb-2">{category.name_en}</h1>
-                    {category.name_ar && <p className="text-lg text-neutral-700">{category.name_ar}</p>}
+                    <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-2 transition-colors">{category.name_en}</h1>
+                    {category.name_ar && <p className="text-lg text-neutral-700 dark:text-neutral-300 transition-colors">{category.name_ar}</p>}
                 </div>
 
                 {/* Search Bar */}
-                <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4 mb-4">
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-4 mb-4 transition-colors">
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
                         <Input
@@ -111,32 +111,32 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
                 </div>
 
                 {/* Collapsible Filters */}
-                <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 mb-8 overflow-hidden">
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 mb-8 overflow-hidden transition-colors">
                     <button
                         onClick={() => setFiltersOpen(!filtersOpen)}
-                        className="w-full flex items-center justify-between p-4 hover:bg-neutral-50 transition-colors"
+                        className="w-full flex items-center justify-between p-4 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                     >
                         <div className="flex items-center gap-3">
-                            <span className="text-lg font-bold text-neutral-900">Filters</span>
+                            <span className="text-lg font-bold text-neutral-900 dark:text-white transition-colors">Filters</span>
                             {hasActiveFilters && (
-                                <Badge variant="secondary" className="bg-rose-100 text-rose-700">
+                                <Badge variant="secondary" className="bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300 transition-colors">
                                     {[searchQuery && 1, sortBy !== 'newest' && 1, priceRange !== 'all' && 1, stockFilter !== 'all' && 1].filter(Boolean).length} active
                                 </Badge>
                             )}
                         </div>
                         {filtersOpen ? (
-                            <ChevronUp className="h-5 w-5 text-neutral-600" />
+                            <ChevronUp className="h-5 w-5 text-neutral-600 dark:text-neutral-300 transition-colors" />
                         ) : (
-                            <ChevronDown className="h-5 w-5 text-neutral-600" />
+                            <ChevronDown className="h-5 w-5 text-neutral-600 dark:text-neutral-300 transition-colors" />
                         )}
                     </button>
 
                     {filtersOpen && (
-                        <div className="p-6 pt-0 space-y-6 border-t border-neutral-200">
+                        <div className="p-6 pt-0 space-y-6 border-t border-neutral-200 dark:border-neutral-800 transition-colors">
                             {/* Sort By */}
                             <div>
                                 <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wide">Sort By</h3>
+                                    <h3 className="text-sm font-bold text-neutral-900 dark:text-white uppercase tracking-wide transition-colors">Sort By</h3>
                                 </div>
                                 <div className="flex flex-wrap gap-2">
                                     {[
@@ -150,7 +150,7 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
                                             onClick={() => setSortBy(option.value)}
                                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${sortBy === option.value
                                                 ? 'bg-rose-600 text-white shadow-md'
-                                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-700'
                                                 }`}
                                         >
                                             {option.label}
@@ -162,7 +162,7 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
                             {/* Price Range */}
                             <div>
                                 <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wide">Price Range</h3>
+                                    <h3 className="text-sm font-bold text-neutral-900 dark:text-white uppercase tracking-wide transition-colors">Price Range</h3>
                                 </div>
                                 <div className="flex flex-wrap gap-2">
                                     {[
@@ -177,7 +177,7 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
                                             onClick={() => setPriceRange(option.value)}
                                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${priceRange === option.value
                                                 ? 'bg-rose-600 text-white shadow-md'
-                                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-700'
                                                 }`}
                                         >
                                             {option.label}
@@ -189,7 +189,7 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
                             {/* Availability */}
                             <div>
                                 <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wide">Availability</h3>
+                                    <h3 className="text-sm font-bold text-neutral-900 dark:text-white uppercase tracking-wide transition-colors">Availability</h3>
                                 </div>
                                 <div className="flex flex-wrap gap-2">
                                     {[
@@ -202,7 +202,7 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
                                             onClick={() => setStockFilter(option.value)}
                                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${stockFilter === option.value
                                                 ? 'bg-rose-600 text-white shadow-md'
-                                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-700'
                                                 }`}
                                         >
                                             {option.label}
@@ -213,14 +213,14 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
 
                             {/* Active Filters Summary */}
                             {hasActiveFilters && (
-                                <div className="pt-4 border-t border-neutral-200">
+                                <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800 transition-colors">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-sm text-neutral-700 font-medium">
+                                        <span className="text-sm text-neutral-700 dark:text-neutral-300 font-medium transition-colors">
                                             Showing {filteredProducts.length} of {allProducts.length} products
                                         </span>
                                         <button
                                             onClick={clearFilters}
-                                            className="inline-flex items-center gap-1.5 text-sm text-rose-600 hover:text-rose-700 font-medium"
+                                            className="inline-flex items-center gap-1.5 text-sm text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 font-medium transition-colors"
                                         >
                                             <X className="h-4 w-4" />
                                             Clear All Filters
@@ -241,7 +241,7 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
 
                 {filteredProducts.length === 0 && (
                     <div className="text-center py-12">
-                        <p className="text-neutral-600 text-lg font-medium">
+                        <p className="text-neutral-600 dark:text-neutral-400 text-lg font-medium transition-colors">
                             {hasActiveFilters
                                 ? 'No products match your filters.'
                                 : 'No products found in this category.'}

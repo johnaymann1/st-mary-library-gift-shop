@@ -2,9 +2,9 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export function ProductCardSkeleton() {
     return (
-        <div className="bg-white rounded-2xl overflow-hidden shadow-md flex flex-col">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-md flex flex-col transition-colors">
             {/* Image Skeleton */}
-            <div className="relative aspect-square bg-neutral-100">
+            <div className="relative aspect-square bg-neutral-100 dark:bg-neutral-800 transition-colors">
                 <Skeleton className="w-full h-full" />
             </div>
 

@@ -42,7 +42,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50">
+        <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 transition-colors">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 {/* Breadcrumb Navigation */}
                 <Breadcrumb
@@ -57,10 +57,10 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                     ]}
                 />
 
-                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-white">
+                <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-2xl overflow-hidden border-4 border-white dark:border-neutral-800 transition-colors">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
                         {/* Image Section */}
-                        <div className="relative aspect-w-1 aspect-h-1 h-96 bg-gradient-to-br from-rose-50 to-pink-50 rounded-3xl overflow-hidden shadow-xl">
+                        <div className="relative aspect-w-1 aspect-h-1 h-96 bg-gradient-to-br from-rose-50 to-pink-50 dark:from-neutral-800 dark:to-neutral-900 rounded-3xl overflow-hidden shadow-xl transition-colors">
                             {product.image_url ? (
                                 <Image
                                     src={product.image_url}
@@ -70,7 +70,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                                     priority
                                 />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-neutral-500">
                                     No Image
                                 </div>
                             )}
@@ -79,11 +79,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                         {/* Details Section */}
                         <div className="flex flex-col">
                             <div className="mb-4">
-                                <span className="inline-flex items-center text-rose-600 font-medium text-sm px-3 py-1 bg-rose-50 rounded-full">
+                                <span className="inline-flex items-center text-rose-600 dark:text-rose-400 font-medium text-sm px-3 py-1 bg-rose-50 dark:bg-rose-900/20 rounded-full transition-colors">
                                     {product.categories?.name_en || 'Uncategorized'}
                                 </span>
-                                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mt-1">{product.name_en}</h1>
-                                {product.name_ar && <p className="text-lg md:text-xl text-gray-600 mt-1 font-medium" dir="rtl">{product.name_ar}</p>}
+                                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mt-1 transition-colors">{product.name_en}</h1>
+                                {product.name_ar && <p className="text-lg md:text-xl text-gray-600 dark:text-neutral-300 mt-1 font-medium transition-colors" dir="rtl">{product.name_ar}</p>}
                             </div>
 
                             {/* Price - hide on mobile (shows in sticky bar) */}
@@ -97,7 +97,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                                 />
                             </div>
 
-                            <div className="prose prose-sm md:prose-base text-gray-500 mb-8">
+                            <div className="prose prose-sm md:prose-base text-gray-500 dark:text-neutral-300 mb-8 transition-colors">
                                 <p>{product.desc_en}</p>
                                 {product.desc_ar && <p className="mt-2 text-right text-sm md:text-base" dir="rtl">{product.desc_ar}</p>}
                             </div>
@@ -105,7 +105,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                             {/* Desktop Add to Cart - hidden on mobile */}
                             <div className="mt-auto hidden md:block">
                                 {!product.in_stock && (
-                                    <div className="mb-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                                    <div className="mb-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400 transition-colors">
                                         Out of Stock
                                     </div>
                                 )}
@@ -117,11 +117,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 </div>
 
                 {/* Mobile Sticky Bottom Bar - only on mobile */}
-                <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-100 shadow-2xl z-50">
+                <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 border-t-2 border-gray-100 dark:border-neutral-800 shadow-2xl z-50 transition-colors">
                     <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
                         {/* Price */}
                         <div className="flex flex-col">
-                            <span className="text-xs text-gray-500">Price</span>
+                            <span className="text-xs text-gray-500 dark:text-neutral-400 transition-colors">Price</span>
                             <ProductPrice 
                                 price={product.price}
                                 salePrice={product.sale_price}
@@ -133,7 +133,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                         {/* Add to Cart Button */}
                         <div className="flex-1 max-w-[200px]">
                             {!product.in_stock ? (
-                                <div className="px-4 py-3 rounded-full text-sm font-medium bg-red-100 text-red-800 text-center">
+                                <div className="px-4 py-3 rounded-full text-sm font-medium bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400 text-center transition-colors">
                                     Out of Stock
                                 </div>
                             ) : (

@@ -103,7 +103,8 @@ export default async function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          enableSystem
+          enableSystem={false}
+          storageKey="st-mary-theme"
           disableTransitionOnChange={false}
         >
           {themeKey === 'christmas' && <SnowOverlay />}

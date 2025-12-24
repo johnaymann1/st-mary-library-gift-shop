@@ -37,18 +37,18 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-white to-pink-50 py-8 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl w-full space-y-6 sm:space-y-6 bg-white p-8 sm:p-8 rounded-2xl shadow-lg border border-neutral-200">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-white to-pink-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
+            <div className="max-w-2xl w-full space-y-6 sm:space-y-6 bg-white dark:bg-neutral-900 p-8 sm:p-8 rounded-2xl shadow-lg border border-neutral-200 dark:border-neutral-800 transition-colors">
                 <BackButton href="/" label="Back to Home" className="-mt-2" />
                 {/* Logo & Title */}
                 <div className="text-center">
                     <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl mb-3">
                         <Gift className="h-6 w-6 text-white" />
                     </div>
-                    <h2 className="text-2xl font-bold text-neutral-900 mb-1">
+                    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-1 transition-colors">
                         Join St. Mary Library
                     </h2>
-                    <p className="text-sm text-neutral-600">Create your account to start shopping</p>
+                    <p className="text-sm text-neutral-600 dark:text-neutral-300 transition-colors">Create your account to start shopping</p>
                 </div>
 
                 {/* Google Signup */}
@@ -64,7 +64,7 @@ export default function RegisterPage() {
                         type="submit"
                         variant="outline"
                         disabled={loading}
-                        className="w-full h-10 border-2 hover:border-rose-300 hover:bg-rose-50 text-neutral-900"
+                        className="w-full h-10 border-2 hover:border-rose-300 dark:hover:border-rose-700 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-neutral-900 dark:text-white dark:border-neutral-700 transition-colors"
                     >
                         <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
                             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
@@ -78,17 +78,17 @@ export default function RegisterPage() {
 
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-neutral-200" />
+                        <div className="w-full border-t border-neutral-200 dark:border-neutral-800 transition-colors" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                        <span className="px-4 bg-white text-neutral-500 font-medium tracking-wider">Or sign up with email</span>
+                        <span className="px-4 bg-white dark:bg-neutral-900 text-neutral-500 dark:text-neutral-400 font-medium tracking-wider transition-colors">Or sign up with email</span>
                     </div>
                 </div>
 
                 <form className="space-y-5 sm:space-y-6" onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-4">
                         <div className="space-y-2">
-                            <label htmlFor="fullName" className="block text-sm font-semibold text-neutral-700">
+                            <label htmlFor="fullName" className="block text-sm font-semibold text-neutral-700 dark:text-neutral-200 transition-colors">
                                 Full Name
                             </label>
                             <div className="relative">
@@ -109,7 +109,7 @@ export default function RegisterPage() {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label htmlFor="phone" className="block text-sm font-semibold text-neutral-700">
+                            <label htmlFor="phone" className="block text-sm font-semibold text-neutral-700 dark:text-neutral-200 transition-colors">
                                 Phone Number
                             </label>
                             <div className="relative">
@@ -130,7 +130,7 @@ export default function RegisterPage() {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label htmlFor="email-address" className="block text-sm font-semibold text-neutral-700">
+                            <label htmlFor="email-address" className="block text-sm font-semibold text-neutral-700 dark:text-neutral-200 transition-colors">
                                 Email Address
                             </label>
                             <div className="relative">
@@ -153,7 +153,7 @@ export default function RegisterPage() {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label htmlFor="password" className="block text-sm font-semibold text-neutral-700">
+                            <label htmlFor="password" className="block text-sm font-semibold text-neutral-700 dark:text-neutral-200 transition-colors">
                                 Password
                             </label>
                             <div className="relative">
@@ -190,10 +190,10 @@ export default function RegisterPage() {
                     </div>
                 </form>
 
-                <div className="text-center pt-2 border-t border-neutral-200">
-                    <p className="text-sm text-neutral-600">
+                <div className="text-center pt-2 border-t border-neutral-200 dark:border-neutral-800 transition-colors">
+                    <p className="text-sm text-neutral-600 dark:text-neutral-300 transition-colors">
                         Already have an account?{' '}
-                        <Link href="/login" className="font-semibold text-rose-600 hover:text-rose-700 transition-colors">
+                        <Link href="/login" className="font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors">
                             Sign in here
                         </Link>
                     </p>

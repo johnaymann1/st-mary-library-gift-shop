@@ -32,11 +32,11 @@ export function EmptyState({
 
     return (
         <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-            <div className="mb-6 w-20 h-20 bg-neutral-100 rounded-full flex items-center justify-center">
-                <Icon className="h-10 w-10 text-neutral-400" />
+            <div className="mb-6 w-20 h-20 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center transition-colors">
+                <Icon className="h-10 w-10 text-neutral-400 dark:text-neutral-500 transition-colors" />
             </div>
-            <h3 className="text-2xl font-bold text-neutral-900 mb-2">{title}</h3>
-            <p className="text-neutral-600 mb-6 max-w-md">{description}</p>
+            <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2 transition-colors">{title}</h3>
+            <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md transition-colors">{description}</p>
             <div className="flex flex-col sm:flex-row gap-3">
                 {actionLabel && actionHref && (
                     <Button asChild size="lg">

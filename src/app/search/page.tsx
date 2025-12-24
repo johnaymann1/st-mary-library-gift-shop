@@ -41,7 +41,7 @@ export default async function SearchPage({
     const totalPages = count ? Math.ceil(count / ITEMS_PER_PAGE) : 0
 
     return (
-        <div className="min-h-screen bg-neutral-50">
+        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 transition-colors">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 {/* Header */}
                 <div className="mb-8">
@@ -50,9 +50,9 @@ export default async function SearchPage({
                             <Search className="h-6 w-6 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-bold text-neutral-900">Search Results</h1>
+                            <h1 className="text-3xl font-bold text-neutral-900 dark:text-white transition-colors">Search Results</h1>
                             {query && (
-                                <p className="text-neutral-600 mt-1">
+                                <p className="text-neutral-600 dark:text-neutral-300 mt-1 transition-colors">
                                     Results for &quot;{query}&quot; · {count || 0} products found
                                 </p>
                             )}
@@ -61,10 +61,10 @@ export default async function SearchPage({
                 </div>
 
                 {/* Filters */}
-                <div className="mb-8 bg-white rounded-2xl p-6 shadow-sm border border-neutral-100">
+                <div className="mb-8 bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-800 transition-colors">
                     <div className="flex items-center gap-2 mb-4">
-                        <SlidersHorizontal className="h-5 w-5 text-neutral-600" />
-                        <h2 className="font-semibold text-neutral-900">Filters</h2>
+                        <SlidersHorizontal className="h-5 w-5 text-neutral-600 dark:text-neutral-300 transition-colors" />
+                        <h2 className="font-semibold text-neutral-900 dark:text-white transition-colors">Filters</h2>
                     </div>
 
                     <SearchFilters
@@ -90,7 +90,7 @@ export default async function SearchPage({
                                 {currentPage > 1 && (
                                     <a
                                         href={`/search?q=${query}${categoryId ? `&category=${categoryId}` : ''}&sort=${sortBy}&page=${currentPage - 1}`}
-                                        className="px-4 py-2 rounded-lg bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition-colors"
+                                        className="px-4 py-2 rounded-lg bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                                     >
                                         Previous
                                     </a>
@@ -110,7 +110,7 @@ export default async function SearchPage({
                                                     href={`/search?q=${query}${categoryId ? `&category=${categoryId}` : ''}&sort=${sortBy}&page=${page}`}
                                                     className={`px-4 py-2 rounded-lg transition-colors ${page === currentPage
                                                         ? 'bg-rose-600 text-white'
-                                                        : 'bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50'
+                                                        : 'bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800'
                                                         }`}
                                                 >
                                                     {page}
@@ -120,7 +120,7 @@ export default async function SearchPage({
                                             page === currentPage - 2 ||
                                             page === currentPage + 2
                                         ) {
-                                            return <span key={page} className="px-2 text-neutral-400">...</span>
+                                            return <span key={page} className="px-2 text-neutral-400 dark:text-neutral-500 transition-colors">...</span>
                                         }
                                         return null
                                     })}
@@ -129,7 +129,7 @@ export default async function SearchPage({
                                 {currentPage < totalPages && (
                                     <a
                                         href={`/search?q=${query}${categoryId ? `&category=${categoryId}` : ''}&sort=${sortBy}&page=${currentPage + 1}`}
-                                        className="px-4 py-2 rounded-lg bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition-colors"
+                                        className="px-4 py-2 rounded-lg bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                                     >
                                         Next
                                     </a>

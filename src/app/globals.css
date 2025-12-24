@@ -1,5 +1,22 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Color definitions */
+  --color-neutral-950: #0a0a0a;
+  --color-neutral-900: #171717;
+  --color-neutral-800: #262626;
+  --color-neutral-700: #404040;
+  --color-neutral-600: #525252;
+  --color-neutral-500: #737373;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-50: #fafafa;
+}
+
 /* Critical CSS for FCP optimization */
 :root {
   font-display: swap;
@@ -85,24 +102,24 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
-/* Smooth transitions - slower and more elegant */
+/* Fast theme transitions */
 * {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
+  transition-duration: 150ms;
 }
 
-/* Allow transform transitions to be controlled individually with slower timing */
+/* Allow transform transitions to be controlled individually */
 *[class*="transition-all"],
 *[class*="transition-transform"] {
   transition-property: all;
-  transition-duration: 400ms;
+  transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Smooth hover effects */
+/* Fast hover effects */
 button, a, [role="button"] {
-  transition-duration: 350ms;
+  transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 /* Arabic Text Styling - Better Typography */

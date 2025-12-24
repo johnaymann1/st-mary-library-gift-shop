@@ -292,7 +292,7 @@ export default function CheckoutClient({
     if (cartLoading) {
         return (
             <div className="flex items-center justify-center h-96">
-                <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
+                <Loader2 className="h-8 w-8 animate-spin text-rose-600 dark:text-rose-400 transition-colors" />
             </div>
         )
     }
@@ -300,7 +300,7 @@ export default function CheckoutClient({
     if (cart.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center h-96">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-2">Your cart is empty</h2>
+                <h2 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2 transition-colors">Your cart is empty</h2>
                 <Button onClick={() => router.push('/')}>Start Shopping</Button>
             </div>
         )

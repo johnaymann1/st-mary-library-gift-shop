@@ -20,24 +20,33 @@ export function ThemeToggle() {
                 size="icon"
                 className="h-9 w-9 rounded-full"
                 aria-label="Toggle theme"
+                disabled
             >
-                <Sun className="h-4 w-4" />
+                <Sun className="h-4 w-4 opacity-50" />
             </Button>
         )
+    }
+
+    const isDark = theme === 'dark'
+
+    const toggleTheme = () => {
+        const newTheme = isDark ? 'light' : 'dark'
+        setTheme(newTheme)
+        console.log('Theme changed to:', newTheme)
     }
 
     return (
         <Button
             variant="ghost"
             size="icon"
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            onClick={toggleTheme}
             className="h-9 w-9 rounded-full hover:bg-rose-100 dark:hover:bg-rose-900/20 transition-colors"
-            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-            {theme === 'dark' ? (
-                <Sun className="h-4 w-4 text-rose-600 dark:text-rose-400" />
+            {isDark ? (
+                <Sun className="h-4 w-4 text-rose-600 dark:text-rose-400 transition-colors" />
             ) : (
-                <Moon className="h-4 w-4 text-rose-600" />
+                <Moon className="h-4 w-4 text-rose-600 transition-colors" />
             )}
         </Button>
     )
