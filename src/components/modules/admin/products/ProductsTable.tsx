@@ -46,7 +46,7 @@ export function ProductsTable({ products, onRefresh }: ProductsTableProps) {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm font-semibold text-neutral-900 dark:text-white">{product.name_en}</div>
-                                    <div className="text-xs text-neutral-700 dark:text-neutral-300">{product.name_ar}</div>
+                                    <div className="text-xs text-neutral-700 dark:text-neutral-300 font-arabic" dir="rtl">{product.name_ar}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300">
                                     {/* @ts-ignore */}

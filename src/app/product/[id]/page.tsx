@@ -83,7 +83,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                                     {product.categories?.name_en || 'Uncategorized'}
                                 </span>
                                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mt-1 transition-colors">{product.name_en}</h1>
-                                {product.name_ar && <p className="text-lg md:text-xl text-gray-600 dark:text-neutral-300 mt-1 font-medium transition-colors" dir="rtl">{product.name_ar}</p>}
+                                {product.name_ar && <p className="text-lg md:text-xl text-gray-600 dark:text-neutral-300 mt-1 font-medium transition-colors font-arabic" dir="rtl">{product.name_ar}</p>}
                             </div>
 
                             {/* Price - hide on mobile (shows in sticky bar) */}

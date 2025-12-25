@@ -54,7 +54,7 @@ async function CategoriesGrid() {
               {/* Category Names */}
               <div className="absolute inset-x-0 bottom-0 p-8">
                 <h3 className="text-white font-bold text-2xl drop-shadow-lg mb-2">{category.name_en}</h3>
-                <p className="text-white/90 text-lg drop-shadow-md font-medium" dir="rtl">{category.name_ar}</p>
+                <p className="text-white/90 text-lg drop-shadow-md font-medium font-arabic" dir="rtl">{category.name_ar}</p>
               </div>
             </div>
           </Link>

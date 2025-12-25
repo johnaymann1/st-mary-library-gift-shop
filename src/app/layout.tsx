@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Cairo } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/context/CartContext";
@@ -36,6 +36,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
   display: "swap",
   preload: false, // Only load when needed (code blocks, etc.)
+});
+
+const cairo = Cairo({
+  variable: "--font-cairo",
+  subsets: ["arabic", "latin"],
+  display: "swap",
+  preload: true, // Preload for Arabic text
 });
 
 /**
@@ -123,7 +130,7 @@ export default async function RootLayout({
         <style id="theme-vars" dangerouslySetInnerHTML={{ __html: themeCSS }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-neutral-950 transition-colors`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cairo.variable} antialiased bg-white dark:bg-neutral-950 transition-colors`}
       >
         {/* Theme Provider for dark/light mode */}
         <ThemeProvider

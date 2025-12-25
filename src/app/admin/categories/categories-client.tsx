@@ -116,7 +116,7 @@ export default function CategoriesClientPage({ initialCategories }: CategoriesCl
                                     )}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-neutral-900 dark:text-white">{category.name_en}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300">{category.name_ar}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300 font-arabic" dir="rtl">{category.name_ar}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <Badge variant={category.is_active ? 'success' : 'destructive'}>
                                         {category.is_active ? 'Active' : 'Inactive'}
@@ -165,7 +165,7 @@ export default function CategoriesClientPage({ initialCategories }: CategoriesCl
                                 )}
                                 <div className="flex-1 min-w-0">
                                     <h3 className="font-semibold text-neutral-900 dark:text-white">{category.name_en}</h3>
-                                    <p className="text-sm text-neutral-600 dark:text-neutral-400 truncate">{category.name_ar}</p>
+                                    <p className="text-sm text-neutral-600 dark:text-neutral-400 truncate font-arabic" dir="rtl">{category.name_ar}</p>
                                     <div className="mt-2">
                                         <Badge variant={category.is_active ? 'success' : 'destructive'}>
                                             {category.is_active ? 'Active' : 'Inactive'}

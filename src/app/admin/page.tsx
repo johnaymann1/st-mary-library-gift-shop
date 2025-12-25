@@ -123,7 +123,7 @@ async function RecentProductsTable() {
                                         )}
                                         <div>
                                             <p className="text-sm font-semibold text-neutral-900 dark:text-white transition-colors">{product.name_en}</p>
-                                            <p className="text-xs text-neutral-500 dark:text-neutral-400 transition-colors">{product.name_ar}</p>
+                                            <p className="text-xs text-neutral-500 dark:text-neutral-400 transition-colors font-arabic" dir="rtl">{product.name_ar}</p>
                                         </div>
                                     </div>
                                 </td>

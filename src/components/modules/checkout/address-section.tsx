@@ -283,13 +283,18 @@ export function AddressSection({
     )
 }
 
-export function PickupInfo() {
+interface PickupInfoProps {
+    address: string
+    workingHours: string
+}
+
+export function PickupInfo({ address, workingHours }: PickupInfoProps) {
     return (
         <div className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800 transition-colors">
             <p className="text-sm text-green-800 dark:text-green-300 transition-colors">
-                <strong>Pickup Location:</strong> St Mary Library, Main Street
+                <strong>Pickup Location:</strong> {address}
                 <br />
-                <strong>Hours:</strong> 9 AM - 8 PM, Daily
+                <strong>Hours:</strong> {workingHours}
             </p>
         </div>
     )

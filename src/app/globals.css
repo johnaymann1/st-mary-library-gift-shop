@@ -137,6 +137,14 @@ button, a, [role="button"] {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Arabic font utility class */
+.font-arabic {
+  font-family: var(--font-cairo), 'Cairo', 'Tajawal', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: 0.01em;
+  word-spacing: 0.05em;
+  font-feature-settings: "liga" 1, "calt" 1;
+}
+
 /* Adjust spacing for Arabic text */
 [dir="rtl"] p,
 [dir="rtl"] h1,

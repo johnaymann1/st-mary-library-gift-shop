@@ -109,7 +109,7 @@ export function NavbarLiveSearch() {
                                         )}
                                         <div className="flex-1 min-w-0">
                                             <p className="font-medium text-neutral-900 dark:text-white truncate transition-colors">{product.name_en}</p>
-                                            <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate transition-colors">{product.name_ar}</p>
+                                            <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate transition-colors font-arabic" dir="rtl">{product.name_ar}</p>
                                         </div>
                                         <p className="font-semibold text-rose-600 dark:text-rose-400 text-sm transition-colors">
                                             {product.price} {siteConfig.currency.code}

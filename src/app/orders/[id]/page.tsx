@@ -157,7 +157,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                                             <div className="flex justify-between items-start gap-4 mb-3">
                                                 <div className="flex-1">
                                                     <h3 className="font-semibold text-neutral-900 dark:text-white text-lg transition-colors">{item.product.name_en}</h3>
-                                                    <p className="text-base text-neutral-500 dark:text-neutral-400 mt-1 transition-colors" dir="rtl">{item.product.name_ar}</p>
+                                                    <p className="text-base text-neutral-500 dark:text-neutral-400 mt-1 transition-colors font-arabic" dir="rtl">{item.product.name_ar}</p>
                                                 </div>
                                                 <p className="font-bold text-neutral-900 dark:text-white text-lg whitespace-nowrap transition-colors">
                                                     {((item.price_at_purchase || 0) * item.quantity).toLocaleString()} <span className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{siteConfig.currency.code}</span>

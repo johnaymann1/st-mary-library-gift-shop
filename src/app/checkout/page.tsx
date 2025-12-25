@@ -38,6 +38,8 @@ export default async function CheckoutPage() {
                     instapayEnabled={settings.instapay_enabled}
                     instapayPhone={settings.instapay_phone || '01000000000'}
                     deliveryTimeDays={settings.delivery_time_days || '1-3 business days'}
+                    pickupAddress={settings.address}
+                    pickupHours={settings.working_hours || 'Daily 9 AM - 8 PM'}
                 />
             </main>
         </div>

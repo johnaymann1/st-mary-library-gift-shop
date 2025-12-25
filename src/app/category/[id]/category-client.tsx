@@ -108,7 +108,7 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
                 {/* Category Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-2 transition-colors">{category.name_en}</h1>
-                    {category.name_ar && <p className="text-lg text-neutral-700 dark:text-neutral-300 transition-colors">{category.name_ar}</p>}
+                    {category.name_ar && <p className="text-lg text-neutral-700 dark:text-neutral-300 transition-colors font-arabic" dir="rtl">{category.name_ar}</p>}
                 </div>
 
                 {/* Search Bar */}

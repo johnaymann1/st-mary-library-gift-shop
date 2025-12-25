@@ -154,7 +154,7 @@ export default function CartClient({ user }: { user: User | null }) {
                                                 />
                                             </div>
                                         </div>
-                                        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-1 transition-colors" dir="rtl">{item.product.name_ar}</p>
+                                        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-1 transition-colors font-arabic" dir="rtl">{item.product.name_ar}</p>
                                         <div className="mt-1">
                                             <ProductPrice 
                                                 price={item.product.price}

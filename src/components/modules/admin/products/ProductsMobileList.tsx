@@ -37,7 +37,7 @@ export function ProductsMobileList({ products, onRefresh, isEmpty }: ProductsMob
                             )}
                             <div className="flex-1 min-w-0">
                                 <h3 className="font-semibold text-neutral-900 dark:text-white truncate">{product.name_en}</h3>
-                                <p className="text-sm text-neutral-600 dark:text-neutral-400 truncate">{product.name_ar}</p>
+                                <p className="text-sm text-neutral-600 dark:text-neutral-400 truncate font-arabic" dir="rtl">{product.name_ar}</p>
                                 <div className="mt-2">
                                     <Badge variant={product.in_stock ? 'success' : 'destructive'}>
                                         {product.in_stock ? 'In Stock' : 'Out of Stock'}

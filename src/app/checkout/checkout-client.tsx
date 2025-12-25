@@ -24,6 +24,8 @@ interface CheckoutClientProps {
     instapayEnabled: boolean
     instapayPhone: string
     deliveryTimeDays: string
+    pickupAddress: string
+    pickupHours: string
 }
 
 export default function CheckoutClient(props: CheckoutClientProps) {
@@ -120,7 +122,12 @@ export default function CheckoutClient(props: CheckoutClientProps) {
                             />
                         )}
 
-                        {deliveryType === 'pickup' && <PickupInfo />}
+                        {deliveryType === 'pickup' && (
+                            <PickupInfo 
+                                address={props.pickupAddress}
+                                workingHours={props.pickupHours}
+                            />
+                        )}
                     </div>
 
                     {/* Step 2: Payment Method */}

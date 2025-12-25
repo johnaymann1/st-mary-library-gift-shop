@@ -63,7 +63,7 @@ export function ProductCard({ product }: ProductCardProps) {
                             {product.name_en}
                         </h3>
                     </Link>
-                    <p className="text-xs md:text-base text-neutral-500 dark:text-neutral-400 line-clamp-1 transition-colors" dir="rtl">{product.name_ar}</p>
+                    <p className="text-xs md:text-base text-neutral-500 dark:text-neutral-400 line-clamp-1 transition-colors font-arabic" dir="rtl">{product.name_ar}</p>
                 </div>
 
                 {/* Price with Sale Support */}
