@@ -21,6 +21,8 @@ export async function getCartByUserId(userId: string): Promise<CartItem[]> {
                 name_en,
                 name_ar,
                 price,
+                sale_price,
+                sale_end_date,
                 image_url,
                 in_stock
             )
