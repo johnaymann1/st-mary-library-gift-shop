@@ -119,14 +119,8 @@ export function useCheckoutLogic({
             toast.dismiss('place-order')
 
             if (result?.error) {
-                if (result.error.includes('image') || result.error.includes('proof')) {
-                    toast.error('Image upload failed. Please try uploading a smaller image (max 10MB).', {
-                        duration: 5000
-                    })
-                    setSubmitting(false)
-                    return
-                }
-                toast.error(result.error)
+                // Show the actual error message from the server
+                toast.error(result.error, { duration: 5000 })
                 setSubmitting(false)
                 return
             }

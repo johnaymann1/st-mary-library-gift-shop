@@ -76,7 +76,7 @@ export async function placeOrder(formData: FormData) {
         if (uploadResult.error) {
             return { error: uploadResult.error }
         }
-        proofUrl = uploadResult.url ?? null
+        proofUrl = uploadResult.data ?? null
     }
     // For cash payment, no image validation or upload is required - proofUrl remains null
 
