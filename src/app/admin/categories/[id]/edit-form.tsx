@@ -70,42 +70,42 @@ export default function EditCategoryForm({ category }: { category: Category }) {
     }
 
     return (
-        <div className="bg-white p-8 rounded-2xl shadow-md border border-neutral-200">
+        <div className="bg-white dark:bg-neutral-900 p-8 rounded-2xl shadow-md border border-neutral-200 dark:border-neutral-700 transition-colors">
             <Button
                 variant="ghost"
                 onClick={() => router.push('/admin/categories')}
-                className="mb-4 text-neutral-600 hover:text-rose-600 hover:bg-rose-50"
+                className="mb-4 text-neutral-600 dark:text-neutral-300 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
             >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Categories
             </Button>
-            <h2 className="text-2xl font-bold mb-6 text-neutral-900">Edit Category</h2>
+            <h2 className="text-2xl font-bold mb-6 text-neutral-900 dark:text-white transition-colors">Edit Category</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 <input type="hidden" name="id" value={category.id} />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-2">Name (English)</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Name (English)</label>
                         <Input type="text" name="name_en" defaultValue={category.name_en} required placeholder="Enter category name" />
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-2">Name (Arabic)</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Name (Arabic)</label>
                         <Input type="text" name="name_ar" defaultValue={category.name_ar} required placeholder="أدخل اسم الفئة" className="text-right" dir="rtl" />
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-sm font-semibold text-neutral-700 mb-2">Category Image</label>
+                    <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Category Image</label>
                     {category.image_url && !imagePreview && (
                         <div className="mb-4">
-                            <p className="text-xs text-neutral-600 mb-2">Current Image:</p>
-                            <img src={category.image_url} alt="Current" className="h-32 w-32 object-cover rounded-xl shadow-sm border border-neutral-200" />
+                            <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-2 transition-colors">Current Image:</p>
+                            <img src={category.image_url} alt="Current" className="h-32 w-32 object-cover rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 transition-colors" />
                         </div>
                     )}
                     {imagePreview && (
                         <div className="mb-4">
-                            <p className="text-xs text-neutral-600 mb-2">New Image Preview:</p>
+                            <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-2 transition-colors">New Image Preview:</p>
                             <div className="relative inline-block">
                                 <img src={imagePreview} alt="Preview" className="h-32 w-32 object-cover rounded-xl shadow-sm border-2 border-green-500" />
                                 <div className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full p-1">
@@ -114,23 +114,23 @@ export default function EditCategoryForm({ category }: { category: Category }) {
                                     </svg>
                                 </div>
                             </div>
-                            <p className="text-xs text-green-600 mt-1">{imageName}</p>
+                            <p className="text-xs text-green-600 dark:text-green-400 mt-1 transition-colors">{imageName}</p>
                         </div>
                     )}
                     {imageError && (
-                        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                            <p className="text-sm text-red-600">{imageError}</p>
+                        <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg transition-colors">
+                            <p className="text-sm text-red-600 dark:text-red-400 transition-colors">{imageError}</p>
                         </div>
                     )}
                     <div className="relative">
-                        <label className="flex items-center justify-center gap-2 w-full h-24 px-4 py-6 border-2 border-dashed border-neutral-300 rounded-xl cursor-pointer hover:border-rose-400 hover:bg-rose-50/50 transition-all group">
-                            <Upload className="h-5 w-5 text-neutral-400 group-hover:text-rose-600 transition-colors" />
-                            <span className="text-sm text-neutral-600 group-hover:text-rose-600 font-medium transition-colors">
+                        <label className="flex items-center justify-center gap-2 w-full h-24 px-4 py-6 border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-xl cursor-pointer hover:border-rose-400 dark:hover:border-rose-500 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 transition-all group">
+                            <Upload className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors" />
+                            <span className="text-sm text-neutral-600 dark:text-neutral-300 group-hover:text-rose-600 dark:group-hover:text-rose-400 font-medium transition-colors">
                                 {imagePreview || category.image_url ? 'Click to change image' : 'Click to upload image'}
                             </span>
                             <input type="file" name="image" accept="image/*" onChange={handleImageChange} className="sr-only" />
                         </label>
-                        <p className="text-xs text-neutral-500 mt-2">Maximum file size: 5MB</p>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2 transition-colors">Maximum file size: 5MB</p>
                     </div>
                 </div>
 

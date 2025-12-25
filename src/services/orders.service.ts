@@ -144,9 +144,10 @@ export async function cancelOrder(
             return { success: false, error: 'Unauthorized to cancel this order' }
         }
 
-        // Only allow cancellation of pending orders
-        if (ownership.status !== 'pending') {
-            return { success: false, error: 'Only pending orders can be cancelled' }
+        // Only allow cancellation of pending_payment and processing orders
+        const cancellableStatuses = ['pending_payment', 'processing']
+        if (!cancellableStatuses.includes(ownership.status)) {
+            return { success: false, error: 'Only pending or processing orders can be cancelled' }
         }
 
         await ordersRepo.updateOrderStatus(orderId, 'cancelled')

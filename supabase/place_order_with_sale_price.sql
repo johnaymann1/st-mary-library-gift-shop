@@ -71,8 +71,8 @@ BEGIN
         payment_method, 
         delivery_type, 
         delivery_address, 
-        recipient_phone,
-        scheduled_delivery_date,
+        phone,
+        delivery_date,
         payment_proof_url
     )
     VALUES (

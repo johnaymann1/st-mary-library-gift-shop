@@ -72,12 +72,12 @@ export default function EditProductForm({ product, categories }: { product: Prod
     }
 
     return (
-        <div className="bg-white p-8 rounded-2xl shadow-md border border-neutral-200">
+        <div className="bg-white dark:bg-neutral-900 p-8 rounded-2xl shadow-md border border-neutral-200 dark:border-neutral-700 transition-colors">
             <div className="flex items-center justify-between mb-6">
                 <Button
                     variant="ghost"
                     onClick={() => router.push('/admin/products')}
-                    className="text-neutral-600 hover:text-rose-600 hover:bg-rose-50"
+                    className="text-neutral-600 dark:text-neutral-300 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
                 >
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Back to Products
@@ -85,7 +85,7 @@ export default function EditProductForm({ product, categories }: { product: Prod
                 <Button
                     variant="outline"
                     asChild
-                    className="border-2 border-rose-500 text-rose-600 hover:bg-rose-50"
+                    className="border-2 border-rose-500 dark:border-rose-600 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
                 >
                     <a href={`/product/${product.id}`} target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="h-4 w-4 mr-2" />
@@ -93,47 +93,47 @@ export default function EditProductForm({ product, categories }: { product: Prod
                     </a>
                 </Button>
             </div>
-            <h2 className="text-2xl font-bold mb-6 text-neutral-900">Edit Product</h2>
+            <h2 className="text-2xl font-bold mb-6 text-neutral-900 dark:text-white transition-colors">Edit Product</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 <input type="hidden" name="id" value={product.id} />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-2">Name (English)</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Name (English)</label>
                         <Input type="text" name="name_en" defaultValue={product.name_en} required placeholder="Enter product name" />
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-2">Name (Arabic)</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Name (Arabic)</label>
                         <Input type="text" name="name_ar" defaultValue={product.name_ar} required placeholder="أدخل اسم المنتج" className="text-right" dir="rtl" />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-2">Description (English)</label>
-                        <textarea name="desc_en" defaultValue={product.desc_en || ''} className="flex w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2 min-h-[80px]" placeholder="Enter product description" />
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Description (English)</label>
+                        <textarea name="desc_en" defaultValue={product.desc_en || ''} className="flex w-full rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 dark:focus-visible:ring-rose-500 focus-visible:ring-offset-2 min-h-[80px]" placeholder="Enter product description" />
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-2">Description (Arabic)</label>
-                        <textarea name="desc_ar" defaultValue={product.desc_ar || ''} className="flex w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2 min-h-[80px] text-right" dir="rtl" placeholder="أدخل وصف المنتج" />
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Description (Arabic)</label>
+                        <textarea name="desc_ar" defaultValue={product.desc_ar || ''} className="flex w-full rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 dark:focus-visible:ring-rose-500 focus-visible:ring-offset-2 min-h-[80px] text-right" dir="rtl" placeholder="أدخل وصف المنتج" />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-2">Price ({siteConfig.currency.code})</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Price ({siteConfig.currency.code})</label>
                         <Input type="number" name="price" step="0.01" defaultValue={product.price} required placeholder="0.00" />
                     </div>
 
-                    <div className="md:col-span-2 p-4 border-2 border-dashed border-rose-200 rounded-xl bg-rose-50/30">
+                    <div className="md:col-span-2 p-4 border-2 border-dashed border-rose-200 dark:border-rose-800 rounded-xl bg-rose-50/30 dark:bg-rose-950/20 transition-colors">
                         <div className="flex items-center gap-2 mb-4">
-                            <div className="p-1.5 bg-rose-100 rounded-lg">
-                                <svg className="h-4 w-4 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div className="p-1.5 bg-rose-100 dark:bg-rose-900 rounded-lg transition-colors">
+                                <svg className="h-4 w-4 text-rose-600 dark:text-rose-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                                 </svg>
                             </div>
-                            <h3 className="font-semibold text-neutral-900">Sale & Offers (Optional)</h3>
+                            <h3 className="font-semibold text-neutral-900 dark:text-white transition-colors">Sale & Offers (Optional)</h3>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-neutral-700 mb-2">Sale Price ({siteConfig.currency.code})</label>
+                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Sale Price ({siteConfig.currency.code})</label>
                                 <Input 
                                     type="number" 
                                     name="sale_price" 
@@ -141,30 +141,30 @@ export default function EditProductForm({ product, categories }: { product: Prod
                                     defaultValue={product.sale_price || ''} 
                                     placeholder="Leave empty for no sale" 
                                 />
-                                <p className="text-xs text-neutral-500 mt-1">Must be less than regular price</p>
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 transition-colors">Must be less than regular price</p>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-neutral-700 mb-2">Sale End Date (Optional)</label>
+                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Sale End Date (Optional)</label>
                                 <Input 
                                     type="datetime-local" 
                                     name="sale_end_date"
                                     defaultValue={product.sale_end_date ? new Date(product.sale_end_date).toISOString().slice(0, 16) : ''}
                                 />
-                                <p className="text-xs text-neutral-500 mt-1">Leave empty for ongoing sale</p>
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 transition-colors">Leave empty for ongoing sale</p>
                             </div>
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-2">Stock Status</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Stock Status</label>
                         <div className="pt-2">
                             <Toggle id="in_stock" name="in_stock" defaultChecked={product.in_stock} label="In Stock" />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-2">Category</label>
-                        <select name="category_id" defaultValue={product.category_id || ''} required className="flex h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2">
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Category</label>
+                        <select name="category_id" defaultValue={product.category_id || ''} required className="flex h-10 w-full rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 dark:focus-visible:ring-rose-500 focus-visible:ring-offset-2">
                             <option value="">Select a category</option>
                             {categories.map((cat) => (
                                 <option key={cat.id} value={cat.id}>{cat.name_en}</option>
@@ -174,41 +174,41 @@ export default function EditProductForm({ product, categories }: { product: Prod
                 </div>
 
                 <div>
-                    <label className="block text-sm font-semibold text-neutral-700 mb-2">Product Image</label>
+                    <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Product Image</label>
                     {product.image_url && !imagePreview && (
                         <div className="mb-4">
-                            <p className="text-xs text-neutral-600 mb-2">Current Image:</p>
-                            <img src={product.image_url} alt="Current" className="h-32 w-32 object-cover rounded-xl shadow-sm border border-neutral-200" />
+                            <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-2 transition-colors">Current Image:</p>
+                            <img src={product.image_url} alt="Current" className="h-32 w-32 object-cover rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 transition-colors" />
                         </div>
                     )}
                     {imagePreview && (
                         <div className="mb-4">
-                            <p className="text-xs text-neutral-600 mb-2">New Image Preview:</p>
+                            <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-2 transition-colors">New Image Preview:</p>
                             <div className="relative inline-block">
-                                <img src={imagePreview} alt="Preview" className="h-32 w-32 object-cover rounded-xl shadow-sm border-2 border-green-500" />
-                                <div className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full p-1">
+                                <img src={imagePreview} alt="Preview" className="h-32 w-32 object-cover rounded-xl shadow-sm border-2 border-green-500 dark:border-green-600" />
+                                <div className="absolute -top-2 -right-2 bg-green-500 dark:bg-green-600 text-white rounded-full p-1">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                     </svg>
                                 </div>
                             </div>
-                            <p className="text-xs text-green-600 mt-1">{imageName}</p>
+                            <p className="text-xs text-green-600 dark:text-green-400 mt-1 transition-colors">{imageName}</p>
                         </div>
                     )}
                     {imageError && (
-                        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                            <p className="text-sm text-red-600">{imageError}</p>
+                        <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg transition-colors">
+                            <p className="text-sm text-red-600 dark:text-red-400 transition-colors">{imageError}</p>
                         </div>
                     )}
                     <div className="relative">
-                        <label className="flex items-center justify-center gap-2 w-full h-24 px-4 py-6 border-2 border-dashed border-neutral-300 rounded-xl cursor-pointer hover:border-rose-400 hover:bg-rose-50/50 transition-all group">
-                            <Upload className="h-5 w-5 text-neutral-400 group-hover:text-rose-600 transition-colors" />
-                            <span className="text-sm text-neutral-600 group-hover:text-rose-600 font-medium transition-colors">
+                        <label className="flex items-center justify-center gap-2 w-full h-24 px-4 py-6 border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-xl cursor-pointer hover:border-rose-400 dark:hover:border-rose-500 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 transition-all group">
+                            <Upload className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors" />
+                            <span className="text-sm text-neutral-600 dark:text-neutral-300 group-hover:text-rose-600 dark:group-hover:text-rose-400 font-medium transition-colors">
                                 {imagePreview || product.image_url ? 'Click to change image' : 'Click to upload image'}
                             </span>
                             <input type="file" name="image" accept="image/*" onChange={handleImageChange} className="sr-only" />
                         </label>
-                        <p className="text-xs text-neutral-500 mt-2">Maximum file size: 5MB</p>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2 transition-colors">Maximum file size: 5MB</p>
                     </div>
                 </div>
 

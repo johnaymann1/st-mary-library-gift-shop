@@ -49,12 +49,14 @@ export default function CartClient({ user }: { user: User | null }) {
                 label: 'Undo',
                 onClick: async () => {
                     try {
-                        // Reconstruct the product object with all required fields
+                        // Reconstruct the product object with all required fields including sale info
                         const productToRestore = {
                             id: removedItem.product_id,
                             name_en: removedItem.product.name_en,
                             name_ar: removedItem.product.name_ar,
                             price: removedItem.product.price,
+                            sale_price: removedItem.product.sale_price,
+                            sale_end_date: removedItem.product.sale_end_date,
                             image_url: removedItem.product.image_url,
                             in_stock: removedItem.product.in_stock,
                             // Add default/placeholder values for required Product fields

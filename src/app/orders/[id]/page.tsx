@@ -58,11 +58,11 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
 
     if (loading || !order) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-white to-neutral-50">
+            <div className="min-h-screen bg-gradient-to-b from-white to-neutral-50 dark:from-neutral-900 dark:to-neutral-950 transition-colors">
                 <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                     <div className="animate-pulse space-y-6">
-                        <div className="h-10 w-48 bg-neutral-200 rounded-xl"></div>
-                        <div className="h-96 bg-white rounded-3xl"></div>
+                        <div className="h-10 w-48 bg-neutral-200 dark:bg-neutral-800 rounded-xl"></div>
+                        <div className="h-96 bg-white dark:bg-neutral-900 rounded-3xl"></div>
                     </div>
                 </main>
             </div>
@@ -94,10 +94,10 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-neutral-50">
+        <div className="min-h-screen bg-gradient-to-b from-white to-neutral-50 dark:from-neutral-900 dark:to-neutral-950 transition-colors">
             <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="mb-12">
-                    <Button variant="ghost" asChild className="mb-6 -ml-4 text-neutral-600 hover:text-rose-600 hover:bg-rose-50">
+                    <Button variant="ghost" asChild className="mb-6 -ml-4 text-neutral-600 dark:text-neutral-300 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors">
                         <Link href="/orders" className="flex items-center gap-2">
                             <ChevronLeft className="h-5 w-5" />
                             Back to Orders
@@ -107,12 +107,12 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                             <div className="space-y-3">
                                 <div className="flex items-center gap-4 flex-wrap">
-                                    <h1 className="text-4xl font-bold text-neutral-900">Order #{order.id}</h1>
+                                    <h1 className="text-4xl font-bold text-neutral-900 dark:text-white transition-colors">Order #{order.id}</h1>
                                     <Badge variant="secondary" className={`${getStatusColor(order.status)} text-sm px-4 py-1.5 border-0`}>
                                         {getStatusLabel(order.status)}
                                     </Badge>
                                 </div>
-                                <p className="text-neutral-600">
+                                <p className="text-neutral-600 dark:text-neutral-400 transition-colors">
                                     {new Date(order.created_at).toLocaleDateString('en-US', {
                                         year: 'numeric',
                                         month: 'long',
@@ -132,14 +132,14 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
                     {/* Left Column: Items */}
                     <div className="lg:col-span-3 space-y-6">
-                        <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
+                        <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-sm overflow-hidden border border-neutral-100 dark:border-neutral-800 transition-colors">
                             <div className="p-8 pb-6">
-                                <h2 className="font-bold text-xl text-neutral-900">Order Items</h2>
+                                <h2 className="font-bold text-xl text-neutral-900 dark:text-white transition-colors">Order Items</h2>
                             </div>
-                            <div className="divide-y divide-neutral-100">
+                            <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
                                 {order.items?.map((item) => (
                                     <div key={item.id} className="px-8 py-6 flex gap-5">
-                                        <div className="relative w-24 h-24 bg-neutral-50 rounded-2xl overflow-hidden flex-shrink-0 border border-neutral-100">
+                                        <div className="relative w-24 h-24 bg-neutral-50 dark:bg-neutral-800 rounded-2xl overflow-hidden flex-shrink-0 border border-neutral-100 dark:border-neutral-700 transition-colors">
                                             {item.product.image_url ? (
                                                 <Image
                                                     src={item.product.image_url}
@@ -148,7 +148,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                                                     className="object-cover"
                                                 />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-neutral-400">
+                                                <div className="w-full h-full flex items-center justify-center text-neutral-400 dark:text-neutral-600">
                                                     <Package className="h-8 w-8" />
                                                 </div>
                                             )}
@@ -156,31 +156,31 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                                         <div className="flex-1 min-w-0">
                                             <div className="flex justify-between items-start gap-4 mb-3">
                                                 <div className="flex-1">
-                                                    <h3 className="font-semibold text-neutral-900 text-lg">{item.product.name_en}</h3>
-                                                    <p className="text-base text-neutral-500 mt-1" dir="rtl">{item.product.name_ar}</p>
+                                                    <h3 className="font-semibold text-neutral-900 dark:text-white text-lg transition-colors">{item.product.name_en}</h3>
+                                                    <p className="text-base text-neutral-500 dark:text-neutral-400 mt-1 transition-colors" dir="rtl">{item.product.name_ar}</p>
                                                 </div>
-                                                <p className="font-bold text-neutral-900 text-lg whitespace-nowrap">
-                                                    {((item.price_at_purchase || 0) * item.quantity).toLocaleString()} <span className="text-sm font-medium text-neutral-500">{siteConfig.currency.code}</span>
+                                                <p className="font-bold text-neutral-900 dark:text-white text-lg whitespace-nowrap transition-colors">
+                                                    {((item.price_at_purchase || 0) * item.quantity).toLocaleString()} <span className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{siteConfig.currency.code}</span>
                                                 </p>
                                             </div>
                                             <div className="flex items-center gap-6 text-sm">
                                                 <div className="flex items-center gap-2">
-                                                    <span className="text-neutral-500">Quantity:</span>
-                                                    <span className="font-medium text-neutral-900">{item.quantity}</span>
+                                                    <span className="text-neutral-500 dark:text-neutral-400 transition-colors">Quantity:</span>
+                                                    <span className="font-medium text-neutral-900 dark:text-white transition-colors">{item.quantity}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                    <span className="text-neutral-500">Unit Price:</span>
-                                                    <span className="font-medium text-neutral-900">{(item.price_at_purchase || 0).toLocaleString()} {siteConfig.currency.code}</span>
+                                                    <span className="text-neutral-500 dark:text-neutral-400 transition-colors">Unit Price:</span>
+                                                    <span className="font-medium text-neutral-900 dark:text-white transition-colors">{(item.price_at_purchase || 0).toLocaleString()} {siteConfig.currency.code}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                            <div className="px-8 py-8 bg-gradient-to-br from-neutral-50 to-white">
+                            <div className="px-8 py-8 bg-gradient-to-br from-neutral-50 to-white dark:from-neutral-800 dark:to-neutral-900 transition-colors">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-lg font-semibold text-neutral-900">Total Amount</span>
-                                    <span className="text-3xl font-bold text-neutral-900">{order.total_amount.toLocaleString()} <span className="text-lg font-medium text-neutral-500">{siteConfig.currency.code}</span></span>
+                                    <span className="text-lg font-semibold text-neutral-900 dark:text-white transition-colors">Total Amount</span>
+                                    <span className="text-3xl font-bold text-neutral-900 dark:text-white transition-colors">{order.total_amount.toLocaleString()} <span className="text-lg font-medium text-neutral-500 dark:text-neutral-400">{siteConfig.currency.code}</span></span>
                                 </div>
                             </div>
                         </div>
@@ -198,31 +198,31 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                         />
 
                         {/* Delivery Info */}
-                        <div className="bg-white rounded-3xl shadow-sm p-8">
+                        <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-sm p-8 border border-neutral-100 dark:border-neutral-800 transition-colors">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-10 h-10 bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl flex items-center justify-center">
-                                    <Truck className="h-5 w-5 text-rose-600" />
+                                <div className="w-10 h-10 bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-950 dark:to-pink-950 rounded-xl flex items-center justify-center transition-colors">
+                                    <Truck className="h-5 w-5 text-rose-600 dark:text-rose-400 transition-colors" />
                                 </div>
-                                <h2 className="font-bold text-lg text-neutral-900">Delivery Details</h2>
+                                <h2 className="font-bold text-lg text-neutral-900 dark:text-white transition-colors">Delivery Details</h2>
                             </div>
                             <div className="space-y-5">
                                 <div>
-                                    <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Method</p>
-                                    <p className="text-neutral-900 font-semibold text-base capitalize">{order.delivery_type}</p>
+                                    <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-2 transition-colors">Method</p>
+                                    <p className="text-neutral-900 dark:text-white font-semibold text-base capitalize transition-colors">{order.delivery_type}</p>
                                 </div>
                                 {order.delivery_type === 'delivery' && (
                                     <>
                                         <div>
-                                            <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Address</p>
-                                            <div className="flex items-start gap-3 text-neutral-900">
-                                                <MapPin className="h-5 w-5 text-rose-600 mt-0.5 flex-shrink-0" />
+                                            <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-2 transition-colors">Address</p>
+                                            <div className="flex items-start gap-3 text-neutral-900 dark:text-white transition-colors">
+                                                <MapPin className="h-5 w-5 text-rose-600 dark:text-rose-400 mt-0.5 flex-shrink-0 transition-colors" />
                                                 <span className="leading-relaxed">{order.delivery_address || 'N/A'}</span>
                                             </div>
                                         </div>
                                         <div>
-                                            <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Phone</p>
-                                            <div className="flex items-center gap-3 text-neutral-900">
-                                                <Phone className="h-5 w-5 text-rose-600" />
+                                            <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-2 transition-colors">Phone</p>
+                                            <div className="flex items-center gap-3 text-neutral-900 dark:text-white transition-colors">
+                                                <Phone className="h-5 w-5 text-rose-600 dark:text-rose-400 transition-colors" />
                                                 <span className="font-medium">{order.phone || 'N/A'}</span>
                                             </div>
                                         </div>
@@ -232,32 +232,32 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                         </div>
 
                         {/* Payment Info */}
-                        <div className="bg-white rounded-3xl shadow-sm p-8">
+                        <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-sm p-8 border border-neutral-100 dark:border-neutral-800 transition-colors">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-10 h-10 bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl flex items-center justify-center">
-                                    <CreditCard className="h-5 w-5 text-rose-600" />
+                                <div className="w-10 h-10 bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-950 dark:to-pink-950 rounded-xl flex items-center justify-center transition-colors">
+                                    <CreditCard className="h-5 w-5 text-rose-600 dark:text-rose-400 transition-colors" />
                                 </div>
-                                <h2 className="font-bold text-lg text-neutral-900">Payment Details</h2>
+                                <h2 className="font-bold text-lg text-neutral-900 dark:text-white transition-colors">Payment Details</h2>
                             </div>
                             <div className="space-y-5">
                                 <div>
-                                    <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Method</p>
-                                    <p className="text-neutral-900 font-semibold text-base">
+                                    <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-2 transition-colors">Method</p>
+                                    <p className="text-neutral-900 dark:text-white font-semibold text-base transition-colors">
                                         {order.payment_method === 'instapay'
                                             ? 'InstaPay'
                                             : (order.delivery_type === 'delivery' ? 'Cash on Delivery' : 'Cash Payment')}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Status</p>
+                                    <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3 transition-colors">Status</p>
                                     <Badge variant="outline" className={`${getStatusColor(order.status)} border-0 px-3 py-1.5`}>
                                         {getStatusLabel(order.status)}
                                     </Badge>
                                 </div>
                                 {order.payment_method === 'instapay' && order.payment_proof_url && (
                                     <div>
-                                        <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Payment Proof</p>
-                                        <div className="relative h-40 w-full rounded-2xl overflow-hidden border border-neutral-100 shadow-sm">
+                                        <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3 transition-colors">Payment Proof</p>
+                                        <div className="relative h-40 w-full rounded-2xl overflow-hidden border border-neutral-100 dark:border-neutral-700 shadow-sm transition-colors">
                                             <Image
                                                 src={order.payment_proof_url}
                                                 alt="Payment Proof"

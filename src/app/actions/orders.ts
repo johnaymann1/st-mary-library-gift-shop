@@ -115,7 +115,7 @@ export async function cancelOrder(orderId: number): Promise<{ success?: boolean;
         return { error: 'This order cannot be cancelled' }
     }
 
-    const result = await orderService.cancelOrder(orderId)
+    const result = await orderService.cancelOrder(orderId, user.id)
 
     if (result.success) {
         revalidatePath('/orders')
