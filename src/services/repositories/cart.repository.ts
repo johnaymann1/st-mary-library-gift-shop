@@ -22,6 +22,8 @@ export interface CartItemWithProduct extends CartItemEntity {
         name_en: string
         name_ar: string
         price: number
+        sale_price?: number | null
+        sale_end_date?: string | null
         image_url: string | null
         in_stock: boolean
     }
