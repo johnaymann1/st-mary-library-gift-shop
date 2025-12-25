@@ -245,14 +245,9 @@ export async function searchProductsWithCount(filters: SearchFilters): Promise<{
         query = query.eq('category_id', filters.categoryId)
     }
 
-    // Apply sorting
+    // For price sorting, we'll do it client-side after fetching to handle sale prices
+    // For other sorts, use database sorting
     switch (filters.sortBy) {
-        case 'price-asc':
-            query = query.order('price', { ascending: true })
-            break
-        case 'price-desc':
-            query = query.order('price', { ascending: false })
-            break
         case 'name':
             query = query.order('name_en', { ascending: true })
             break
@@ -272,6 +267,31 @@ export async function searchProductsWithCount(filters: SearchFilters): Promise<{
         return { products: [], count: 0 }
     }
 
-    return { products: data as Product[], count: count || 0 }
+    let products = data as Product[]
+
+    // Client-side sorting for price to account for sale prices
+    if (filters.sortBy === 'price-asc' || filters.sortBy === 'price-desc') {
+        products = products.sort((a, b) => {
+            // Calculate effective price (sale price if active, otherwise regular price)
+            const getEffectivePrice = (product: Product) => {
+                if (product.sale_price && product.sale_price > 0) {
+                    if (!product.sale_end_date) return product.sale_price
+                    const today = new Date()
+                    today.setHours(0, 0, 0, 0)
+                    const endDate = new Date(product.sale_end_date)
+                    endDate.setHours(0, 0, 0, 0)
+                    if (endDate >= today) return product.sale_price
+                }
+                return product.price
+            }
+
+            const priceA = getEffectivePrice(a)
+            const priceB = getEffectivePrice(b)
+            
+            return filters.sortBy === 'price-asc' ? priceA - priceB : priceB - priceA
+        })
+    }
+
+    return { products, count: count || 0 }
 }
 

@@ -27,6 +27,11 @@ export function isSaleActive(salePrice?: number | null, saleEndDate?: string | n
     return endDate >= today // Sale active ON the end date
 }
 
+// Helper function to get the effective price (sale price if active, otherwise regular price)
+export function getEffectivePrice(price: number, salePrice?: number | null, saleEndDate?: string | null): number {
+    return isSaleActive(salePrice, saleEndDate) ? salePrice! : price
+}
+
 // Helper function to calculate savings
 function calculateSavings(price: number, salePrice: number) {
     const amount = price - salePrice

@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Search, ChevronDown, ChevronUp, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { getEffectivePrice } from '@/components/ui/product-price'
 
 import { Product, Category } from '@/types'
 
@@ -46,22 +47,36 @@ export default function CategoryPageClient({ category, initialProducts }: Catego
             result = result.filter(p => !p.in_stock)
         }
 
-        // Price range filter
+        // Price range filter (using effective price)
         if (priceRange === 'under-100') {
-            result = result.filter(p => p.price < 100)
+            result = result.filter(p => getEffectivePrice(p.price, p.sale_price, p.sale_end_date) < 100)
         } else if (priceRange === '100-500') {
-            result = result.filter(p => p.price >= 100 && p.price <= 500)
+            result = result.filter(p => {
+                const effectivePrice = getEffectivePrice(p.price, p.sale_price, p.sale_end_date)
+                return effectivePrice >= 100 && effectivePrice <= 500
+            })
         } else if (priceRange === '500-1000') {
-            result = result.filter(p => p.price >= 500 && p.price <= 1000)
+            result = result.filter(p => {
+                const effectivePrice = getEffectivePrice(p.price, p.sale_price, p.sale_end_date)
+                return effectivePrice >= 500 && effectivePrice <= 1000
+            })
         } else if (priceRange === 'over-1000') {
-            result = result.filter(p => p.price > 1000)
+            result = result.filter(p => getEffectivePrice(p.price, p.sale_price, p.sale_end_date) > 1000)
         }
 
-        // Sorting
+        // Sorting (using effective price for price sorting)
         if (sortBy === 'price-low') {
-            result.sort((a, b) => a.price - b.price)
+            result.sort((a, b) => {
+                const priceA = getEffectivePrice(a.price, a.sale_price, a.sale_end_date)
+                const priceB = getEffectivePrice(b.price, b.sale_price, b.sale_end_date)
+                return priceA - priceB
+            })
         } else if (sortBy === 'price-high') {
-            result.sort((a, b) => b.price - a.price)
+            result.sort((a, b) => {
+                const priceA = getEffectivePrice(a.price, a.sale_price, a.sale_end_date)
+                const priceB = getEffectivePrice(b.price, b.sale_price, b.sale_end_date)
+                return priceB - priceA
+            })
         } else if (sortBy === 'name') {
             result.sort((a, b) => a.name_en.localeCompare(b.name_en))
         } else {
