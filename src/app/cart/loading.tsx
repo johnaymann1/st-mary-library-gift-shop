@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export default function CartLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 transition-colors">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Skeleton className="h-10 w-48 mb-8" />
         
@@ -10,7 +10,7 @@ export default function CartLoading() {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-xl shadow-sm p-6">
+              <div key={i} className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-6 transition-colors">
                 <div className="flex gap-6">
                   <Skeleton className="h-24 w-24 rounded-lg flex-shrink-0" />
                   <div className="flex-1 space-y-3">
@@ -28,7 +28,7 @@ export default function CartLoading() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-6 sticky top-24 transition-colors">
               <Skeleton className="h-8 w-32 mb-6" />
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between">

@@ -3,14 +3,14 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export default function ProductLoading() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-neutral-950 transition-colors">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-800 overflow-hidden transition-colors">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
             {/* Image Section Skeleton - Square */}
-            <div className="relative aspect-square bg-neutral-100 rounded-lg overflow-hidden">
+            <div className="relative aspect-square bg-neutral-100 dark:bg-neutral-800 rounded-lg overflow-hidden transition-colors">
               <Skeleton className="w-full h-full" />
             </div>
 

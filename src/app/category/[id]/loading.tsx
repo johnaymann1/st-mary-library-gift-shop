@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export default function CategoryLoading() {
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 transition-colors">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -14,12 +14,12 @@ export default function CategoryLoading() {
         </div>
 
         {/* Search Bar Skeleton */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4 mb-4">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-4 mb-4 transition-colors">
           <Skeleton className="h-10 w-full rounded-lg" />
         </div>
 
         {/* Filters Skeleton */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 mb-8 overflow-hidden">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 mb-8 overflow-hidden transition-colors">
           <div className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Skeleton className="h-6 w-20" />
@@ -42,7 +42,7 @@ export default function CategoryLoading() {
 
 function ProductCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-md flex flex-col">
+    <div className="bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-md border border-neutral-200 dark:border-neutral-800 flex flex-col transition-colors">
       {/* Image Skeleton - Square aspect ratio */}
       <Skeleton className="aspect-square w-full" />
 
@@ -57,7 +57,7 @@ function ProductCardSkeleton() {
         </div>
 
         {/* Price Skeleton */}
-        <div className="pt-2 border-t border-neutral-100">
+        <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800 transition-colors">
           <Skeleton className="h-8 w-24" />
         </div>
 

@@ -2,13 +2,13 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export default function CheckoutLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 transition-colors">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Checkout Form */}
           <div className="lg:col-span-2 space-y-6">
             {/* Delivery Method */}
-            <div className="bg-white rounded-2xl shadow-sm p-6">
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-6 transition-colors">
               <Skeleton className="h-6 w-48 mb-4" />
               <div className="grid grid-cols-2 gap-4">
                 <Skeleton className="h-24 rounded-lg" />
@@ -17,7 +17,7 @@ export default function CheckoutLoading() {
             </div>
 
             {/* Address Section */}
-            <div className="bg-white rounded-2xl shadow-sm p-6">
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-6 transition-colors">
               <Skeleton className="h-6 w-32 mb-4" />
               <div className="space-y-4">
                 <Skeleton className="h-12 rounded-lg" />
@@ -27,7 +27,7 @@ export default function CheckoutLoading() {
             </div>
 
             {/* Payment Method */}
-            <div className="bg-white rounded-2xl shadow-sm p-6">
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-6 transition-colors">
               <Skeleton className="h-6 w-40 mb-4" />
               <div className="grid grid-cols-2 gap-4">
                 <Skeleton className="h-24 rounded-lg" />
@@ -41,7 +41,7 @@ export default function CheckoutLoading() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-6 sticky top-24 transition-colors">
               <Skeleton className="h-8 w-32 mb-6" />
               <div className="space-y-4">
                 {[1, 2].map((i) => (
@@ -54,7 +54,7 @@ export default function CheckoutLoading() {
                   </div>
                 ))}
               </div>
-              <div className="border-t border-neutral-200 my-6" />
+              <div className="border-t border-neutral-200 dark:border-neutral-800 my-6 transition-colors" />
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <Skeleton className="h-5 w-20" />
@@ -64,7 +64,7 @@ export default function CheckoutLoading() {
                   <Skeleton className="h-5 w-24" />
                   <Skeleton className="h-5 w-20" />
                 </div>
-                <div className="flex justify-between pt-3 border-t">
+                <div className="flex justify-between pt-3 border-t border-neutral-200 dark:border-neutral-800 transition-colors">
                   <Skeleton className="h-6 w-16" />
                   <Skeleton className="h-6 w-28" />
                 </div>
