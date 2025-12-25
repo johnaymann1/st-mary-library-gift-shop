@@ -43,18 +43,18 @@ export async function updateOrderStatus(orderId: number, status: string) {
     }
 
     return result
-}user = await userService.getCurrentUser()
-    if (!user) return { error: 'Unauthorized' }
-
-    const isAdmin = await userService.isCurrentUserAdmin()
-    if (!isAdmin) return { error: 'Unauthorized' }
-
-    const 
+}
 
 /**
  * Approves payment proof
  */
 export async function approvePaymentProof(orderId: number) {
+    const user = await userService.getCurrentUser()
+    if (!user) return { error: 'Unauthorized' }
+
+    const isAdmin = await userService.isCurrentUserAdmin()
+    if (!isAdmin) return { error: 'Unauthorized' }
+
     const result = await orderService.approvePaymentProof(orderId)
 
     if (result.success) {
@@ -62,26 +62,20 @@ export async function approvePaymentProof(orderId: number) {
     }
 
     return result
-}user = await userService.getCurrentUser()
-    if (!user) return { error: 'Unauthorized' }
-
-    const isAdmin = await userService.isCurrentUserAdmin()
-    if (!isAdmin) return { error: 'Unauthorized' }
-
-    const 
+}
 
 /**
  * Rejects payment proof
  */
 export async function rejectPaymentProof(orderId: number, reason?: string) {
-    const result = await orderService.rejectPaymentProof(orderId)
-user = await userService.getCurrentUser()
+    const user = await userService.getCurrentUser()
     if (!user) return { error: 'Unauthorized' }
 
     const isAdmin = await userService.isCurrentUserAdmin()
     if (!isAdmin) return { error: 'Unauthorized' }
 
-    const 
+    const result = await orderService.rejectPaymentProof(orderId)
+
     if (result.success) {
         revalidatePath('/admin/orders')
     }
@@ -93,6 +87,12 @@ user = await userService.getCurrentUser()
  * Cancels an order by admin
  */
 export async function cancelOrderByAdmin(orderId: number, reason?: string) {
+    const user = await userService.getCurrentUser()
+    if (!user) return { error: 'Unauthorized' }
+
+    const isAdmin = await userService.isCurrentUserAdmin()
+    if (!isAdmin) return { error: 'Unauthorized' }
+
     const result = await orderService.cancelOrder(orderId)
 
     if (result.success) {
