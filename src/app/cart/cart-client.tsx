@@ -27,9 +27,11 @@ export default function CartClient({ user }: { user: User | null }) {
             console.log('=== CART DEBUG ===')
             cart.forEach(item => {
                 console.log(`Product: ${item.product.name_en}`)
+                console.log(`  Product ID: ${item.product_id}`)
                 console.log(`  Regular Price: ${item.product.price}`)
                 console.log(`  Sale Price: ${item.product.sale_price}`)
                 console.log(`  Sale End Date: ${item.product.sale_end_date}`)
+                console.log(`  Raw Product Object:`, item.product)
                 console.log(`  Is Sale Active: ${isSaleActive(item.product.sale_price, item.product.sale_end_date)}`)
             })
         }
