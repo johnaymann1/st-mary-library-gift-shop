@@ -15,7 +15,16 @@ interface ProductPriceProps {
 export function isSaleActive(salePrice?: number | null, saleEndDate?: string | null): boolean {
     if (!salePrice || salePrice <= 0) return false
     if (!saleEndDate) return true // No end date = ongoing sale
-    return new Date(saleEndDate) > new Date()
+    
+    // Compare dates only (not time) to match SQL CURRENT_DATE behavior
+    // Sale should be active for the entire end date
+    const today = new Date()
+    today.setHours(0, 0, 0, 0) // Start of today
+    
+    const endDate = new Date(saleEndDate)
+    endDate.setHours(0, 0, 0, 0) // Start of end date
+    
+    return endDate >= today // Sale active ON the end date
 }
 
 // Helper function to calculate savings
