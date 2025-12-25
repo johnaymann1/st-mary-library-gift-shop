@@ -58,16 +58,16 @@ export function CancelOrderButton({ orderId, status }: CancelOrderButtonProps) {
             </Button>
 
             <Dialog open={showConfirm} onOpenChange={setShowConfirm}>
-                <DialogContent className="sm:max-w-md bg-gradient-to-br from-rose-50 via-white to-red-50">
+                <DialogContent className="sm:max-w-md bg-gradient-to-br from-rose-50 via-white to-red-50 dark:from-neutral-900 dark:via-neutral-900 dark:to-red-950/20 border-neutral-200 dark:border-neutral-700 transition-colors">
                     <DialogHeader className="space-y-4">
-                        <div className="mx-auto w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-red-100">
-                            <AlertTriangle className="h-7 w-7 text-red-600" />
+                        <div className="mx-auto w-14 h-14 bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center shadow-lg border-2 border-red-100 dark:border-red-900 transition-colors">
+                            <AlertTriangle className="h-7 w-7 text-red-600 dark:text-red-400 transition-colors" />
                         </div>
-                        <DialogTitle className="text-xl text-center text-neutral-900">Cancel This Order?</DialogTitle>
-                        <DialogDescription className="text-center text-neutral-700">
-                            Are you sure you want to cancel <span className="font-bold text-neutral-900">Order #{orderId}</span>?
+                        <DialogTitle className="text-xl text-center text-neutral-900 dark:text-white transition-colors">Cancel This Order?</DialogTitle>
+                        <DialogDescription className="text-center text-neutral-700 dark:text-neutral-300 transition-colors">
+                            Are you sure you want to cancel <span className="font-bold text-neutral-900 dark:text-white">Order #{orderId}</span>?
                             <br />
-                            <span className="text-sm mt-1 block text-neutral-600">This action cannot be undone.</span>
+                            <span className="text-sm mt-1 block text-neutral-600 dark:text-neutral-400 transition-colors">This action cannot be undone.</span>
                         </DialogDescription>
                     </DialogHeader>
 
@@ -76,14 +76,14 @@ export function CancelOrderButton({ orderId, status }: CancelOrderButtonProps) {
                             variant="outline"
                             onClick={() => setShowConfirm(false)}
                             disabled={loading}
-                            className="flex-1 h-11 border-2 bg-white hover:bg-neutral-50 font-semibold text-neutral-900"
+                            className="flex-1 h-11 border-2 bg-white dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-700 border-neutral-300 dark:border-neutral-600 font-semibold text-neutral-900 dark:text-white transition-colors"
                         >
                             Keep Order
                         </Button>
                         <Button
                             onClick={handleCancel}
                             disabled={loading}
-                            className="bg-red-600 hover:bg-red-700 text-white flex-1 h-11 shadow-lg shadow-red-600/20 font-semibold"
+                            className="bg-red-600 dark:bg-red-500 hover:bg-red-700 dark:hover:bg-red-600 text-white flex-1 h-11 shadow-lg shadow-red-600/20 dark:shadow-red-500/20 font-semibold transition-colors"
                         >
                             {loading ? 'Cancelling...' : (
                                 <>
