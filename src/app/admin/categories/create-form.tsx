@@ -71,23 +71,23 @@ export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => vo
     }
 
     return (
-        <div className="bg-white p-8 rounded-2xl shadow-md border border-neutral-200 mb-8">
-            <h2 className="text-2xl font-bold mb-6 text-neutral-900">Add New Category</h2>
+        <div className="bg-white dark:bg-neutral-900 p-8 rounded-2xl shadow-md border border-neutral-200 dark:border-neutral-800 mb-8 transition-colors">
+            <h2 className="text-2xl font-bold mb-6 text-neutral-900 dark:text-white transition-colors">Add New Category</h2>
 
             <form id="create-category-form" onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-2">Name (English)</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Name (English)</label>
                         <Input type="text" name="name_en" required placeholder="Enter category name" />
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-2">Name (Arabic)</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Name (Arabic)</label>
                         <Input type="text" name="name_ar" required placeholder="أدخل اسم الفئة" className="text-right" dir="rtl" />
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-sm font-semibold text-neutral-700 mb-2">Category Image</label>
+                    <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2 transition-colors">Category Image</label>
                     <input 
                         ref={fileInputRef}
                         type="file" 
@@ -99,23 +99,23 @@ export default function CreateCategoryForm({ onSuccess }: { onSuccess?: () => vo
                     />
                     {imagePreview ? (
                         <div className="space-y-3">
-                            <div className="relative w-full h-48 rounded-xl overflow-hidden border-2 border-green-500 bg-green-50">
+                            <div className="relative w-full h-48 rounded-xl overflow-hidden border-2 border-green-500 dark:border-green-600 bg-green-50 dark:bg-green-900/20 transition-colors">
                                 <img src={imagePreview} alt="Preview" className="w-full h-full object-contain" />
                             </div>
-                            <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+                            <div className="flex items-center justify-between bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/50 rounded-lg px-4 py-3 transition-colors">
                                 <div className="flex items-center gap-2">
-                                    <Check className="h-5 w-5 text-green-600" />
-                                    <span className="text-sm font-medium text-green-700">{imageName}</span>
+                                    <Check className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                    <span className="text-sm font-medium text-green-700 dark:text-green-300 transition-colors">{imageName}</span>
                                 </div>
-                                <label htmlFor="category-image-input" className="text-sm text-rose-600 hover:text-rose-700 font-medium cursor-pointer">
+                                <label htmlFor="category-image-input" className="text-sm text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 font-medium cursor-pointer transition-colors">
                                     Change
                                 </label>
                             </div>
                         </div>
                     ) : (
-                        <label htmlFor="category-image-input" className="flex items-center justify-center gap-2 w-full h-24 px-4 py-6 border-2 border-dashed border-neutral-300 rounded-xl cursor-pointer hover:border-rose-400 hover:bg-rose-50/50 transition-all group">
-                            <Upload className="h-5 w-5 text-neutral-400 group-hover:text-rose-600 transition-colors" />
-                            <span className="text-sm text-neutral-600 group-hover:text-rose-600 font-medium transition-colors">Click to upload image</span>
+                        <label htmlFor="category-image-input" className="flex items-center justify-center gap-2 w-full h-24 px-4 py-6 border-2 border-dashed border-neutral-300 dark:border-neutral-700 rounded-xl cursor-pointer hover:border-rose-400 dark:hover:border-rose-500 hover:bg-rose-50/50 dark:hover:bg-rose-900/10 transition-all group">
+                            <Upload className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors" />
+                            <span className="text-sm text-neutral-600 dark:text-neutral-400 group-hover:text-rose-600 dark:group-hover:text-rose-400 font-medium transition-colors">Click to upload image</span>
                         </label>
                     )}
                 </div>

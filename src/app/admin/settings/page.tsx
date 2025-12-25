@@ -17,12 +17,12 @@ export default async function SettingsPage() {
         <div className="space-y-6">
             {/* Header */}
             <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                    <Settings className="w-6 h-6 text-blue-600" />
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg transition-colors">
+                    <Settings className="w-6 h-6 text-blue-600 dark:text-blue-400 transition-colors" />
                 </div>
                 <div>
-                    <h1 className="text-2xl font-bold text-neutral-900">Store Settings</h1>
-                    <p className="text-sm text-neutral-600">
+                    <h1 className="text-2xl font-bold text-neutral-900 dark:text-white transition-colors">Store Settings</h1>
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 transition-colors">
                         Manage your store information, delivery settings, and contact details
                     </p>
                 </div>
