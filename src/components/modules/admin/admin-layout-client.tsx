@@ -34,7 +34,7 @@ export function AdminLayoutClient({ navigation, children }: AdminLayoutClientPro
     }, [])
 
     return (
-        <div className="min-h-screen bg-neutral-50">
+        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 transition-colors">
             <AdminSidebar navigation={navigation} />
 
             {/* Main Content - dynamic offset based on sidebar state */}
