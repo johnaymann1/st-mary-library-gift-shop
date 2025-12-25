@@ -10,6 +10,8 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
         filteredOrders,
         filter,
         setFilter,
+        searchQuery,
+        setSearchQuery,
         selectedOrder,
         isVerifyModalOpen,
         setIsVerifyModalOpen,
@@ -34,6 +36,8 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
             <OrderFilterBar
                 filter={filter}
                 onFilterChange={setFilter}
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
                 filteredCount={filteredOrders.length}
                 totalCount={orders.length}
             />

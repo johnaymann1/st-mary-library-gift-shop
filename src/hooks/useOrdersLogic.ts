@@ -10,6 +10,7 @@ export function useOrdersLogic(initialOrders: Order[]) {
     const router = useRouter()
     const [orders, setOrders] = useState<Order[]>(initialOrders)
     const [filter, setFilter] = useState('all')
+    const [searchQuery, setSearchQuery] = useState('')
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
     const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false)
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false)
@@ -30,8 +31,26 @@ export function useOrdersLogic(initialOrders: Order[]) {
     }, [initialOrders])
 
     const filteredOrders = orders.filter(order => {
-        if (filter === 'all') return true
-        return order.status === filter
+        // Filter by status
+        if (filter !== 'all' && order.status !== filter) return false
+        
+        // Filter by search query
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase()
+            const orderId = order.id.toString()
+            const customerName = order.user?.full_name?.toLowerCase() || ''
+            const customerEmail = order.user?.email?.toLowerCase() || ''
+            const customerPhone = order.user?.phone?.toLowerCase() || ''
+            const deliveryPhone = order.phone?.toLowerCase() || ''
+            
+            return orderId.includes(query) ||
+                   customerName.includes(query) ||
+                   customerEmail.includes(query) ||
+                   customerPhone.includes(query) ||
+                   deliveryPhone.includes(query)
+        }
+        
+        return true
     })
 
     const stats = {
@@ -106,6 +125,8 @@ export function useOrdersLogic(initialOrders: Order[]) {
         filteredOrders,
         filter,
         setFilter,
+        searchQuery,
+        setSearchQuery,
         selectedOrder,
         isVerifyModalOpen,
         setIsVerifyModalOpen,

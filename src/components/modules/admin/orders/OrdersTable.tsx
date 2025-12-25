@@ -127,13 +127,20 @@ export function OrdersTable({ orders, updating, onStatusUpdate, onVerifyClick, o
                                         </Button>
                                     </td>
                                     <td className="px-4 py-4 text-center">
-                                        {order.payment_method === 'instapay' && order.payment_proof_url && order.status === 'pending_payment' ? (
+                                        {order.payment_method === 'instapay' && order.payment_proof_url ? (
                                             <Button
                                                 size="sm"
-                                                className="bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white shadow-sm font-medium h-8 px-2 transition-colors"
+                                                className={order.status === 'pending_payment' 
+                                                    ? "bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white shadow-sm font-medium h-8 px-2 transition-colors"
+                                                    : "bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-300 shadow-sm font-medium h-8 px-2 transition-colors"
+                                                }
                                                 onClick={() => onVerifyClick(order)}
                                             >
-                                                <CheckCircle className="h-4 w-4" />
+                                                {order.status === 'pending_payment' ? (
+                                                    <CheckCircle className="h-4 w-4" />
+                                                ) : (
+                                                    <Eye className="h-4 w-4" />
+                                                )}
                                             </Button>
                                         ) : (
                                             <span className="text-xs text-neutral-400 dark:text-neutral-500">—</span>

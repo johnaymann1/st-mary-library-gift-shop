@@ -25,9 +25,14 @@ export function PaymentVerifyModal({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-2xl max-h-[90vh] bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700 transition-colors">
                 <DialogHeader>
-                    <DialogTitle className="text-xl text-neutral-900 dark:text-white transition-colors">Verify Payment Proof</DialogTitle>
+                    <DialogTitle className="text-xl text-neutral-900 dark:text-white transition-colors">
+                        {order?.status === 'pending_payment' ? 'Verify Payment Proof' : 'View Payment Proof'}
+                    </DialogTitle>
                     <DialogDescription className="text-neutral-600 dark:text-neutral-400 transition-colors">
-                        Review the InstaPay transfer screenshot for <span className="font-semibold text-neutral-900 dark:text-white">Order #{order?.id}</span>
+                        {order?.status === 'pending_payment' 
+                            ? `Review the InstaPay transfer screenshot for Order #${order?.id}`
+                            : `Payment proof for Order #${order?.id} (Already ${order?.status === 'cancelled' ? 'rejected' : 'verified'})`
+                        }
                     </DialogDescription>
                 </DialogHeader>
 
@@ -63,25 +68,27 @@ export function PaymentVerifyModal({
                     )}
                 </div>
 
-                <DialogFooter className="gap-2 sm:gap-2">
-                    <Button
-                        variant="outline"
-                        onClick={() => onVerify(false)}
-                        disabled={updating || !order?.payment_proof_url}
-                        className="flex-1 border-2 border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-800 dark:hover:text-red-300 hover:border-red-400 dark:hover:border-red-600 font-semibold transition-colors"
-                    >
-                        <XCircle className="mr-2 h-4 w-4" />
-                        Reject
-                    </Button>
-                    <Button
-                        className="bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-600 text-white flex-1 shadow-sm transition-colors"
-                        onClick={() => onVerify(true)}
-                        disabled={updating || !order?.payment_proof_url}
-                    >
-                        <CheckCircle className="mr-2 h-4 w-4" />
-                        Approve
-                    </Button>
-                </DialogFooter>
+                {order?.status === 'pending_payment' && (
+                    <DialogFooter className="gap-2 sm:gap-2">
+                        <Button
+                            variant="outline"
+                            onClick={() => onVerify(false)}
+                            disabled={updating || !order?.payment_proof_url}
+                            className="flex-1 border-2 border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-800 dark:hover:text-red-300 hover:border-red-400 dark:hover:border-red-600 font-semibold transition-colors"
+                        >
+                            <XCircle className="mr-2 h-4 w-4" />
+                            Reject
+                        </Button>
+                        <Button
+                            className="bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-600 text-white flex-1 shadow-sm transition-colors"
+                            onClick={() => onVerify(true)}
+                            disabled={updating || !order?.payment_proof_url}
+                        >
+                            <CheckCircle className="mr-2 h-4 w-4" />
+                            Approve
+                        </Button>
+                    </DialogFooter>
+                )}
             </DialogContent>
         </Dialog>
     )
