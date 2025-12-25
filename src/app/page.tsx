@@ -131,8 +131,8 @@ export default async function Home() {
                     fill
                     className="object-cover"
                     priority // Load immediately for LCP optimization
-                    quality={75}
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
+                    quality={100} // Maximum quality for hero image
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px"
                     loading="eager"
                   />
                 </div>
