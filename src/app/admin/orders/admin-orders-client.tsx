@@ -135,49 +135,49 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
             />
 
             {/* Orders Table */}
-            <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm overflow-hidden transition-colors">
                 {/* Mobile scroll wrapper */}
                 <div className="overflow-x-auto">
                     <table className="w-full table-fixed min-w-[1200px]">
-                        <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-100 dark:border-neutral-800">
+                        <thead className="bg-neutral-50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-700">
                             <tr>
-                                <th className="w-20 px-4 py-4 text-left text-xs font-semibold text-neutral-600 dark:text-neutral-300 uppercase tracking-wider">Order</th>
-                                <th className="w-44 px-4 py-4 text-left text-xs font-semibold text-neutral-600 dark:text-neutral-300 uppercase tracking-wider">Customer</th>
-                                <th className="w-32 px-4 py-4 text-left text-xs font-semibold text-neutral-600 dark:text-neutral-300 uppercase tracking-wider">Items</th>
-                                <th className="w-28 px-4 py-4 text-left text-xs font-semibold text-neutral-600 dark:text-neutral-300 uppercase tracking-wider">Date</th>
-                                <th className="w-28 px-4 py-4 text-left text-xs font-semibold text-neutral-600 dark:text-neutral-300 uppercase tracking-wider">Total</th>
-                                <th className="w-40 px-4 py-4 text-left text-xs font-semibold text-neutral-600 dark:text-neutral-300 uppercase tracking-wider">Status</th>
-                                <th className="w-24 px-4 py-4 text-center text-xs font-semibold text-neutral-600 dark:text-neutral-300 dark:text-neutral-300 uppercase tracking-wider">View</th>
-                                <th className="w-28 px-4 py-4 text-center text-xs font-semibold text-neutral-600 dark:text-neutral-300 uppercase tracking-wider">Verify</th>
-                                <th className="w-48 px-4 py-4 text-center text-xs font-semibold text-neutral-600 dark:text-neutral-300 uppercase tracking-wider">Change Status</th>
-                                <th className="w-28 px-4 py-4 text-center text-xs font-semibold text-neutral-600 dark:text-neutral-300 uppercase tracking-wider">Cancel</th>
+                                <th className="w-20 px-4 py-4 text-left text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider transition-colors">Order</th>
+                                <th className="w-44 px-4 py-4 text-left text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider transition-colors">Customer</th>
+                                <th className="w-32 px-4 py-4 text-left text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider transition-colors">Items</th>
+                                <th className="w-28 px-4 py-4 text-left text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider transition-colors">Date</th>
+                                <th className="w-28 px-4 py-4 text-left text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider transition-colors">Total</th>
+                                <th className="w-40 px-4 py-4 text-left text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider transition-colors">Status</th>
+                                <th className="w-24 px-4 py-4 text-center text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider transition-colors">View</th>
+                                <th className="w-28 px-4 py-4 text-center text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider transition-colors">Verify</th>
+                                <th className="w-48 px-4 py-4 text-center text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider transition-colors">Change Status</th>
+                                <th className="w-28 px-4 py-4 text-center text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider transition-colors">Cancel</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800">
+                        <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
                             {filteredOrders.length === 0 ? (
                                 <tr>
                                     <td colSpan={10} className="px-6 py-16 text-center">
-                                        <ShoppingBag className="h-12 w-12 text-neutral-300 dark:text-neutral-600 mx-auto mb-3" />
-                                        <p className="text-neutral-500 dark:text-neutral-400 font-medium">No orders found matching the filter</p>
+                                        <ShoppingBag className="h-12 w-12 text-neutral-300 dark:text-neutral-600 mx-auto mb-3 transition-colors" />
+                                        <p className="text-neutral-600 dark:text-neutral-400 font-medium transition-colors">No orders found matching the filter</p>
                                     </td>
                                 </tr>
                             ) : (
                                 filteredOrders.map((order) => (
-                                    <tr key={order.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
+                                    <tr key={order.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
                                         <td className="px-4 py-4">
-                                            <span className="font-semibold text-neutral-900 dark:text-white">#{order.id}</span>
+                                            <span className="font-semibold text-neutral-900 dark:text-white transition-colors">#{order.id}</span>
                                         </td>
                                         <td className="px-4 py-4">
                                             <div className="truncate">
-                                                <p className="font-medium text-neutral-900 dark:text-white truncate">{order.user?.full_name || 'Guest'}</p>
-                                                <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate">{order.user?.email || order.user?.phone || 'N/A'}</p>
+                                                <p className="font-medium text-neutral-900 dark:text-white truncate transition-colors">{order.user?.full_name || 'Guest'}</p>
+                                                <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate transition-colors">{order.user?.email || order.user?.phone || 'N/A'}</p>
                                             </div>
                                         </td>
                                         <td className="px-4 py-4">
                                             <div className="flex items-center gap-2">
                                                 <div className="flex -space-x-2">
                                                     {order.items?.slice(0, 2).map((item) => (
-                                                        <div key={item.id} className="relative w-7 h-7 rounded-lg border-2 border-white dark:border-neutral-900 bg-neutral-50 dark:bg-neutral-800 overflow-hidden shadow-sm">
+                                                        <div key={item.id} className="relative w-7 h-7 rounded-lg border-2 border-white dark:border-neutral-900 bg-neutral-50 dark:bg-neutral-800 overflow-hidden shadow-sm ring-1 ring-neutral-200 dark:ring-neutral-700">
                                                             {item.product?.image_url ? (
                                                                 <Image
                                                                     src={item.product.image_url}
@@ -193,13 +193,13 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                                         </div>
                                                     ))}
                                                 </div>
-                                                <span className="text-xs font-medium text-neutral-900 dark:text-white">
+                                                <span className="text-xs font-medium text-neutral-900 dark:text-white transition-colors">
                                                     {order.items?.length || 0}
                                                 </span>
                                             </div>
                                         </td>
                                         <td className="px-4 py-4">
-                                            <span className="text-sm text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
+                                            <span className="text-sm text-neutral-600 dark:text-neutral-400 whitespace-nowrap transition-colors">
                                                 {new Date(order.created_at).toLocaleDateString('en-US', {
                                                     month: 'short',
                                                     day: 'numeric'
@@ -207,8 +207,8 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                             </span>
                                         </td>
                                         <td className="px-4 py-4">
-                                            <span className="font-semibold text-neutral-900 dark:text-white text-sm whitespace-nowrap">
-                                                {order.total_amount.toLocaleString()} <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">{siteConfig.currency.code}</span>
+                                            <span className="font-semibold text-neutral-900 dark:text-white text-sm whitespace-nowrap transition-colors">
+                                                {order.total_amount.toLocaleString()} <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400 transition-colors">{siteConfig.currency.code}</span>
                                             </span>
                                         </td>
                                         <td className="px-4 py-4">
@@ -221,7 +221,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                                 variant="outline"
                                                 size="sm"
                                                 asChild
-                                                className="border-2 border-neutral-400 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-500 dark:hover:border-neutral-500 text-neutral-800 dark:text-neutral-300 h-8 px-2 font-semibold"
+                                                className="border-2 border-neutral-300 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:border-neutral-400 dark:hover:border-neutral-500 text-neutral-700 dark:text-neutral-300 h-8 px-2 font-semibold transition-all"
                                             >
                                                 <Link href={`/orders/${order.id}`}>
                                                     <Eye className="h-4 w-4" />
@@ -232,7 +232,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                             {order.payment_method === 'instapay' && order.payment_proof_url && order.status === 'pending_payment' ? (
                                                 <Button
                                                     size="sm"
-                                                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm font-medium h-8 px-2"
+                                                    className="bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white shadow-sm font-medium h-8 px-2 transition-colors"
                                                     onClick={() => {
                                                         setSelectedOrder(order)
                                                         setIsVerifyModalOpen(true)
