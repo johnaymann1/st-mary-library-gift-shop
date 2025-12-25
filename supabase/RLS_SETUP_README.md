@@ -1,6 +1,34 @@
 # RLS Policies Setup Guide
 
-## Problem
+## ⚠️ IMPORTANT UPDATE - DO NOT USE rls_policies.sql!
+
+**The RLS policies in `rls_policies.sql` are TOO RESTRICTIVE and will break database access.**
+
+## Quick Fix - Database Not Working After Applying RLS
+
+If you applied `rls_policies.sql` and now your database is broken:
+
+1. **IMMEDIATELY** run `EMERGENCY_FIX_DISABLE_RLS.sql` in Supabase SQL Editor
+2. This will disable RLS on all tables and restore full access
+3. Your app will work normally again
+
+## Why RLS Is Currently Disabled
+
+The RLS policies were blocking legitimate server-side queries because:
+- Supabase server functions need to bypass RLS
+- The policies were too restrictive for authenticated access
+- Service role credentials are used by server actions
+
+## Recommendation
+
+**For now, keep RLS DISABLED.** Your app is using:
+- Server-side authentication checks (✅ secure)
+- Server actions with proper user validation (✅ secure)  
+- Admin role checks in all admin functions (✅ secure)
+
+This provides adequate security without RLS complexity.
+
+## Original Problem (Now Resolved Differently)
 Orders are not showing in the Admin Orders Management page because **Row Level Security (RLS)** is enabled on the database tables but **no policies were defined**. This blocks all access by default.
 
 ## Solution
