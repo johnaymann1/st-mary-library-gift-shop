@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Order } from '@/types'
-import { updateOrderStatus, approvePaymentProof, rejectPaymentProof, cancelOrderByAdmin } from '@/app/actions/admin'
+import { updateOrderStatus, approvePaymentProof, rejectPaymentProof, cancelOrderByAdmin } from '@/app/actions/admin/orders'
 import { toast } from 'sonner'
 
 export function useOrdersLogic(initialOrders: Order[]) {
