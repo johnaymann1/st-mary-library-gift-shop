@@ -7,6 +7,8 @@ import { User, Mail, Phone, Loader2, Save, ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import SavedAddresses from '@/components/modules/account/saved-addresses'
+import { SavedAddress } from '@/types'
 
 interface ProfileEditClientProps {
     user: {
@@ -14,9 +16,11 @@ interface ProfileEditClientProps {
         full_name: string
         phone: string | null
     }
+    addresses: SavedAddress[]
+    userId: string
 }
 
-export default function ProfileEditClient({ user }: ProfileEditClientProps) {
+export default function ProfileEditClient({ user, addresses, userId }: ProfileEditClientProps) {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
@@ -210,6 +214,11 @@ export default function ProfileEditClient({ user }: ProfileEditClientProps) {
                             </Button>
                         </div>
                     </form>
+                </div>
+
+                {/* Saved Addresses Section */}
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-8 transition-colors">
+                    <SavedAddresses addresses={addresses} userId={userId} />
                 </div>
             </main>
         </div>

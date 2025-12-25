@@ -40,6 +40,7 @@ export async function saveAddress(formData: FormData) {
     }
 
     revalidatePath('/checkout')
+    revalidatePath('/account/edit')
     return { success: true }
 }
 
@@ -76,6 +77,7 @@ export async function updateAddress(addressId: number, formData: FormData) {
     }
 
     revalidatePath('/checkout')
+    revalidatePath('/account/edit')
     return { success: true }
 }
 
@@ -92,6 +94,7 @@ export async function deleteAddress(addressId: number) {
     }
 
     revalidatePath('/checkout')
+    revalidatePath('/account/edit')
     return { success: true }
 }
 
