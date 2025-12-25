@@ -11,12 +11,15 @@ import { siteConfig } from '@/config/site'
 import { CartSkeleton } from '@/components/modules/cart'
 import { ProductPrice, isSaleActive } from '@/components/ui/product-price'
 import { toast } from 'sonner'
+import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
+import { useState } from 'react'
 
 import { User } from '@supabase/supabase-js'
 
 export default function CartClient({ user }: { user: User | null }) {
     const { cart, removeFromCart, updateQuantity, isLoading, addToCart } = useCart()
     const router = useRouter()
+    const [showEmptyCartDialog, setShowEmptyCartDialog] = useState(false)
 
     const subtotal = cart.reduce((acc, item) => {
         if (!item.product || item.product.price == null) return acc
@@ -191,12 +194,7 @@ export default function CartClient({ user }: { user: User | null }) {
                         <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => {
-                                if (window.confirm('Are you sure you want to empty your cart?')) {
-                                    cart.forEach(item => removeFromCart(item.product_id))
-                                    toast.success('Cart emptied successfully')
-                                }
-                            }}
+                            onClick={() => setShowEmptyCartDialog(true)}
                             className="text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-xs transition-colors"
                         >
                             <Trash2 className="h-3.5 w-3.5 mr-1" />
@@ -237,6 +235,20 @@ export default function CartClient({ user }: { user: User | null }) {
                     )}
                 </div>
             </div>
+
+            <ConfirmationDialog
+                open={showEmptyCartDialog}
+                onOpenChange={setShowEmptyCartDialog}
+                title="Empty Cart?"
+                description="Are you sure you want to remove all items from your cart? This action cannot be undone."
+                confirmLabel="Empty Cart"
+                cancelLabel="Cancel"
+                variant="destructive"
+                onConfirm={() => {
+                    cart.forEach(item => removeFromCart(item.product_id))
+                    toast.success('Cart emptied successfully')
+                }}
+            />
         </div>
     )
 }
