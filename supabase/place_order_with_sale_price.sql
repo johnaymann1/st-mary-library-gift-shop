@@ -1,6 +1,55 @@
 -- Create or replace the place_order function to use sale prices
 -- This function creates an order from the user's cart items, properly handling sale prices
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- Verify `store_settings` table exists with a `delivery_fee` column- Ensure the `orders`, `order_items`, `cart`, and `products` tables exist- Check that all previous migration files have been runIf you get any errors:## Need Help?5. Verify the sale price was used in the order total4. Check the order status - should be **Processing** (not Pending Payment)3. Complete the order2. Proceed to checkout with **Cash on Delivery**1. Add a product with a sale price to your cartAfter running the SQL:## Verification- ✅ Correct database column names- ✅ Sale prices correctly used in cart and checkout- ✅ InstaPay orders start as `pending_payment` (admin verifies payment screenshot)- ✅ Cash orders start as `processing` (no payment verification needed)### After:- ❌ Wrong column names causing SQL errors- ❌ Sale prices might not be applied correctly- ❌ All orders start as `pending_payment` (even cash orders)### Before:## What This Fixes6. Click **Run** or press `Ctrl/Cmd + Enter`5. Paste into the SQL editor4. Copy the ENTIRE contents of `place_order_with_sale_price.sql`3. Click **New Query**2. Go to **SQL Editor**1. Open your Supabase project dashboard## How to Execute3. ✅ **Fixed column names** - Uses `phone` and `delivery_date` (not `recipient_phone` or `scheduled_delivery_date`)   - InstaPay orders → `pending_payment` (waiting for payment proof verification)   - Cash orders → `processing` (ready to fulfill immediately)2. ✅ **Sets correct initial status**:1. ✅ **Handles sale prices correctly** - Uses sale price when active, otherwise regular priceThe `place_order_with_sale_price.sql` file contains the corrected order placement function that:## Critical: Execute SQL Function
 CREATE OR REPLACE FUNCTION place_order(
     p_user_id UUID,
     p_delivery_type TEXT,
@@ -63,6 +112,8 @@ BEGIN
     v_total_amount := v_total_amount + v_delivery_fee;
 
     -- Create order
+    -- Status: 'processing' for cash orders (no payment verification needed)
+    --         'pending_payment' for InstaPay orders (requires payment proof verification)
     INSERT INTO orders (
         user_id, 
         status, 
@@ -77,7 +128,10 @@ BEGIN
     )
     VALUES (
         p_user_id,
-        'pending_payment',
+        CASE 
+            WHEN p_payment_method = 'cash' THEN 'processing'
+            ELSE 'pending_payment'
+        END,
         v_total_amount,
         v_delivery_fee,
         p_payment_method,
