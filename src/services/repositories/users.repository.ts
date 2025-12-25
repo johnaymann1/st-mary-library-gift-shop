@@ -108,7 +108,16 @@ export async function upsertUser(entity: UpsertUserEntity): Promise<void> {
             }
         )
 
-    if (error) throw new Error(`Failed to upsert user: ${error.message}`)
+    if (error) {
+        // Provide friendly error messages for common constraint violations
+        if (error.message.includes('users_phone_key') || error.message.includes('duplicate key')) {
+            throw new Error('This phone number is already registered. Please use a different number.')
+        }
+        if (error.message.includes('users_role_check')) {
+            throw new Error('Invalid role specified. Please contact support.')
+        }
+        throw new Error(`Failed to save user profile: ${error.message}`)
+    }
 }
 
 /**
@@ -122,7 +131,13 @@ export async function updateUser(userId: string, entity: UpdateUserEntity): Prom
         .update(entity)
         .eq('id', userId)
 
-    if (error) throw new Error(`Failed to update user: ${error.message}`)
+    if (error) {
+        // Provide friendly error messages for common constraint violations
+        if (error.message.includes('users_phone_key') || error.message.includes('duplicate key')) {
+            throw new Error('This phone number is already registered. Please use a different number.')
+        }
+        throw new Error(`Failed to update profile: ${error.message}`)
+    }
 }
 
 /**
@@ -136,7 +151,13 @@ export async function updateUserPhone(userId: string, phone: string): Promise<vo
         .update({ phone })
         .eq('id', userId)
 
-    if (error) throw new Error(`Failed to update phone: ${error.message}`)
+    if (error) {
+        // Provide friendly error message for duplicate phone number
+        if (error.message.includes('users_phone_key') || error.message.includes('duplicate key')) {
+            throw new Error('This phone number is already registered. Please use a different number.')
+        }
+        throw new Error(`Failed to update phone number: ${error.message}`)
+    }
 }
 
 /**
