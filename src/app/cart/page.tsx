@@ -1,9 +1,12 @@
-import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
 import CartClient from './cart-client'
+import * as UsersService from '@/services/users.service'
+import * as AuthService from '@/services/auth.service'
+import { createClient } from '@/lib/supabase/server'
 
 export default async function CartPage() {
+    // Get full Supabase user for CartClient compatibility
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 

@@ -1,17 +1,25 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 import { formatPhoneNumber } from '@/utils/formatters'
-import { resend } from '@/lib/resend'
-import { createElement } from 'react'
-import { renderToStaticMarkup } from 'react-dom/server.browser'
-import WelcomeEmail from '@/components/emails/WelcomeEmail'
-import { registerSchema, loginSchema } from '@/utils/validation'
+import { registerSchema, loginSchema, phoneSchema } from '@/utils/validation'
+import * as AuthService from '@/services/auth.service'
 
+/**
+ * Authentication Actions
+ * Server actions for user authentication and account management.
+ * Uses AuthService for all business logic - zero direct database access.
+ */
+
+/**
+ * User Registration (Sign Up)
+ * Creates a new user account with email and password
+ * Sends a welcome email upon successful registration
+ */
 export async function signup(formData: FormData) {
-    // Validate input
+    // Extract and validate form data
     const rawData = {
         email: formData.get('email'),
         password: formData.get('password'),
@@ -19,6 +27,7 @@ export async function signup(formData: FormData) {
         phone: formData.get('phone') || undefined
     }
 
+    // Validate using Zod schema
     const result = registerSchema.safeParse(rawData)
     if (!result.success) {
         const errors = result.error.flatten().fieldErrors
@@ -29,47 +38,34 @@ export async function signup(formData: FormData) {
     const { email, password, full_name: fullName, phone: rawPhone } = result.data
     const phone = rawPhone ? formatPhoneNumber(rawPhone) : undefined
 
-    const supabase = await createClient()
-
-    const { error } = await supabase.auth.signUp({
+    // Use service layer for signup
+    const serviceResult = await AuthService.signup({
         email,
         password,
-        options: {
-            data: {
-                full_name: fullName,
-                phone: phone,
-            },
-        },
+        fullName,
+        phone
     })
 
-    if (error) {
-        return { error: error.message }
+    if (!serviceResult.success) {
+        return { error: serviceResult.error || 'Failed to create account' }
     }
 
-    // Send welcome email (non-blocking)
-    try {
-        await resend.emails.send({
-            from: 'St Mary Library <onboarding@resend.dev>',
-            to: email,
-            subject: 'Welcome to St Mary Library! 🎉',
-            html: renderToStaticMarkup(createElement(WelcomeEmail, { name: fullName })),
-        })
-    } catch {
-        // Email send failed - don't block signup
-    }
-
-    // If email confirmation is disabled, we could redirect to dashboard
-    // But usually we redirect to a "check email" page or login
+    // Redirect to login with success message
     redirect('/login?message=Check email to continue sign in process')
 }
 
+/**
+ * User Login
+ * Authenticates a user with email and password
+ */
 export async function login(formData: FormData) {
-    // Validate input
+    // Extract and validate login credentials
     const rawData = {
         email: formData.get('email'),
         password: formData.get('password')
     }
 
+    // Validate using Zod schema
     const result = loginSchema.safeParse(rawData)
     if (!result.success) {
         const errors = result.error.flatten().fieldErrors
@@ -79,50 +75,53 @@ export async function login(formData: FormData) {
 
     const { email, password } = result.data
 
-    const supabase = await createClient()
+    // Use service layer for login
+    const serviceResult = await AuthService.login({ email, password })
 
-    const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-    })
-
-    if (error) {
-        return { error: error.message }
+    if (!serviceResult.success) {
+        return { error: serviceResult.error || 'Login failed' }
     }
 
-    const { revalidatePath } = await import('next/cache')
+    // Revalidate cached data after login
     revalidatePath('/', 'layout')
     redirect('/')
 }
 
+/**
+ * Google OAuth Login
+ * Initiates Google OAuth authentication flow
+ */
 export async function loginWithGoogle() {
-    const supabase = await createClient()
-    const origin = (await headers()).get('origin')
+    const origin = (await headers()).get('origin') || ''
 
-    const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-            redirectTo: `${origin}/auth/callback`,
-        },
-    })
+    // Use service layer for Google OAuth
+    const serviceResult = await AuthService.loginWithGoogle(origin)
 
-    if (error) {
-        return { error: error.message }
+    if (!serviceResult.success || !serviceResult.data) {
+        return { error: serviceResult.error || 'Failed to initiate Google login' }
     }
 
-    if (data.url) {
-        redirect(data.url)
-    }
+    // Redirect to Google for authentication
+    redirect(serviceResult.data)
 }
 
+/**
+ * User Logout
+ * Signs out the current user and clears session
+ */
 export async function logout() {
-    const supabase = await createClient()
-    await supabase.auth.signOut()
-    const { revalidatePath } = await import('next/cache')
+    // Use service layer for logout
+    await AuthService.logout()
+    
+    // Revalidate cached data after logout
     revalidatePath('/', 'layout')
     redirect('/login')
 }
 
+/**
+ * Send Password Reset Email
+ * Sends a password reset link to the user's email
+ */
 export async function sendPasswordResetEmail(formData: FormData) {
     const email = formData.get('email') as string
     
@@ -130,43 +129,48 @@ export async function sendPasswordResetEmail(formData: FormData) {
         return { error: 'Email is required' }
     }
 
-    const supabase = await createClient()
-    const origin = (await headers()).get('origin')
+    const origin = (await headers()).get('origin') || ''
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${origin}/auth/reset-password`,
-    })
+    // Use service layer for password reset
+    const serviceResult = await AuthService.sendPasswordResetEmail(email, origin)
 
-    if (error) {
-        return { error: error.message }
+    if (!serviceResult.success) {
+        return { error: serviceResult.error || 'Failed to send reset email' }
     }
 
     return { success: true }
 }
 
+/**
+ * Reset Password
+ * Updates the user's password after clicking reset link
+ */
 export async function resetPassword(formData: FormData) {
     const password = formData.get('password') as string
     
+    // Validate password length
     if (!password || password.length < 8) {
         return { error: 'Password must be at least 8 characters' }
     }
 
-    const supabase = await createClient()
+    // Use service layer for password reset
+    const serviceResult = await AuthService.resetPassword(password)
 
-    const { error } = await supabase.auth.updateUser({
-        password: password,
-    })
-
-    if (error) {
-        return { error: error.message }
+    if (!serviceResult.success) {
+        return { error: serviceResult.error || 'Failed to reset password' }
     }
 
+    // Redirect to login with success message
     redirect('/login?message=Password updated successfully')
 }
 
+/**
+ * Update Phone Number
+ * Updates the user's phone number in auth metadata and database
+ * Used for profile completion flow
+ */
 export async function updatePhone(formData: FormData) {
-    // Validate input
-    const { phoneSchema } = await import('@/utils/validation')
+    // Validate phone number
     const rawData = {
         phone: formData.get('phone')
     }
@@ -181,32 +185,19 @@ export async function updatePhone(formData: FormData) {
     const rawPhone = result.data.phone
     const phone = formatPhoneNumber(rawPhone)
 
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
+    // Get current user session
+    const session = await AuthService.getCurrentSession()
+    if (!session) {
         return { error: 'Not authenticated' }
     }
 
-    // 1. Update Auth Metadata
-    const { error: authError } = await supabase.auth.updateUser({
-        data: { phone: phone },
-    })
+    // Use service layer to update phone
+    const serviceResult = await AuthService.updatePhone(session.userId, phone)
 
-    if (authError) {
-        return { error: authError.message }
+    if (!serviceResult.success) {
+        return { error: serviceResult.error || 'Failed to update phone' }
     }
 
-    // 2. Update Public Users Table via service
-    const authSvc = await import('@/services/auth')
-    const serviceResult = await authSvc.updateUserPhone({
-        userId: user.id,
-        phone
-    })
-
-    if (serviceResult.error) {
-        return { error: serviceResult.error }
-    }
-
+    // Redirect to home after successful phone update
     redirect('/')
 }

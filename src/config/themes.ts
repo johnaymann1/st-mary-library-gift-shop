@@ -1,10 +1,21 @@
 /**
  * Theme Configuration System
  * 
- * This file contains all theme configurations for the St. Mary Gift Shop.
- * Themes can be activated through the admin settings dashboard.
+ * This file manages all theme configurations for the St. Mary Gift Shop.
+ * Themes can be dynamically activated through the admin settings dashboard,
+ * allowing seasonal or promotional customizations without code changes.
+ * 
+ * Features:
+ * - Multiple theme presets (Default, Christmas, etc.)
+ * - Dynamic color schemes and gradients
+ * - Customizable hero section content
+ * - CSS variable generation for runtime theme switching
  */
 
+/**
+ * Theme Interface
+ * Defines the structure for all theme configurations
+ */
 export interface Theme {
   id: string
   name: string
@@ -35,7 +46,13 @@ export interface Theme {
   }
 }
 
+/**
+ * Theme Registry
+ * All available themes for the application
+ * Add new themes here to make them available in admin settings
+ */
 export const themes: Record<string, Theme> = {
+  // Default theme - Classic rose and pink color scheme
   default: {
     id: 'default',
     name: 'Default Theme',
@@ -62,6 +79,7 @@ export const themes: Record<string, Theme> = {
     },
   },
 
+  // Christmas theme - Festive red and green for holiday season
   christmas: {
     id: 'christmas',
     name: 'Christmas Theme',
@@ -91,20 +109,27 @@ export const themes: Record<string, Theme> = {
 
 /**
  * Get the active theme based on admin settings
- * Falls back to default theme if selection is invalid
+ * Falls back to default theme if the selected theme doesn't exist
+ * 
+ * @param selectedThemeId - The theme ID from admin settings
+ * @returns The theme configuration object
  */
 export function getActiveTheme(selectedThemeId?: string): Theme {
-  // If admin selected a theme and it exists, use it
+  // If admin selected a valid theme, use it
   if (selectedThemeId && themes[selectedThemeId]) {
     return themes[selectedThemeId]
   }
 
-  // Default theme as fallback
+  // Fall back to default theme
   return themes.default
 }
 
 /**
  * Generate CSS custom properties for a theme
+ * Creates CSS variables that can be used throughout the application
+ * 
+ * @param theme - The theme configuration object
+ * @returns CSS string with custom properties
  */
 export function generateThemeCSS(theme: Theme): string {
   return `

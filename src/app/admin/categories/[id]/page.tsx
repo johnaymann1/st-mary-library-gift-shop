@@ -1,18 +1,13 @@
-import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
 import EditCategoryForm from './edit-form'
+import * as CategoriesService from '@/services/categories.service'
 
 export default async function EditCategoryPage({ params }: { params: Promise<{ id: string }> }) {
-    const supabase = await createClient()
     const { id } = await params
 
-    const { data: category } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('id', parseInt(id))
-        .single()
+    const category = await CategoriesService.getCategoryById(parseInt(id))
 
     if (!category) {
         notFound()

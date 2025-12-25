@@ -1,17 +1,19 @@
-import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { logout } from '@/app/actions/auth'
 import { User, Package, LogOut, Phone, Mail, Heart, ArrowLeft, Edit } from 'lucide-react'
 import Link from 'next/link'
+import * as UsersService from '@/services/users.service'
+import * as OrdersService from '@/services/orders.service'
 
 export default async function AccountPage() {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const user = await UsersService.getCurrentUser()
 
     if (!user) {
         redirect('/login')
     }
+
+    const userProfile = await UsersService.getUserById(user.id)
 
 
 
@@ -38,10 +40,10 @@ export default async function AccountPage() {
                                     <User className="h-12 w-12 text-white" />
                                 </div>
                                 <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-1">
-                                    {user.user_metadata.full_name || 'Valued Customer'}
+                                    {userProfile?.full_name || 'Valued Customer'}
                                 </h2>
                                 <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                                    Member since {new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                                    Member since {userProfile ? new Date(userProfile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'Recently'}
                                 </p>
                             </div>
 
@@ -58,7 +60,7 @@ export default async function AccountPage() {
                                     <div className="min-w-0 flex-1">
                                         <p className="text-xs text-neutral-600 dark:text-neutral-400 font-medium mb-1">Phone</p>
                                         <p className="text-sm text-neutral-900 dark:text-white font-medium">
-                                            {user.user_metadata.phone || 'Not provided'}
+                                            {userProfile?.phone || 'Not provided'}
                                         </p>
                                     </div>
                                 </div>

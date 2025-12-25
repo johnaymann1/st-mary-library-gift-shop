@@ -1,46 +1,21 @@
 'use client'
 
 import { updateStoreSettings } from '@/app/actions/admin'
-import { useState } from 'react'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Save, Upload, Image as ImageIcon, Palette } from 'lucide-react'
+import { Save } from 'lucide-react'
 import { toast } from 'sonner'
 import { StoreSettings } from '@/utils/settings'
-import Image from 'next/image'
-import { themes } from '@/config/themes'
+import { HeroImageSection } from '@/components/modules/admin/settings/HeroImageSection'
+import { StoreInfoSection } from '@/components/modules/admin/settings/StoreInfoSection'
+import { ContactInfoSection } from '@/components/modules/admin/settings/ContactInfoSection'
+import { DeliverySettingsSection } from '@/components/modules/admin/settings/DeliverySettingsSection'
+import { PaymentSettingsSection } from '@/components/modules/admin/settings/PaymentSettingsSection'
+import { SocialMediaSection } from '@/components/modules/admin/settings/SocialMediaSection'
+import { ThemeSelectionSection } from '@/components/modules/admin/settings/ThemeSelectionSection'
+import { useSettingsForm } from '@/components/modules/admin/settings/useSettingsForm'
 
 export default function SettingsForm({ settings }: { settings: StoreSettings }) {
-    const [loading, setLoading] = useState(false)
-    const [heroImagePreview, setHeroImagePreview] = useState<string | null>(settings.hero_image_url || null)
-    const [selectedFile, setSelectedFile] = useState<File | null>(null)
-
-    function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.target.files?.[0]
-        if (file) {
-            // Validate file size (5MB max)
-            if (file.size > 5 * 1024 * 1024) {
-                toast.error('Image must be less than 5MB. Please choose a smaller file.')
-                e.target.value = '' // Clear the input
-                return
-            }
-
-            // Validate file type
-            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-            if (!validTypes.includes(file.type)) {
-                toast.error('Please select a JPG, PNG, or WebP image file.')
-                e.target.value = ''
-                return
-            }
-
-            setSelectedFile(file)
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setHeroImagePreview(reader.result as string)
-            }
-            reader.readAsDataURL(file)
-        }
-    }
+    const { loading, setLoading } = useSettingsForm()
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -64,335 +39,41 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Hero Image */}
-            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Hero Image</h2>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    Upload a new hero image for your homepage. Recommended size: 1920x1080px (max 5MB)
-                </p>
-                
-                <div className="space-y-4">
-                    {heroImagePreview && (
-                        <div className="relative w-full h-64 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700 transition-colors">
-                            <Image
-                                src={heroImagePreview}
-                                alt="Hero image preview"
-                                fill
-                                className="object-cover"
-                            />
-                        </div>
-                    )}
-                    
-                    <div className="flex items-center gap-4">
-                        <label className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 cursor-pointer transition-colors">
-                            <Upload className="w-4 h-4" />
-                            Choose Image
-                            <input
-                                type="file"
-                                name="hero_image"
-                                accept="image/jpeg,image/jpg,image/png,image/webp"
-                                onChange={handleImageChange}
-                                className="hidden"
-                            />
-                        </label>
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400 transition-colors">
-                            JPG, PNG or WebP (max 5MB)
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <HeroImageSection initialImage={settings.hero_image_url || null} />
+            
+            <StoreInfoSection 
+                storeName={settings.store_name} 
+                description={settings.description} 
+            />
+            
+            <ContactInfoSection
+                phone={settings.phone}
+                phone2={settings.phone_2}
+                phone3={settings.phone_3}
+                address={settings.address}
+                workingHours={settings.working_hours}
+            />
+            
+            <DeliverySettingsSection
+                deliveryFee={settings.delivery_fee}
+                freeDeliveryThreshold={settings.free_delivery_threshold}
+                deliveryTimeDays={settings.delivery_time_days}
+            />
+            
+            <PaymentSettingsSection
+                instapayEnabled={settings.instapay_enabled}
+                instapayPhone={settings.instapay_phone}
+            />
+            
+            <SocialMediaSection
+                facebookUrl={settings.facebook_url}
+                instagramUrl={settings.instagram_url}
+                twitterUrl={settings.twitter_url}
+                linkedinUrl={settings.linkedin_url}
+            />
+            
+            <ThemeSelectionSection activeTheme={settings.active_theme} />
 
-            {/* Store Information */}
-            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Store Information</h2>
-                
-                <div className="space-y-2">
-                    <label htmlFor="store_name" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                        Store Name <span className="text-red-500 dark:text-red-400">*</span>
-                    </label>
-                    <Input
-                        type="text"
-                        id="store_name"
-                        name="store_name"
-                        defaultValue={settings.store_name}
-                        required
-                        placeholder="St. Mary Gift Shop"
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <label htmlFor="description" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                        Description
-                    </label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        defaultValue={settings.description}
-                        rows={3}
-                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600"
-                        placeholder="Discover a curated collection of books, stationery, and unique gifts..."
-                    />
-                </div>
-            </div>
-
-            {/* Contact Information */}
-            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Contact Information</h2>
-                
-                <div className="space-y-2">
-                    <label htmlFor="phone" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                        Primary Phone Number <span className="text-red-500 dark:text-red-400">*</span>
-                    </label>
-                    <Input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        defaultValue={settings.phone}
-                        required
-                        placeholder="+20 123 456 7890"
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <label htmlFor="phone_2" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                        Secondary Phone Number
-                    </label>
-                    <Input
-                        type="tel"
-                        id="phone_2"
-                        name="phone_2"
-                        defaultValue={settings.phone_2 || ''}
-                        placeholder="+20 123 456 7891 (optional)"
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <label htmlFor="phone_3" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                        Third Phone Number
-                    </label>
-                    <Input
-                        type="tel"
-                        id="phone_3"
-                        name="phone_3"
-                        defaultValue={settings.phone_3 || ''}
-                        placeholder="+20 123 456 7892 (optional)"
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <label htmlFor="address" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                        Address <span className="text-red-500 dark:text-red-400">*</span>
-                    </label>
-                    <Input
-                        type="text"
-                        id="address"
-                        name="address"
-                        defaultValue={settings.address}
-                        required
-                        placeholder="St Mary Church Faggalah, Cairo, Egypt"
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <label htmlFor="working_hours" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                        Working Hours
-                    </label>
-                    <Input
-                        type="text"
-                        id="working_hours"
-                        name="working_hours"
-                        defaultValue={settings.working_hours || ''}
-                        placeholder="Sunday - Thursday: 9:00 AM - 9:00 PM"
-                    />
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                        Example: Sunday - Thursday: 9:00 AM - 9:00 PM
-                    </p>
-                </div>
-            </div>
-
-            {/* Delivery Settings */}
-            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Delivery Settings</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <label htmlFor="delivery_fee" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                            Delivery Fee (EGP) <span className="text-red-500 dark:text-red-400">*</span>
-                        </label>
-                        <Input
-                            type="number"
-                            id="delivery_fee"
-                            name="delivery_fee"
-                            defaultValue={settings.delivery_fee}
-                            required
-                            min="0"
-                            step="0.01"
-                            placeholder="50"
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <label htmlFor="free_delivery_threshold" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                            Free Delivery Threshold (EGP)
-                        </label>
-                        <Input
-                            type="number"
-                            id="free_delivery_threshold"
-                            name="free_delivery_threshold"
-                            defaultValue={settings.free_delivery_threshold || ''}
-                            min="0"
-                            step="0.01"
-                            placeholder="1000 (optional)"
-                        />
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                            Leave empty for no free delivery threshold
-                        </p>
-                    </div>
-                </div>
-
-                <div className="space-y-2">
-                    <label htmlFor="delivery_time_days" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                        Delivery Time
-                    </label>
-                    <Input
-                        type="text"
-                        id="delivery_time_days"
-                        name="delivery_time_days"
-                        defaultValue={settings.delivery_time_days || ''}
-                        placeholder="1-3 business days"
-                    />
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                        Example: 1-3 business days, 2-5 days, Same day delivery
-                    </p>
-                </div>
-            </div>
-
-            {/* Payment Settings */}
-            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Payment Settings</h2>
-                
-                <div className="flex items-center gap-3 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
-                    <input
-                        type="checkbox"
-                        id="instapay_enabled"
-                        name="instapay_enabled"
-                        defaultChecked={settings.instapay_enabled}
-                        className="w-5 h-5 text-rose-600 border-neutral-300 dark:border-neutral-600 rounded focus:ring-2 focus:ring-rose-500"
-                    />
-                    <label htmlFor="instapay_enabled" className="text-sm font-medium text-neutral-700 dark:text-neutral-300 cursor-pointer">
-                        Enable InstaPay Payments
-                    </label>
-                </div>
-
-                <div className="space-y-2">
-                    <label htmlFor="instapay_phone" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                        InstaPay Phone Number
-                    </label>
-                    <Input
-                        type="tel"
-                        id="instapay_phone"
-                        name="instapay_phone"
-                        defaultValue={settings.instapay_phone || ''}
-                        placeholder="01000000000"
-                    />
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                        Phone number for InstaPay payments (11 digits)
-                    </p>
-                </div>
-            </div>
-
-            {/* Social Media Links */}
-            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Social Media Links</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <label htmlFor="facebook_url" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                            Facebook URL
-                        </label>
-                        <Input
-                            type="url"
-                            id="facebook_url"
-                            name="facebook_url"
-                            defaultValue={settings.facebook_url || ''}
-                            placeholder="https://facebook.com/yourpage"
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <label htmlFor="instagram_url" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                            Instagram URL
-                        </label>
-                        <Input
-                            type="url"
-                            id="instagram_url"
-                            name="instagram_url"
-                            defaultValue={settings.instagram_url || ''}
-                            placeholder="https://instagram.com/yourpage"
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <label htmlFor="twitter_url" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                            Twitter URL
-                        </label>
-                        <Input
-                            type="url"
-                            id="twitter_url"
-                            name="twitter_url"
-                            defaultValue={settings.twitter_url || ''}
-                            placeholder="https://twitter.com/yourpage"
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <label htmlFor="linkedin_url" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                            LinkedIn URL
-                        </label>
-                        <Input
-                            type="url"
-                            id="linkedin_url"
-                            name="linkedin_url"
-                            defaultValue={settings.linkedin_url || ''}
-                            placeholder="https://linkedin.com/company/yourpage"
-                        />
-                    </div>
-                </div>
-            </div>
-
-            {/* Theme Selection */}
-            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
-                <div className="flex items-center gap-2">
-                    <Palette className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
-                    <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Store Theme</h2>
-                </div>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    Choose a theme for your store. You have full control over which theme is active.
-                </p>
-                
-                <div className="space-y-2">
-                    <label htmlFor="active_theme" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                        Active Theme
-                    </label>
-                    <select
-                        id="active_theme"
-                        name="active_theme"
-                        defaultValue={settings.active_theme}
-                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
-                    >
-                        {Object.entries(themes).map(([key, theme]) => (
-                            <option key={key} value={key} className="text-neutral-900 dark:text-white dark:bg-neutral-800">
-                                {theme.name}
-                            </option>
-                        ))}
-                    </select>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                        The selected theme will be applied across your entire store
-                    </p>
-                </div>
-            </div>
-
-            {/* Save Button */}
             <div className="flex justify-end">
                 <Button
                     type="submit"

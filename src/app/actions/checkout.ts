@@ -12,15 +12,30 @@ import * as storageService from '@/services/storage'
 import { checkoutSchema, validateImageFile } from '@/utils/validation'
 
 /**
- * Places a new order
+ * Checkout Server Actions
+ * Handles order placement, payment proof upload, and email notifications
+ */
+
+/**
+ * Places a new order with validation and email notifications
+ * 
+ * Process:
+ * 1. Validate checkout form data
+ * 2. Upload payment proof if InstaPay
+ * 3. Create order in database
+ * 4. Send confirmation emails (async, non-blocking)
+ * 
+ * @param formData - Form data containing delivery, payment, and contact info
+ * @returns Success with order ID or error message
  */
 export async function placeOrder(formData: FormData) {
+    // Ensure user is authenticated
     const user = await userService.getCurrentUser()
     if (!user) {
         return { error: 'Unauthorized' }
     }
 
-    // Validate input
+    // Extract and validate form data
     const rawData = {
         delivery_type: formData.get('delivery_type'),
         address: formData.get('address') || undefined,
@@ -29,6 +44,7 @@ export async function placeOrder(formData: FormData) {
         proof_image: formData.get('proof_image')
     }
 
+    // Validate using Zod schema
     const validationResult = checkoutSchema.safeParse(rawData)
     if (!validationResult.success) {
         const errors = validationResult.error.flatten().fieldErrors
@@ -41,17 +57,19 @@ export async function placeOrder(formData: FormData) {
 
     let proofUrl: string | null = null
 
+    // Handle InstaPay payment proof upload
     if (paymentMethod === 'instapay') {
         if (!proofImage || proofImage.size === 0) {
             return { error: 'Payment proof screenshot is required for InstaPay' }
         }
 
-        // Validate image file
+        // Validate image file (size, type)
         const fileValidation = validateImageFile(proofImage)
         if (!fileValidation.valid) {
             return { error: fileValidation.error || 'Invalid payment proof image' }
         }
 
+        // Upload to Supabase Storage
         const uploadResult = await storageService.uploadPaymentProof(proofImage)
         if (uploadResult.error) {
             return { error: uploadResult.error }
@@ -59,7 +77,7 @@ export async function placeOrder(formData: FormData) {
         proofUrl = uploadResult.url ?? null
     }
 
-    // Create the order using service
+    // Create the order in database
     const orderResult = await orderService.createOrder({
         userId: user.id,
         deliveryType,
@@ -75,18 +93,22 @@ export async function placeOrder(formData: FormData) {
 
     const orderId = orderResult.orderId!
 
-    // Send emails asynchronously without blocking response
-    // This significantly speeds up checkout (emails sent in background)
+    /**
+     * Send email notifications asynchronously (non-blocking)
+     * This significantly speeds up checkout response time
+     * Emails are sent in the background
+     */
     Promise.all([
         (async () => {
             try {
+                // Fetch order details for email
                 const orderData = await orderService.getOrderForEmail(orderId)
                 if (!orderData) return
 
                 const userData = await userService.getUserById(orderData.user_id)
                 if (!userData) return
 
-                // Send order receipt to customer
+                // Send order confirmation email to customer
                 await resend.emails.send({
                     from: siteConfig.email.from,
                     to: userData.email,
@@ -101,7 +123,7 @@ export async function placeOrder(formData: FormData) {
                     }))
                 })
 
-                // Send notification to admin
+                // Send notification email to admin
                 const adminEmail = siteConfig.email.adminEmail
                 if (adminEmail) {
                     await resend.emails.send({
@@ -123,9 +145,12 @@ export async function placeOrder(formData: FormData) {
             }
         })()
     ]).catch(() => {
-        // Emails failed, but order succeeded - this is ok
+        // Emails failed, but order succeeded - this is acceptable
+        // The order is still created successfully
     })
 
+    // Revalidate orders page to show new order
     revalidatePath('/orders')
+    
     return { success: true, orderId }
 }

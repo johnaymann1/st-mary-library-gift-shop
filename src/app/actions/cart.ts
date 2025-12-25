@@ -6,7 +6,13 @@ import * as cartService from '@/services/cart'
 import * as userService from '@/services/users'
 
 /**
+ * Shopping Cart Server Actions
+ * Handles all cart-related operations with authentication and validation
+ */
+
+/**
  * Retrieves the current user's shopping cart
+ * @returns Array of cart items or empty array if not authenticated
  */
 export async function getCart(): Promise<CartItem[]> {
     const user = await userService.getCurrentUser()
@@ -17,6 +23,9 @@ export async function getCart(): Promise<CartItem[]> {
 
 /**
  * Adds a product to the shopping cart
+ * @param productId - The ID of the product to add
+ * @param quantity - The quantity to add (default: 1)
+ * @returns Success status or error message
  */
 export async function addToCart(productId: number, quantity: number): Promise<{ success?: boolean; error?: string }> {
     const user = await userService.getCurrentUser()
@@ -33,6 +42,9 @@ export async function addToCart(productId: number, quantity: number): Promise<{ 
 
 /**
  * Updates the quantity of a cart item
+ * @param productId - The ID of the product to update
+ * @param quantity - The new quantity (0 to remove)
+ * @returns Success status or error message
  */
 export async function updateCartItem(productId: number, quantity: number): Promise<{ success?: boolean; error?: string }> {
     const user = await userService.getCurrentUser()
@@ -49,6 +61,8 @@ export async function updateCartItem(productId: number, quantity: number): Promi
 
 /**
  * Removes a product from the cart
+ * @param productId - The ID of the product to remove
+ * @returns Success status or error message
  */
 export async function removeCartItem(productId: number): Promise<{ success?: boolean; error?: string }> {
     const user = await userService.getCurrentUser()
@@ -64,7 +78,10 @@ export async function removeCartItem(productId: number): Promise<{ success?: boo
 }
 
 /**
- * Merges local cart items into the user's cart
+ * Merges local cart items into the user's cart after login
+ * Used to preserve cart items from anonymous browsing
+ * @param localItems - Array of cart items from local storage
+ * @returns Success status or error message
  */
 export async function mergeCart(localItems: { product_id: number; quantity: number }[]): Promise<{ success?: boolean; error?: string }> {
     const user = await userService.getCurrentUser()

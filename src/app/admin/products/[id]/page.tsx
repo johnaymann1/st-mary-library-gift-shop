@@ -1,28 +1,20 @@
-import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
 import EditProductForm from './edit-form'
+import * as ProductsService from '@/services/products.service'
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
-    const supabase = await createClient()
     const { id } = await params
 
-    const { data: product } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', parseInt(id))
-        .single()
+    const product = await ProductsService.getProductById(parseInt(id))
 
     if (!product) {
         notFound()
     }
 
     // Fetch categories for dropdown
-    const { data: categories } = await supabase
-        .from('categories')
-        .select('id, name_en')
-        .order('name_en')
+    const categories = await import('@/services/categories.service').then(m => m.getAdminCategories())
 
     return (
         <div>

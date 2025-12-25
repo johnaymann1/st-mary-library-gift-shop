@@ -1,19 +1,20 @@
-import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import ProfileEditClient from './profile-edit-client'
+import * as UsersService from '@/services/users.service'
 
 export default async function EditProfilePage() {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const user = await UsersService.getCurrentUser()
 
     if (!user) {
         redirect('/login')
     }
 
+    const userProfile = await UsersService.getUserById(user.id)
+
     const userData = {
         email: user.email || '',
-        full_name: user.user_metadata.full_name || '',
-        phone: user.user_metadata.phone || null
+        full_name: userProfile?.full_name || '',
+        phone: userProfile?.phone || null
     }
 
     return <ProfileEditClient user={userData} />
