@@ -125,3 +125,13 @@ export async function updateUserPhone(phone: string) {
     revalidatePath('/checkout')
     return { success: true }
 }
+
+export async function getUserAddresses() {
+    const user = await userService.getCurrentUser()
+    if (!user) {
+        return { error: 'Unauthorized', addresses: [] }
+    }
+
+    const addresses = await addressService.getAddressesByUserId(user.id)
+    return { success: true, addresses }
+}

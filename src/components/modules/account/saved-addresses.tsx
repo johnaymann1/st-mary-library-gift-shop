@@ -42,7 +42,7 @@ export default function SavedAddresses({ addresses: initialAddresses, userId }: 
         setLoading(true)
 
         try {
-            const { saveAddress } = await import('@/app/actions/address')
+            const { saveAddress, getUserAddresses } = await import('@/app/actions/address')
             const formDataObj = new FormData()
             formDataObj.append('label', formData.label)
             formDataObj.append('address', formData.address)
@@ -56,8 +56,9 @@ export default function SavedAddresses({ addresses: initialAddresses, userId }: 
                 toast.success('Address added successfully!')
                 setIsAddDialogOpen(false)
                 resetForm()
-                // Refresh the page to get updated addresses
-                window.location.reload()
+                // Fetch updated addresses
+                const { addresses: updatedAddresses } = await getUserAddresses()
+                setAddresses(updatedAddresses)
             }
         } catch (error) {
             toast.error('Failed to add address')
@@ -72,7 +73,7 @@ export default function SavedAddresses({ addresses: initialAddresses, userId }: 
         setLoading(true)
 
         try {
-            const { updateAddress } = await import('@/app/actions/address')
+            const { updateAddress, getUserAddresses } = await import('@/app/actions/address')
             const formDataObj = new FormData()
             formDataObj.append('label', formData.label)
             formDataObj.append('address', formData.address)
@@ -87,8 +88,9 @@ export default function SavedAddresses({ addresses: initialAddresses, userId }: 
                 setIsEditDialogOpen(false)
                 setEditingAddress(null)
                 resetForm()
-                // Refresh the page to get updated addresses
-                window.location.reload()
+                // Fetch updated addresses
+                const { addresses: updatedAddresses } = await getUserAddresses()
+                setAddresses(updatedAddresses)
             }
         } catch (error) {
             toast.error('Failed to update address')
@@ -102,15 +104,16 @@ export default function SavedAddresses({ addresses: initialAddresses, userId }: 
 
         setLoading(true)
         try {
-            const { deleteAddress } = await import('@/app/actions/address')
+            const { deleteAddress, getUserAddresses } = await import('@/app/actions/address')
             const result = await deleteAddress(addressId)
 
             if (result?.error) {
                 toast.error(result.error)
             } else {
                 toast.success('Address deleted successfully!')
-                // Refresh the page to get updated addresses
-                window.location.reload()
+                // Fetch updated addresses
+                const { addresses: updatedAddresses } = await getUserAddresses()
+                setAddresses(updatedAddresses)
             }
         } catch (error) {
             toast.error('Failed to delete address')
