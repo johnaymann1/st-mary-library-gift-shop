@@ -103,8 +103,8 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                         <button
                             onClick={() => setStatusFilter('all')}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${statusFilter === 'all'
-                                ? 'bg-rose-600 text-white shadow-md'
-                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                ? 'bg-rose-600 dark:bg-rose-500 text-white shadow-md'
+                                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
                                 }`}
                         >
                             All
@@ -112,8 +112,8 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                         <button
                             onClick={() => setStatusFilter('instock')}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${statusFilter === 'instock'
-                                ? 'bg-rose-600 text-white shadow-md'
-                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                ? 'bg-rose-600 dark:bg-rose-500 text-white shadow-md'
+                                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
                                 }`}
                         >
                             In Stock
@@ -121,8 +121,8 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                         <button
                             onClick={() => setStatusFilter('outofstock')}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${statusFilter === 'outofstock'
-                                ? 'bg-rose-600 text-white shadow-md'
-                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                ? 'bg-rose-600 dark:bg-rose-500 text-white shadow-md'
+                                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
                                 }`}
                         >
                             Out of Stock

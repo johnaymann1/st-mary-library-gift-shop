@@ -73,7 +73,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                 
                 <div className="space-y-4">
                     {heroImagePreview && (
-                        <div className="relative w-full h-64 rounded-lg overflow-hidden border border-neutral-200">
+                        <div className="relative w-full h-64 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700 transition-colors">
                             <Image
                                 src={heroImagePreview}
                                 alt="Hero image preview"
@@ -84,7 +84,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                     )}
                     
                     <div className="flex items-center gap-4">
-                        <label className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 cursor-pointer transition-colors">
+                        <label className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 cursor-pointer transition-colors">
                             <Upload className="w-4 h-4" />
                             Choose Image
                             <input
@@ -95,7 +95,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                                 className="hidden"
                             />
                         </label>
-                        <p className="text-sm text-neutral-500">
+                        <p className="text-sm text-neutral-500 dark:text-neutral-400 transition-colors">
                             JPG, PNG or WebP (max 5MB)
                         </p>
                     </div>

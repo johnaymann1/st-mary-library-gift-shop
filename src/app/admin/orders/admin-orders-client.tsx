@@ -99,13 +99,13 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case 'pending_payment': return 'bg-amber-100 text-amber-800 border-amber-200'
-            case 'processing': return 'bg-blue-100 text-blue-800 border-blue-200'
-            case 'out_for_delivery': return 'bg-indigo-100 text-indigo-800 border-indigo-200'
-            case 'ready_for_pickup': return 'bg-purple-100 text-purple-800 border-purple-200'
-            case 'completed': return 'bg-green-100 text-green-800 border-green-200'
-            case 'cancelled': return 'bg-red-100 text-red-800 border-red-200'
-            default: return 'bg-gray-100 text-gray-800 border-gray-200'
+            case 'pending_payment': return 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800'
+            case 'processing': return 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800'
+            case 'out_for_delivery': return 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800'
+            case 'ready_for_pickup': return 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 border-purple-200 dark:border-purple-800'
+            case 'completed': return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border-green-200 dark:border-green-800'
+            case 'cancelled': return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border-red-200 dark:border-red-800'
+            default: return 'bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-800'
         }
     }
 
@@ -241,7 +241,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                                     <CheckCircle className="h-4 w-4" />
                                                 </Button>
                                             ) : (
-                                                <span className="text-xs text-neutral-400">—</span>
+                                                <span className="text-xs text-neutral-400 dark:text-neutral-500">—</span>
                                             )}
                                         </td>
                                         <td className="px-4 py-4 text-center">
@@ -250,20 +250,20 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                                 onValueChange={(newStatus) => handleStatusUpdate(order.id, newStatus)}
                                                 disabled={updating || order.status === 'cancelled'}
                                             >
-                                                <SelectTrigger className="w-full h-8 bg-white border-neutral-200 text-neutral-900 text-xs">
+                                                <SelectTrigger className="w-full h-8 bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white text-xs transition-colors">
                                                     <SelectValue />
                                                 </SelectTrigger>
-                                                <SelectContent className="bg-white border-neutral-200">
+                                                <SelectContent className="bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700">
                                                     {order.payment_method === 'instapay' && (
-                                                        <SelectItem value="pending_payment" className="text-neutral-900 text-xs">Pending Payment</SelectItem>
+                                                        <SelectItem value="pending_payment" className="text-neutral-900 dark:text-white text-xs focus:bg-neutral-100 dark:focus:bg-neutral-700">Pending Payment</SelectItem>
                                                     )}
-                                                    <SelectItem value="processing" className="text-neutral-900 text-xs">Processing</SelectItem>
+                                                    <SelectItem value="processing" className="text-neutral-900 dark:text-white text-xs focus:bg-neutral-100 dark:focus:bg-neutral-700">Processing</SelectItem>
                                                     {order.delivery_type === 'delivery' ? (
-                                                        <SelectItem value="out_for_delivery" className="text-neutral-900 text-xs">Out for Delivery</SelectItem>
+                                                        <SelectItem value="out_for_delivery" className="text-neutral-900 dark:text-white text-xs focus:bg-neutral-100 dark:focus:bg-neutral-700">Out for Delivery</SelectItem>
                                                     ) : (
-                                                        <SelectItem value="ready_for_pickup" className="text-neutral-900 text-xs">Ready for Pickup</SelectItem>
+                                                        <SelectItem value="ready_for_pickup" className="text-neutral-900 dark:text-white text-xs focus:bg-neutral-100 dark:focus:bg-neutral-700">Ready for Pickup</SelectItem>
                                                     )}
-                                                    <SelectItem value="completed" className="text-neutral-900 text-xs">Completed</SelectItem>
+                                                    <SelectItem value="completed" className="text-neutral-900 dark:text-white text-xs focus:bg-neutral-100 dark:focus:bg-neutral-700">Completed</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </td>
@@ -272,7 +272,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                                 <Button
                                                     size="sm"
                                                     variant="outline"
-                                                    className="border-2 border-red-300 hover:bg-red-50 hover:border-red-400 text-red-700 font-semibold h-8 px-2"
+                                                    className="border-2 border-red-300 dark:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-400 dark:hover:border-red-600 text-red-700 dark:text-red-400 font-semibold h-8 px-2 transition-colors"
                                                     onClick={() => {
                                                         setSelectedOrder(order)
                                                         setIsCancelModalOpen(true)
@@ -282,7 +282,7 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: Or
                                                     <Ban className="h-4 w-4" />
                                                 </Button>
                                             ) : (
-                                                <span className="text-xs text-neutral-400">—</span>
+                                                <span className="text-xs text-neutral-400 dark:text-neutral-500">—</span>
                                             )}
                                         </td>
                                     </tr>

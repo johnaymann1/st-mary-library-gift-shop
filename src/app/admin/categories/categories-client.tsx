@@ -203,7 +203,7 @@ export default function CategoriesClientPage({ initialCategories }: CategoriesCl
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
-                <div className="bg-white dark:bg-neutral-900 shadow-sm rounded-xl border border-neutral-200 dark:border-neutral-800 p-4">
+                <div className="bg-white dark:bg-neutral-900 shadow-sm rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 transition-colors">
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                         {/* Results info */}
                         <div className="text-sm text-neutral-700 dark:text-neutral-300 font-medium">
