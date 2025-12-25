@@ -12,7 +12,7 @@ import { CartSkeleton } from '@/components/modules/cart'
 import { ProductPrice, isSaleActive } from '@/components/ui/product-price'
 import { toast } from 'sonner'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { User } from '@supabase/supabase-js'
 
@@ -20,6 +20,20 @@ export default function CartClient({ user }: { user: User | null }) {
     const { cart, removeFromCart, updateQuantity, isLoading, addToCart } = useCart()
     const router = useRouter()
     const [showEmptyCartDialog, setShowEmptyCartDialog] = useState(false)
+
+    // DEBUG: Log cart data to see sale prices
+    useEffect(() => {
+        if (cart.length > 0) {
+            console.log('=== CART DEBUG ===')
+            cart.forEach(item => {
+                console.log(`Product: ${item.product.name_en}`)
+                console.log(`  Regular Price: ${item.product.price}`)
+                console.log(`  Sale Price: ${item.product.sale_price}`)
+                console.log(`  Sale End Date: ${item.product.sale_end_date}`)
+                console.log(`  Is Sale Active: ${isSaleActive(item.product.sale_price, item.product.sale_end_date)}`)
+            })
+        }
+    }, [cart])
 
     const subtotal = cart.reduce((acc, item) => {
         if (!item.product || item.product.price == null) return acc
