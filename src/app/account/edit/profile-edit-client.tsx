@@ -81,27 +81,27 @@ export default function ProfileEditClient({ user }: ProfileEditClientProps) {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50">
+        <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 transition-colors">
             <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <Link href="/account" className="inline-flex items-center gap-2 text-neutral-600 hover:text-rose-600 transition-colors mb-6">
+                <Link href="/account" className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors mb-6">
                     <ArrowLeft className="h-5 w-5" />
                     Back to Account
                 </Link>
 
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-neutral-900 mb-2">Edit Profile</h1>
-                    <p className="text-neutral-600">Update your account information</p>
+                    <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-2 transition-colors">Edit Profile</h1>
+                    <p className="text-neutral-600 dark:text-neutral-400 transition-colors">Update your account information</p>
                 </div>
 
-                <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-8">
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-8 transition-colors">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-2">
-                            <label htmlFor="fullName" className="block text-sm font-semibold text-neutral-700">
+                            <label htmlFor="fullName" className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 transition-colors">
                                 Full Name
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 items-center pointer-events-none flex">
-                                    <User className="h-4 w-4 text-neutral-400" />
+                                    <User className="h-4 w-4 text-neutral-400 dark:text-neutral-500 transition-colors" />
                                 </div>
                                 <Input
                                     id="fullName"
@@ -109,19 +109,19 @@ export default function ProfileEditClient({ user }: ProfileEditClientProps) {
                                     required
                                     value={formData.fullName}
                                     onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
-                                    className="pl-12 pr-4 h-12 text-sm"
+                                    className="pl-12 pr-4 h-12 text-sm dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 transition-colors"
                                     placeholder="John Doe"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <label htmlFor="phone" className="block text-sm font-semibold text-neutral-700">
+                            <label htmlFor="phone" className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 transition-colors">
                                 Phone Number
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 items-center pointer-events-none flex">
-                                    <Phone className="h-4 w-4 text-neutral-400" />
+                                    <Phone className="h-4 w-4 text-neutral-400 dark:text-neutral-500 transition-colors" />
                                 </div>
                                 <Input
                                     id="phone"
@@ -129,53 +129,53 @@ export default function ProfileEditClient({ user }: ProfileEditClientProps) {
                                     required
                                     value={formData.phone}
                                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                                    className="pl-12 pr-4 h-12 text-sm"
+                                    className="pl-12 pr-4 h-12 text-sm dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 transition-colors"
                                     placeholder="01012345678"
                                 />
                             </div>
-                            <p className="text-xs text-neutral-500">Format: 01012345678 (11 digits starting with 01)</p>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400 transition-colors">Format: 01012345678 (11 digits starting with 01)</p>
                         </div>
 
-                        <div className="border-t border-neutral-200 pt-6">
-                            <h3 className="text-lg font-semibold text-neutral-900 mb-4">Change Email</h3>
+                        <div className="border-t border-neutral-200 dark:border-neutral-700 pt-6 transition-colors">
+                            <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 transition-colors">Change Email</h3>
                             
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <label htmlFor="currentEmail" className="block text-sm font-semibold text-neutral-700">
+                                    <label htmlFor="currentEmail" className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 transition-colors">
                                         Current Email
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-4 items-center pointer-events-none flex">
-                                            <Mail className="h-4 w-4 text-neutral-400" />
+                                            <Mail className="h-4 w-4 text-neutral-400 dark:text-neutral-500 transition-colors" />
                                         </div>
                                         <Input
                                             id="currentEmail"
                                             type="email"
                                             disabled
                                             value={formData.email}
-                                            className="pl-12 pr-4 h-12 text-sm bg-neutral-50"
+                                            className="pl-12 pr-4 h-12 text-sm bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 transition-colors"
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label htmlFor="newEmail" className="block text-sm font-semibold text-neutral-700">
+                                    <label htmlFor="newEmail" className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 transition-colors">
                                         New Email (Optional)
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-4 items-center pointer-events-none flex">
-                                            <Mail className="h-4 w-4 text-neutral-400" />
+                                            <Mail className="h-4 w-4 text-neutral-400 dark:text-neutral-500 transition-colors" />
                                         </div>
                                         <Input
                                             id="newEmail"
                                             type="email"
                                             value={formData.newEmail}
                                             onChange={(e) => setFormData(prev => ({ ...prev, newEmail: e.target.value }))}
-                                            className="pl-12 pr-4 h-12 text-sm"
+                                            className="pl-12 pr-4 h-12 text-sm dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 transition-colors"
                                             placeholder="newemail@example.com"
                                         />
                                     </div>
-                                    <p className="text-xs text-neutral-500">
+                                    <p className="text-xs text-neutral-500 dark:text-neutral-400 transition-colors">
                                         If you change your email, you&apos;ll need to verify it before you can use it to log in.
                                     </p>
                                 </div>
@@ -187,7 +187,7 @@ export default function ProfileEditClient({ user }: ProfileEditClientProps) {
                                 type="button"
                                 variant="outline"
                                 onClick={() => router.push('/account')}
-                                className="flex-1 text-neutral-900"
+                                className="flex-1 text-neutral-900 dark:text-white dark:border-neutral-700 dark:hover:bg-neutral-800 transition-colors"
                             >
                                 Cancel
                             </Button>

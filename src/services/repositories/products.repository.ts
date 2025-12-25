@@ -213,11 +213,17 @@ export async function searchProductsWithCount(
     }
 
     // Apply sorting
+    // Note: For price sorting with sale prices, we order by sale_price first (nulls last/first based on direction)
+    // then by regular price. This ensures products with sale prices appear appropriately in the sort order.
     switch (sortBy) {
         case 'price-asc':
+            // Sort by effective price ascending: products with sale prices first (lower), then by regular price
+            queryBuilder = queryBuilder.order('sale_price', { ascending: true, nullsFirst: false })
             queryBuilder = queryBuilder.order('price', { ascending: true })
             break
         case 'price-desc':
+            // Sort by effective price descending: products with higher prices first
+            queryBuilder = queryBuilder.order('sale_price', { ascending: false, nullsFirst: true })
             queryBuilder = queryBuilder.order('price', { ascending: false })
             break
         case 'name':

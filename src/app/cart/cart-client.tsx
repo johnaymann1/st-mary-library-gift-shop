@@ -186,7 +186,23 @@ export default function CartClient({ user }: { user: User | null }) {
             {/* Order Summary */}
             <div className="lg:col-span-4 mt-6 lg:mt-0">
                 <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-5 sm:p-6 sticky top-24 transition-colors">
-                    <h2 className="text-lg font-bold text-neutral-900 dark:text-white mb-6 transition-colors">Order Summary</h2>
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-lg font-bold text-neutral-900 dark:text-white transition-colors">Order Summary</h2>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                                if (window.confirm('Are you sure you want to empty your cart?')) {
+                                    cart.forEach(item => removeFromCart(item.product_id))
+                                    toast.success('Cart emptied successfully')
+                                }
+                            }}
+                            className="text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-xs transition-colors"
+                        >
+                            <Trash2 className="h-3.5 w-3.5 mr-1" />
+                            Empty Cart
+                        </Button>
+                    </div>
 
                     <div className="space-y-4 mb-6">
                         <div className="flex justify-between text-neutral-700 dark:text-neutral-300 font-medium transition-colors">

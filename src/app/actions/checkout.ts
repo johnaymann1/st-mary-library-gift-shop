@@ -58,7 +58,9 @@ export async function placeOrder(formData: FormData) {
     let proofUrl: string | null = null
 
     // Handle InstaPay payment proof upload
+    // Only validate and upload image if payment method is InstaPay
     if (paymentMethod === 'instapay') {
+        // Validate that image exists and is not empty
         if (!proofImage || proofImage.size === 0) {
             return { error: 'Payment proof screenshot is required for InstaPay' }
         }
@@ -76,6 +78,7 @@ export async function placeOrder(formData: FormData) {
         }
         proofUrl = uploadResult.url ?? null
     }
+    // For cash payment, no image validation or upload is required - proofUrl remains null
 
     // Create the order in database
     const orderResult = await orderService.createOrder({

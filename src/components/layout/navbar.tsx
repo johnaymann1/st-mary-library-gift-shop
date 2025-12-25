@@ -68,6 +68,7 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
             // Immediately clear admin status when logging out
             if (!session?.user) {
                 setIsAdmin(false)
+                router.refresh() // Force refresh to update navbar
                 return
             }
 
@@ -80,9 +81,11 @@ export function Navbar({ storeName = siteConfig.displayName }: NavbarProps) {
                 .then(
                     ({ data }) => {
                         setIsAdmin(data?.role === 'admin')
+                        router.refresh() // Force refresh to update navbar
                     },
                     () => {
                         setIsAdmin(false)
+                        router.refresh() // Force refresh to update navbar
                     }
                 )
         })
