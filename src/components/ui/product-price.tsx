@@ -11,8 +11,8 @@ interface ProductPriceProps {
     size?: 'sm' | 'md' | 'lg'
 }
 
-// Helper function to check if sale is active
-function isSaleActive(salePrice?: number | null, saleEndDate?: string | null): boolean {
+// Helper function to check if sale is active (exported for use in cart/checkout logic)
+export function isSaleActive(salePrice?: number | null, saleEndDate?: string | null): boolean {
     if (!salePrice || salePrice <= 0) return false
     if (!saleEndDate) return true // No end date = ongoing sale
     return new Date(saleEndDate) > new Date()

@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { placeOrder } from '@/app/actions/checkout'
 import { saveAddress, updateAddress, deleteAddress, updateUserPhone } from '@/app/actions/address'
 import { SavedAddress } from '@/types'
+import { isSaleActive } from '@/components/ui/product-price'
 
 
 interface UseCheckoutLogicProps {
@@ -48,10 +49,13 @@ export function useCheckoutLogic({
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [addressToDelete, setAddressToDelete] = useState<number | null>(null)
 
-    // Calculate totals
+    // Calculate totals using sale prices when active
     const subtotal = cart.reduce((acc, item) => {
         if (!item.product || item.product.price == null) return acc
-        return acc + (item.product.price * item.quantity)
+        const activePrice = isSaleActive(item.product.sale_price, item.product.sale_end_date) && item.product.sale_price
+            ? item.product.sale_price
+            : item.product.price
+        return acc + (activePrice * item.quantity)
     }, 0)
     const shippingCost = deliveryType === 'delivery' ? deliveryFee : 0
     const total = subtotal + shippingCost
