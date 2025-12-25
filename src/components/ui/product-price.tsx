@@ -91,5 +91,5 @@ export function ProductPrice({
     )
 }
 
-// Export helper functions for use in other components
-export { isSaleActive, calculateSavings }
+// Export helper function for calculating savings
+export { calculateSavings }
