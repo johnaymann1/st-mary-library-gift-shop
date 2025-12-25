@@ -75,7 +75,7 @@ export function AddressSection({
             {addresses.length > 0 && !showAddressForm && (
                 <div>
                     <div className="flex items-center justify-between mb-3">
-                        <label className="block text-sm font-semibold text-neutral-700">Saved Addresses</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 transition-colors">Saved Addresses</label>
                         <Button
                             type="button"
                             variant="ghost"
@@ -84,7 +84,7 @@ export function AddressSection({
                                 setShowAddressForm(true)
                                 setEditingAddress(null)
                             }}
-                            className="text-rose-600 hover:text-rose-700 focus:ring-2 focus:ring-rose-500"
+                            className="text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 focus:ring-2 focus:ring-rose-500 dark:focus:ring-rose-400 transition-colors"
                             aria-label="Add new address"
                         >
                             <Plus className="h-4 w-4 mr-1" />
@@ -96,8 +96,8 @@ export function AddressSection({
                             <div
                                 key={addr.id}
                                 className={`p-3 border-2 rounded-xl cursor-pointer transition-all focus-within:ring-4 focus-within:ring-rose-500 focus-within:ring-offset-2 ${selectedAddress?.id === addr.id
-                                    ? 'border-rose-600 bg-rose-50'
-                                    : 'border-neutral-200 hover:border-rose-300'
+                                    ? 'border-rose-600 dark:border-rose-500 bg-rose-50 dark:bg-rose-900/20'
+                                    : 'border-neutral-200 dark:border-neutral-700 hover:border-rose-300 dark:hover:border-rose-600'
                                     }`}
                                 onClick={() => onAddressSelect(addr)}
                                 role="button"
@@ -113,16 +113,16 @@ export function AddressSection({
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2">
-                                            <MapPin className="h-4 w-4 text-rose-600" />
-                                            <span className="font-semibold text-neutral-900">{addr.label}</span>
+                                            <MapPin className="h-4 w-4 text-rose-600 dark:text-rose-400 transition-colors" />
+                                            <span className="font-semibold text-neutral-900 dark:text-white transition-colors">{addr.label}</span>
                                             {addr.is_default && (
-                                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Default</span>
+                                                <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full transition-colors">Default</span>
                                             )}
                                             {selectedAddress?.id === addr.id && (
-                                                <Check className="h-4 w-4 text-rose-600" />
+                                                <Check className="h-4 w-4 text-rose-600 dark:text-rose-400 transition-colors" />
                                             )}
                                         </div>
-                                        <p className="text-sm text-neutral-600 mt-1">{addr.address}</p>
+                                        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 transition-colors">{addr.address}</p>
                                     </div>
                                     <div className="flex gap-1 ml-2">
                                         <Button
@@ -147,7 +147,7 @@ export function AddressSection({
                                                 e.stopPropagation()
                                                 onOpenDeleteDialog(addr.id)
                                             }}
-                                            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 focus:ring-2 focus:ring-red-500"
+                                            className="h-8 w-8 p-0 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 transition-colors"
                                             aria-label={`Delete ${addr.label} address`}
                                         >
                                             <Trash2 className="h-3.5 w-3.5" />
@@ -162,9 +162,9 @@ export function AddressSection({
 
             {/* Address Form */}
             {(showAddressForm || addresses.length === 0) && (
-                <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+                <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 transition-colors">
                     <div className="flex items-center justify-between mb-3">
-                        <h3 className="font-semibold text-neutral-900">
+                        <h3 className="font-semibold text-neutral-900 dark:text-white transition-colors">
                             {editingAddress ? 'Edit Address' : 'Add New Address'}
                         </h3>
                         {addresses.length > 0 && (
@@ -183,19 +183,19 @@ export function AddressSection({
                     </div>
                     <div className="space-y-3" key={editingAddress?.id || 'new'}>
                         <div>
-                            <label htmlFor="address-label-input" className="block text-sm font-medium text-neutral-700 mb-1">Label *</label>
+                            <label htmlFor="address-label-input" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1 transition-colors">Label *</label>
                             <Input
                                 id="address-label-input"
                                 name="label"
                                 defaultValue={editingAddress?.label || ''}
                                 placeholder="e.g., Home, Work"
                                 required
-                                className="h-11 text-[16px] focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
+                                className="h-11 text-[16px] focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 dark:bg-neutral-900 dark:border-neutral-600 dark:text-white dark:placeholder:text-neutral-500 transition-colors"
                                 aria-required="true"
                             />
                         </div>
                         <div>
-                            <label htmlFor="address-text-input" className="block text-sm font-medium text-neutral-700 mb-1">Full Address *</label>
+                            <label htmlFor="address-text-input" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1 transition-colors">Full Address *</label>
                             <textarea
                                 id="address-text-input"
                                 name="address"
@@ -203,7 +203,7 @@ export function AddressSection({
                                 placeholder="Street, Building, Apartment..."
                                 required
                                 rows={3}
-                                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900 text-[16px]"
+                                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900 dark:text-white dark:bg-neutral-900 dark:placeholder:text-neutral-500 text-[16px] transition-colors"
                                 aria-required="true"
                             />
                         </div>
@@ -213,9 +213,9 @@ export function AddressSection({
                                 id="address-default-input"
                                 name="is_default"
                                 defaultChecked={editingAddress?.is_default || false}
-                                className="h-4 w-4 text-rose-600 rounded"
+                                className="h-4 w-4 text-rose-600 rounded dark:bg-neutral-700 dark:border-neutral-600 transition-colors"
                             />
-                            <label htmlFor="address-default-input" className="text-sm text-neutral-700">Set as default address</label>
+                            <label htmlFor="address-default-input" className="text-sm text-neutral-700 dark:text-neutral-300 transition-colors">Set as default address</label>
                         </div>
                         <Button
                             type="button"
@@ -232,7 +232,7 @@ export function AddressSection({
             {/* Custom Address Input */}
             {selectedAddress && !showAddressForm && (
                 <div>
-                    <label htmlFor="custom-address-input" className="block text-sm font-medium text-neutral-700 mb-1">Delivery Address *</label>
+                    <label htmlFor="custom-address-input" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1 transition-colors">Delivery Address *</label>
                     <textarea
                         id="custom-address-input"
                         value={customAddress}
@@ -240,7 +240,7 @@ export function AddressSection({
                         placeholder="Street, Building, Apartment..."
                         required
                         rows={3}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900 text-[16px]"
+                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 focus:border-transparent text-neutral-900 dark:text-white dark:bg-neutral-900 dark:placeholder:text-neutral-500 text-[16px] transition-colors"
                         aria-required="true"
                     />
                 </div>
@@ -248,7 +248,7 @@ export function AddressSection({
 
             {/* Phone Number */}
             <div>
-                <label htmlFor="phone-input" className="block text-sm font-medium text-neutral-700 mb-1">Phone Number *</label>
+                <label htmlFor="phone-input" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1 transition-colors">Phone Number *</label>
                 <div className="flex gap-2">
                     <Input
                         id="phone-input"
@@ -257,7 +257,7 @@ export function AddressSection({
                         type="tel"
                         required
                         placeholder="01xxxxxxxxx"
-                        className="h-11 text-[16px] focus:ring-4 focus:ring-rose-500 focus:ring-offset-2"
+                        className="h-11 text-[16px] focus:ring-4 focus:ring-rose-500 focus:ring-offset-2 dark:bg-neutral-900 dark:border-neutral-600 dark:text-white dark:placeholder:text-neutral-500 transition-colors"
                         disabled={!editingPhone && !!userPhone}
                         aria-required="true"
                     />
@@ -272,7 +272,7 @@ export function AddressSection({
                                     onEditingPhoneChange(true)
                                 }
                             }}
-                            className="border-2 border-neutral-400 text-neutral-800 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-400 font-semibold"
+                            className="border-2 border-neutral-400 dark:border-neutral-600 text-neutral-800 dark:text-neutral-200 hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:text-rose-700 dark:hover:text-rose-400 hover:border-rose-400 dark:hover:border-rose-500 font-semibold transition-colors"
                         >
                             {editingPhone ? 'Save' : 'Edit'}
                         </Button>
@@ -285,8 +285,8 @@ export function AddressSection({
 
 export function PickupInfo() {
     return (
-        <div className="mt-6 p-4 bg-green-50 rounded-xl border border-green-200">
-            <p className="text-sm text-green-800">
+        <div className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800 transition-colors">
+            <p className="text-sm text-green-800 dark:text-green-300 transition-colors">
                 <strong>Pickup Location:</strong> St Mary Library, Main Street
                 <br />
                 <strong>Hours:</strong> 9 AM - 8 PM, Daily
