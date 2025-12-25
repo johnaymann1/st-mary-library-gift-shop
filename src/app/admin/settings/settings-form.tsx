@@ -65,9 +65,9 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             {/* Hero Image */}
-            <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900">Hero Image</h2>
-                <p className="text-sm text-neutral-600">
+            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Hero Image</h2>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">
                     Upload a new hero image for your homepage. Recommended size: 1920x1080px (max 5MB)
                 </p>
                 
@@ -103,12 +103,12 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
             </div>
 
             {/* Store Information */}
-            <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900">Store Information</h2>
+            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Store Information</h2>
                 
                 <div className="space-y-2">
-                    <label htmlFor="store_name" className="block text-sm font-medium text-neutral-700">
-                        Store Name <span className="text-red-500">*</span>
+                    <label htmlFor="store_name" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                        Store Name <span className="text-red-500 dark:text-red-400">*</span>
                     </label>
                     <Input
                         type="text"
@@ -121,7 +121,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                 </div>
 
                 <div className="space-y-2">
-                    <label htmlFor="description" className="block text-sm font-medium text-neutral-700">
+                    <label htmlFor="description" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                         Description
                     </label>
                     <textarea
@@ -129,19 +129,19 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                         name="description"
                         defaultValue={settings.description}
                         rows={3}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600"
                         placeholder="Discover a curated collection of books, stationery, and unique gifts..."
                     />
                 </div>
             </div>
 
             {/* Contact Information */}
-            <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900">Contact Information</h2>
+            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Contact Information</h2>
                 
                 <div className="space-y-2">
-                    <label htmlFor="phone" className="block text-sm font-medium text-neutral-700">
-                        Primary Phone Number <span className="text-red-500">*</span>
+                    <label htmlFor="phone" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                        Primary Phone Number <span className="text-red-500 dark:text-red-400">*</span>
                     </label>
                     <Input
                         type="tel"
@@ -154,7 +154,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                 </div>
 
                 <div className="space-y-2">
-                    <label htmlFor="phone_2" className="block text-sm font-medium text-neutral-700">
+                    <label htmlFor="phone_2" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                         Secondary Phone Number
                     </label>
                     <Input
@@ -167,7 +167,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                 </div>
 
                 <div className="space-y-2">
-                    <label htmlFor="phone_3" className="block text-sm font-medium text-neutral-700">
+                    <label htmlFor="phone_3" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                         Third Phone Number
                     </label>
                     <Input
@@ -180,8 +180,8 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                 </div>
 
                 <div className="space-y-2">
-                    <label htmlFor="address" className="block text-sm font-medium text-neutral-700">
-                        Address <span className="text-red-500">*</span>
+                    <label htmlFor="address" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                        Address <span className="text-red-500 dark:text-red-400">*</span>
                     </label>
                     <Input
                         type="text"
@@ -194,7 +194,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                 </div>
 
                 <div className="space-y-2">
-                    <label htmlFor="working_hours" className="block text-sm font-medium text-neutral-700">
+                    <label htmlFor="working_hours" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                         Working Hours
                     </label>
                     <Input
@@ -204,20 +204,20 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                         defaultValue={settings.working_hours || ''}
                         placeholder="Sunday - Thursday: 9:00 AM - 9:00 PM"
                     />
-                    <p className="text-xs text-neutral-500">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
                         Example: Sunday - Thursday: 9:00 AM - 9:00 PM
                     </p>
                 </div>
             </div>
 
             {/* Delivery Settings */}
-            <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900">Delivery Settings</h2>
+            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Delivery Settings</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <label htmlFor="delivery_fee" className="block text-sm font-medium text-neutral-700">
-                            Delivery Fee (EGP) <span className="text-red-500">*</span>
+                        <label htmlFor="delivery_fee" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                            Delivery Fee (EGP) <span className="text-red-500 dark:text-red-400">*</span>
                         </label>
                         <Input
                             type="number"
@@ -232,7 +232,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="free_delivery_threshold" className="block text-sm font-medium text-neutral-700">
+                        <label htmlFor="free_delivery_threshold" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                             Free Delivery Threshold (EGP)
                         </label>
                         <Input
@@ -244,14 +244,14 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                             step="0.01"
                             placeholder="1000 (optional)"
                         />
-                        <p className="text-xs text-neutral-500">
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400">
                             Leave empty for no free delivery threshold
                         </p>
                     </div>
                 </div>
 
                 <div className="space-y-2">
-                    <label htmlFor="delivery_time_days" className="block text-sm font-medium text-neutral-700">
+                    <label htmlFor="delivery_time_days" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                         Delivery Time
                     </label>
                     <Input
@@ -261,31 +261,31 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                         defaultValue={settings.delivery_time_days || ''}
                         placeholder="1-3 business days"
                     />
-                    <p className="text-xs text-neutral-500">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
                         Example: 1-3 business days, 2-5 days, Same day delivery
                     </p>
                 </div>
             </div>
 
             {/* Payment Settings */}
-            <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900">Payment Settings</h2>
+            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Payment Settings</h2>
                 
-                <div className="flex items-center gap-3 p-4 bg-neutral-50 rounded-lg">
+                <div className="flex items-center gap-3 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
                     <input
                         type="checkbox"
                         id="instapay_enabled"
                         name="instapay_enabled"
                         defaultChecked={settings.instapay_enabled}
-                        className="w-5 h-5 text-rose-600 border-neutral-300 rounded focus:ring-2 focus:ring-rose-500"
+                        className="w-5 h-5 text-rose-600 border-neutral-300 dark:border-neutral-600 rounded focus:ring-2 focus:ring-rose-500"
                     />
-                    <label htmlFor="instapay_enabled" className="text-sm font-medium text-neutral-700 cursor-pointer">
+                    <label htmlFor="instapay_enabled" className="text-sm font-medium text-neutral-700 dark:text-neutral-300 cursor-pointer">
                         Enable InstaPay Payments
                     </label>
                 </div>
 
                 <div className="space-y-2">
-                    <label htmlFor="instapay_phone" className="block text-sm font-medium text-neutral-700">
+                    <label htmlFor="instapay_phone" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                         InstaPay Phone Number
                     </label>
                     <Input
@@ -295,19 +295,19 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                         defaultValue={settings.instapay_phone || ''}
                         placeholder="01000000000"
                     />
-                    <p className="text-xs text-neutral-500">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
                         Phone number for InstaPay payments (11 digits)
                     </p>
                 </div>
             </div>
 
             {/* Social Media Links */}
-            <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-neutral-900">Social Media Links</h2>
+            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Social Media Links</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <label htmlFor="facebook_url" className="block text-sm font-medium text-neutral-700">
+                        <label htmlFor="facebook_url" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                             Facebook URL
                         </label>
                         <Input
@@ -320,7 +320,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="instagram_url" className="block text-sm font-medium text-neutral-700">
+                        <label htmlFor="instagram_url" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                             Instagram URL
                         </label>
                         <Input
@@ -333,7 +333,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="twitter_url" className="block text-sm font-medium text-neutral-700">
+                        <label htmlFor="twitter_url" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                             Twitter URL
                         </label>
                         <Input
@@ -346,7 +346,7 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="linkedin_url" className="block text-sm font-medium text-neutral-700">
+                        <label htmlFor="linkedin_url" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                             LinkedIn URL
                         </label>
                         <Input
@@ -361,32 +361,32 @@ export default function SettingsForm({ settings }: { settings: StoreSettings }) 
             </div>
 
             {/* Theme Selection */}
-            <div className="bg-white rounded-lg border border-neutral-200 p-6 space-y-4">
+            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6 space-y-4">
                 <div className="flex items-center gap-2">
-                    <Palette className="w-5 h-5 text-neutral-700" />
-                    <h2 className="text-lg font-semibold text-neutral-900">Store Theme</h2>
+                    <Palette className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
+                    <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Store Theme</h2>
                 </div>
-                <p className="text-sm text-neutral-600">
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">
                     Choose a theme for your store. You have full control over which theme is active.
                 </p>
                 
                 <div className="space-y-2">
-                    <label htmlFor="active_theme" className="block text-sm font-medium text-neutral-700">
+                    <label htmlFor="active_theme" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                         Active Theme
                     </label>
                     <select
                         id="active_theme"
                         name="active_theme"
                         defaultValue={settings.active_theme}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-neutral-900"
+                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
                     >
                         {Object.entries(themes).map(([key, theme]) => (
-                            <option key={key} value={key} className="text-neutral-900">
+                            <option key={key} value={key} className="text-neutral-900 dark:text-white dark:bg-neutral-800">
                                 {theme.name}
                             </option>
                         ))}
                     </select>
-                    <p className="text-xs text-neutral-500 mt-1">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                         The selected theme will be applied across your entire store
                     </p>
                 </div>

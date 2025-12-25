@@ -80,17 +80,17 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-4xl font-bold text-neutral-900 tracking-tight mb-2">Products Management</h1>
-                <p className="text-neutral-700 font-medium text-lg">Manage your gift shop inventory</p>
+                <h1 className="text-4xl font-bold text-neutral-900 dark:text-white tracking-tight mb-2">Products Management</h1>
+                <p className="text-neutral-700 dark:text-neutral-300 font-medium text-lg">Manage your gift shop inventory</p>
             </div>
 
             <CreateProductForm categories={categories} onSuccess={fetchData} />
 
             {/* Search and Filter Bar */}
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-neutral-200 space-y-4">
+            <div className="bg-white dark:bg-neutral-900 p-4 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 space-y-4">
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1 relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 dark:text-neutral-500" />
                         <Input
                             type="search"
                             placeholder="Search products by name..."
@@ -130,7 +130,7 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                     </div>
                 </div>
                 {(searchQuery || statusFilter !== 'all') && (
-                    <div className="flex items-center gap-2 text-sm text-neutral-700 font-medium">
+                    <div className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300 font-medium">
                         <span>Showing {filteredProducts.length} of {allProducts.length} results</span>
                         {searchQuery && <Badge variant="secondary">Search: {searchQuery}</Badge>}
                         {statusFilter !== 'all' && (
@@ -143,38 +143,38 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
             </div>
 
             {/* Desktop Table View */}
-            <div className="hidden md:block bg-white shadow-sm rounded-xl overflow-hidden border border-neutral-200">
+            <div className="hidden md:block bg-white dark:bg-neutral-900 shadow-sm rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800">
                 <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-neutral-200">
-                        <thead className="bg-neutral-50">
+                    <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800">
+                        <thead className="bg-neutral-50 dark:bg-neutral-800">
                             <tr>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 uppercase tracking-wider">Image</th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 uppercase tracking-wider">Name</th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 uppercase tracking-wider">Category</th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 uppercase tracking-wider">Price</th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 uppercase tracking-wider">Status</th>
-                                <th className="px-6 py-4 text-right text-xs font-bold text-neutral-900 uppercase tracking-wider">Actions</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 dark:text-neutral-200 uppercase tracking-wider">Image</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 dark:text-neutral-200 uppercase tracking-wider">Name</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 dark:text-neutral-200 uppercase tracking-wider">Category</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 dark:text-neutral-200 uppercase tracking-wider">Price</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-900 dark:text-neutral-200 uppercase tracking-wider">Status</th>
+                                <th className="px-6 py-4 text-right text-xs font-bold text-neutral-900 dark:text-neutral-200 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-neutral-200">
+                        <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-neutral-800">
                             {paginatedProducts.map((product) => (
-                                <tr key={product.id} className="hover:bg-neutral-50 transition-colors">
+                                <tr key={product.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         {product.image_url ? (
                                             <img src={product.image_url} alt={product.name_en} className="h-12 w-12 rounded-lg object-cover shadow-sm" />
                                         ) : (
-                                            <div className="h-12 w-12 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-400 text-xs font-medium">No Img</div>
+                                            <div className="h-12 w-12 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-400 dark:text-neutral-500 text-xs font-medium">No Img</div>
                                         )}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm font-semibold text-neutral-900">{product.name_en}</div>
-                                        <div className="text-xs text-neutral-700">{product.name_ar}</div>
+                                        <div className="text-sm font-semibold text-neutral-900 dark:text-white">{product.name_en}</div>
+                                        <div className="text-xs text-neutral-700 dark:text-neutral-300">{product.name_ar}</div>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300">
                                         {/* @ts-ignore */}
                                         {product.categories?.name_en || 'Uncategorized'}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-neutral-900">{product.price} {siteConfig.currency.code}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-neutral-900 dark:text-white">{product.price} {siteConfig.currency.code}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <Badge variant={product.in_stock ? 'success' : 'destructive'}>
                                             {product.in_stock ? 'In Stock' : 'Out of Stock'}
@@ -184,7 +184,7 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                                         <div className="flex items-center justify-end gap-3">
                                             <a
                                                 href={`/admin/products/${product.id}`}
-                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors"
+                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition-colors"
                                             >
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -199,7 +199,7 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                             ))}
                             {filteredProducts.length === 0 && (
                                 <tr>
-                                    <td colSpan={6} className="px-6 py-12 text-center text-sm text-neutral-700 font-medium">
+                                    <td colSpan={6} className="px-6 py-12 text-center text-sm text-neutral-700 dark:text-neutral-300 font-medium">
                                         {searchQuery || statusFilter !== 'all'
                                             ? 'No products match your filters.'
                                             : 'No products found. Create your first product above.'}
@@ -214,18 +214,18 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
             {/* Mobile Card View */}
             <div className="md:hidden space-y-4">
                 {paginatedProducts.map((product) => (
-                    <div key={product.id} className="bg-white shadow-sm rounded-xl border border-neutral-200 overflow-hidden">
+                    <div key={product.id} className="bg-white dark:bg-neutral-900 shadow-sm rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
                         <div className="p-4 space-y-4">
                             {/* Image and Title */}
                             <div className="flex gap-4">
                                 {product.image_url ? (
                                     <img src={product.image_url} alt={product.name_en} className="h-20 w-20 rounded-lg object-cover shadow-sm flex-shrink-0" />
                                 ) : (
-                                    <div className="h-20 w-20 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-400 text-xs font-medium flex-shrink-0">No Image</div>
+                                    <div className="h-20 w-20 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-400 dark:text-neutral-500 text-xs font-medium flex-shrink-0">No Image</div>
                                 )}
                                 <div className="flex-1 min-w-0">
-                                    <h3 className="font-semibold text-neutral-900 truncate">{product.name_en}</h3>
-                                    <p className="text-sm text-neutral-600 truncate">{product.name_ar}</p>
+                                    <h3 className="font-semibold text-neutral-900 dark:text-white truncate">{product.name_en}</h3>
+                                    <p className="text-sm text-neutral-600 dark:text-neutral-400 truncate">{product.name_ar}</p>
                                     <div className="mt-2">
                                         <Badge variant={product.in_stock ? 'success' : 'destructive'}>
                                             {product.in_stock ? 'In Stock' : 'Out of Stock'}
@@ -237,20 +237,20 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                             {/* Details */}
                             <div className="grid grid-cols-2 gap-3 text-sm">
                                 <div>
-                                    <p className="text-neutral-500 text-xs">Category</p>
-                                    <p className="font-medium text-neutral-900">
+                                    <p className="text-neutral-500 dark:text-neutral-400 text-xs">Category</p>
+                                    <p className="font-medium text-neutral-900 dark:text-white">
                                         {/* @ts-ignore */}
                                         {product.categories?.name_en || 'Uncategorized'}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-neutral-500 text-xs">Price</p>
-                                    <p className="font-semibold text-neutral-900">{product.price} {siteConfig.currency.code}</p>
+                                    <p className="text-neutral-500 dark:text-neutral-400 text-xs">Price</p>
+                                    <p className="font-semibold text-neutral-900 dark:text-white">{product.price} {siteConfig.currency.code}</p>
                                 </div>
                             </div>
 
                             {/* Actions */}
-                            <div className="flex gap-2 pt-3 border-t border-neutral-100">
+                            <div className="flex gap-2 pt-3 border-t border-neutral-100 dark:border-neutral-800">
                                 <a
                                     href={`/admin/products/${product.id}`}
                                     className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-rose-600 hover:bg-rose-700 rounded-lg transition-colors"
@@ -267,8 +267,8 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                     </div>
                 ))}
                 {filteredProducts.length === 0 && (
-                    <div className="bg-white shadow-sm rounded-xl border border-neutral-200 p-8 text-center">
-                        <p className="text-sm text-neutral-700 font-medium">
+                    <div className="bg-white dark:bg-neutral-900 shadow-sm rounded-xl border border-neutral-200 dark:border-neutral-800 p-8 text-center">
+                        <p className="text-sm text-neutral-700 dark:text-neutral-300 font-medium">
                             {searchQuery || statusFilter !== 'all'
                                 ? 'No products match your filters.'
                                 : 'No products found. Create your first product above.'}
@@ -279,10 +279,10 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
-                <div className="bg-white shadow-sm rounded-xl border border-neutral-200 p-4">
+                <div className="bg-white dark:bg-neutral-900 shadow-sm rounded-xl border border-neutral-200 dark:border-neutral-800 p-4">
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                         {/* Results info */}
-                        <div className="text-sm text-neutral-700 font-medium">
+                        <div className="text-sm text-neutral-700 dark:text-neutral-300 font-medium">
                             Showing {startIndex + 1}-{Math.min(endIndex, filteredProducts.length)} of {filteredProducts.length}
                         </div>
 
@@ -291,7 +291,7 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                             <button
                                 onClick={() => goToPage(currentPage - 1)}
                                 disabled={currentPage === 1}
-                                className="px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 Previous
                             </button>
@@ -306,13 +306,13 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                                     .map((page, idx, arr) => (
                                         <div key={page} className="flex items-center gap-1">
                                             {idx > 0 && arr[idx - 1] !== page - 1 && (
-                                                <span className="px-2 text-neutral-400">...</span>
+                                                <span className="px-2 text-neutral-400 dark:text-neutral-500">...</span>
                                             )}
                                             <button
                                                 onClick={() => goToPage(page)}
                                                 className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${currentPage === page
                                                     ? 'bg-rose-600 text-white shadow-md'
-                                                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                                    : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
                                                     }`}
                                             >
                                                 {page}
@@ -322,14 +322,14 @@ export default function ProductsClientPage({ initialProducts, initialCategories 
                             </div>
 
                             {/* Mobile page indicator */}
-                            <div className="sm:hidden px-3 py-2 text-sm font-medium text-neutral-700">
+                            <div className="sm:hidden px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">
                                 Page {currentPage} of {totalPages}
                             </div>
 
                             <button
                                 onClick={() => goToPage(currentPage + 1)}
                                 disabled={currentPage === totalPages}
-                                className="px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 Next
                             </button>

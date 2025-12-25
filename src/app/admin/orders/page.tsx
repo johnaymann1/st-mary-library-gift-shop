@@ -13,8 +13,8 @@ export default async function AdminOrdersPage() {
     return (
         <div className="p-8">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-neutral-900 mb-2">Orders Management</h1>
-                <p className="text-neutral-600">Manage customer orders and payment confirmations</p>
+                <h1 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">Orders Management</h1>
+                <p className="text-neutral-600 dark:text-neutral-300">Manage customer orders and payment confirmations</p>
             </div>
 
             <AdminOrdersClient initialOrders={result.orders || []} />

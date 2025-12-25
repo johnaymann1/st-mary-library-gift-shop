@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export default function AccountLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-rose-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Skeleton className="h-6 w-32 mb-6" />
         
@@ -14,7 +14,7 @@ export default function AccountLoading() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Profile Card */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-8">
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-8">
               <div className="flex flex-col items-center text-center mb-6">
                 <Skeleton className="h-24 w-24 rounded-full mb-4" />
                 <Skeleton className="h-8 w-48 mb-2" />
@@ -22,11 +22,11 @@ export default function AccountLoading() {
               </div>
 
               <div className="space-y-4 mb-6">
-                <div className="p-3 bg-neutral-50 rounded-lg">
+                <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
                   <Skeleton className="h-4 w-16 mb-2" />
                   <Skeleton className="h-5 w-full" />
                 </div>
-                <div className="p-3 bg-neutral-50 rounded-lg">
+                <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
                   <Skeleton className="h-4 w-16 mb-2" />
                   <Skeleton className="h-5 w-32" />
                 </div>
@@ -42,7 +42,7 @@ export default function AccountLoading() {
             <Skeleton className="h-6 w-32 mb-4" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {[1, 2].map((i) => (
-                <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+                <div key={i} className="bg-white dark:bg-neutral-900 p-6 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800">
                   <Skeleton className="h-14 w-14 rounded-xl mb-4" />
                   <Skeleton className="h-6 w-32 mb-2" />
                   <Skeleton className="h-4 w-full mb-1" />
